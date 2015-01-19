@@ -45,6 +45,7 @@ yum install -y ambari-server
 
 #cp -r /vagrant/PHD /var/lib/ambari-server/resources/stacks/.
 cp -r /vagrant/GREENPLUM /var/lib/ambari-server/resources/stacks/HDP/2.0.6/services/
+cp -r /vagrant/HAWQ /var/lib/ambari-server/resources/stacks/HDP/2.0.6/services/ 
 ambari-server setup -s
 ambari-server start 
 service httpd start
