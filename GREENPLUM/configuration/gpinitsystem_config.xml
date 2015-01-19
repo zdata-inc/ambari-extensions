@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+	<property>
+		<name>use_mirrors</name>
+		<value>false</value>
+		<description>Setup segment mirror databases.</description>
+	</property>
+	<property>
+		<name>ARRAY_NAME</name>
+		<value>"EMC Greenplum DW"</value>
+		<description>Name of this Greenplum system enclosed in quotes.</description>
+	</property>
+	<property>
+		<name>SEG_PREFIX</name>
+		<value>gpseg</value>
+		<description>Naming convention for utility-generated data directories.</description>
+	</property>
+	<property>
+		<name>PORT_BASE</name>
+		<value>40000</value>
+		<description>Base number by which primary segment port numbers are calculated.</description>
+	</property>
+	<property>
+		<name>DATA_DIRECTORY</name>
+		<value>/data1/primary /data2/primary</value>
+		<description>File system location(s) where primary segment data directories
+		 will be created. The number of locations in the list dictate
+		 the number of primary segments that will get created per
+		 physical host (if multiple addresses for a host are listed in
+		 the hostfile, the number of segments will be spread evenly across
+		 the specified interface addresses).</description>
+	</property>
+	<property>
+		<name>MASTER_HOSTNAME</name>
+		<value>mdw</value>
+		<description>OS-configured hostname or IP address of the master host.</description>
+	</property>
+	<property>
+		<name>MASTER_DIRECTORY</name>
+		<value>/data/master</value>
+		<description>File system location where the master data directory will be created.</description>
+	</property>
+	<property>
+		<name>MASTER_PORT</name>
+		<value>5432</value>
+		<description>Port number for the master instance.</description>
+	</property>
+	<property>
+		<name>TRUSTED_SHELL</name>
+		<value>ssh</value>
+		<description>Shell utility used to connect to remote hosts.</description>
+	</property>
+	<property>
+		<name>CHECK_POINT_SEGMENTS</name>
+		<value>8</value>
+		<description>Maximum log file segments between automatic WAL checkpoints.</description>
+	</property>
+	<property>
+		<name>ENCODING</name>
+		<value>UNICODE</value>
+		<description>Default server-side character set encoding.</description>
+	</property>
+	<property>
+		<name>MIRROR_PORT_BASE</name>
+		<value>50000</value>
+		<description>Base number by which mirror segment port numbers are calculated.</description>
+	</property>
+	<property>
+		<name>REPLICATION_PORT_BASE</name>
+		<value>41000</value>
+		<description>Base number by which primary file replication port numbers are calculated.</description>
+	</property>
+	<property>
+		<name>MIRROR_REPLICATION_PORT_BASE</name>
+		<value>51000</value>
+		<description>Base number by which mirror file replication port numbers are calculated.</description>
+	</property>
+	<property>
+		<name>MIRROR_DATA_DIRECTORY</name>
+		<value>/data1/mirror /data2/mirror</value>
+		<description>File system location(s) where mirror segment data directories
+		 will be created. The number of mirror locations must equal the
+		 number of primary locations as specified in the
+		 DATA_DIRECTORY parameter.</description>
+	</property>
+	<property>
+		<name>DATABASE_NAME</name>
+		<value>pizza4me</value>
+		<description></description>
+	</property>
+	<property>
+		<name>MACHINE_LIST_FILE</name>
+		<value>home/gpadmin/gpconfigs/hostfile_gpinitsystem</value>
+		<description>Specify the location of the host address file here instead of
+		 with the the -h option of gpinitsystem.</description>
+	</property>
+</configuration>
