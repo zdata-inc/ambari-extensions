@@ -28,3 +28,6 @@ class Master(Script):
 
     def configure(self, env):
         print "configure"
+
+if __name__ == "__main__":
+    Master().execute()
