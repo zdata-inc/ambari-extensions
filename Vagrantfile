@@ -37,7 +37,9 @@ Vagrant.configure(2) do |config|
             v.memory = 2048
         end
 
-        # node.vm.synced_folder 
+        node.vm.synced_folder 'CHORUS', '/var/lib/ambari-server/resources/stacks/HDP/2.0.6/services/CHORUS', create: true
+        node.vm.synced_folder 'HAWQ', '/var/lib/ambari-server/resources/stacks/HDP/2.0.6/services/HAWQ', create: true
+        node.vm.synced_folder 'GREENPLUM', '/var/lib/ambari-server/resources/stacks/HDP/2.0.6/services/GREENPLUM', create: true
         
         node.vm.provision 'shell', path: 'vagrant/bootstrap.sh'
         node.vm.provision 'shell', path: 'vagrant/bootstrap-master.sh'

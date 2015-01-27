@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+    <property>
+        <name>chorus.termsaccepted</name> //Accept Chorus Terms
+        <value></value>
+        <description>By setting this value to yes, you agree you have read and accepted the Chorus license agreement. Installation will not occur if the value is anything other than 'yes'.</description>
+    </property>
+    <property>
+        <name>chorus.installation.installerpath</name>
+        <value></value>
+        <description>The chorus installer's absolute file path.</description>
+    </property>
+    <property>
+        <name>chorus.installation.directory</name>
+        <value>/usr/local/chorus</value>
+        <description>The absolute path to the install location. You must have write permissions to the location you specify.</description>
+    </property>
+    <property>
+        <name>chorus.installation.datadirectory</name>
+        <value>/data/chorus</value>
+        <description>The absolute path to the data directory. You must have write permissions to the location you specify.  Recommended data directory is at least 500GB.</description>
+    </property>
+    <property>
+        <name>chorus.security.salt</name>
+        <value></value>
+        <description>Enter passphrase used to generate a recoverable secret key for encrypting passwords.  By default one will be generated randomly.</description>
+    </property>
+</configuration>

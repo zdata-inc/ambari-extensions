@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+
+<metainfo>
+    <schemaVersion>2.0</schemaVersion>
+    <services>
+        <service>
+            <name>CHORUS</name>
+            <displayName>Chorus</displayName>
+            <comment>ZData Chorus bigdata analytical tool</comment>
+            <version>0.1</version>
+            
+            <components>
+                <component>
+                    <name>CHORUS_MASTER</name>
+                    <displayName>Chorus Master</displayName>
+                    <category>MASTER</category>
+                    <cardinality>1</cardinality>
+                    <commandScript>
+                        <script>scripts/master.py</script>
+                        <scriptType>PYTHON</scriptType>
+                        <timeout>4800</timeout>
+                    </commandScript>
+                </component>
+            </components>
+
+            <osSpecifics>
+                <osSpecific>
+                    <osFamily>any</osFamily>
+                </osSpecific>
+            </osSpecifics>
+        </service>
+    </services>
+</metainfo>
