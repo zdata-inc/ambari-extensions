@@ -11,22 +11,26 @@ Vagrant.configure(2) do |config|
     config.hostmanager.manage_host = true
 
     config.hostmanager.ip_resolver = proc do |vm, resolving_vm|
-        buffer = '';
-        vm.communicate.execute("/sbin/ifconfig") do |type, data|
-          buffer += data if type == :stdout
+        begin
+            buffer = '';
+            vm.communicate.execute("/sbin/ifconfig") do |type, data|
+              buffer += data if type == :stdout
+            end
+
+            ips = []
+            ifconfigIPs = buffer.scan(/inet addr:(\d+\.\d+\.\d+\.\d+)/)
+            ifconfigIPs[0..ifconfigIPs.size].each do |ip|
+                ip = ip.first
+                next if ip == '127.0.0.1'
+                next if ip.start_with? '10.'
+
+                ips.push(ip) unless ips.include? ip
+            end
+
+            ips.first
+        rescue StandardError => exc
+            return
         end
-
-        ips = []
-        ifconfigIPs = buffer.scan(/inet addr:(\d+\.\d+\.\d+\.\d+)/)
-        ifconfigIPs[0..ifconfigIPs.size].each do |ip|
-            ip = ip.first
-            next if ip == '127.0.0.1'
-            next if ip.start_with? '10.'
-
-            ips.push(ip) unless ips.include? ip
-        end
-
-        ips.first
     end
 
     config.vm.define 'master', primary: true do |node|
