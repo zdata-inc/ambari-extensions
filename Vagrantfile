@@ -21,7 +21,8 @@ Vagrant.configure(2) do |config|
             ifconfigIPs = buffer.scan(/inet addr:(\d+\.\d+\.\d+\.\d+)/)
             ifconfigIPs[0..ifconfigIPs.size].each do |ip|
                 ip = ip.first
-                next if ip == '127.0.0.1'
+
+                next unless system "ping -c1 -t1 #{ip} > /dev/null"
 
                 ips.push(ip) unless ips.include? ip
             end
