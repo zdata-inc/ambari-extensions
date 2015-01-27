@@ -12,7 +12,7 @@ EOF
 
 # Add ambari repo
 if [ ! -f ambari.repo ]; then
-    wget $AMBARI_REPO -O ambari.repo
+    wget $AMBARI_REPO -q -O ambari.repo
     sudo cp ambari.repo /etc/yum.repos.d/ambari.repo
 fi
 

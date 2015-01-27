@@ -1,4 +1,9 @@
+.vagrant
+**.DS_Store
+
+private_key
+private_key.pub
+
 greenplum-db-4.zip
 GREENPLUM/package/.hash
 GREENPLUM/package/archive.zip
-**.DS_Store
