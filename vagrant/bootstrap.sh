@@ -10,6 +10,12 @@ fi
 sh -c 'cat /vagrant/private_key.pub >> ~/.ssh/authorized_keys'
 EOF
 
+# Add Epel repo
+if [ ! -f epel-release-6-8.noarch.rpm ]; then
+    wget http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+    sudo rpm -Uvh epel-release-6*.rpm
+fi
+
 # Add ambari repo
 if [ ! -f ambari.repo ]; then
     wget $AMBARI_REPO -q -O ambari.repo
@@ -17,7 +23,8 @@ if [ ! -f ambari.repo ]; then
 fi
 
 umask 022
-sudo yum install -y epel-release openssl ntp
+
+sudo yum install -y openssl ntp
 
 sudo chkconfig iptables off
 sudo service iptables stop
