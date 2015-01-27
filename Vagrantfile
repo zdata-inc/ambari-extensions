@@ -17,11 +17,13 @@ Vagrant.configure(2) do |config|
               buffer += data if type == :stdout
             end
 
+            puts buffer
+
             ips = []
             ifconfigIPs = buffer.scan(/inet addr:(\d+\.\d+\.\d+\.\d+)/)
             ifconfigIPs[0..ifconfigIPs.size].each do |ip|
                 ip = ip.first
-                next if ip =~ /(^127\.0\.0\.1)|(^10\.)|(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)|(^192\.168\.)/
+                next if ip == '127.0.0.1'
 
                 ips.push(ip) unless ips.include? ip
             end
