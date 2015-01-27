@@ -17,8 +17,6 @@ Vagrant.configure(2) do |config|
               buffer += data if type == :stdout
             end
 
-            puts buffer
-
             ips = []
             ifconfigIPs = buffer.scan(/inet addr:(\d+\.\d+\.\d+\.\d+)/)
             ifconfigIPs[0..ifconfigIPs.size].each do |ip|
