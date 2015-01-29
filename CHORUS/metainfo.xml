@@ -27,6 +27,14 @@
                 <osSpecific>
                     <osFamily>any</osFamily>
                 </osSpecific>
+                <osSpecific>
+                    <osFamily>redhat5,redhat6</osFamily>
+                    <packages>
+                        <package>
+                            <name>java-1.7.0-openjdk</name>
+                        </package>
+                    </packages>
+                </osSpecific>
             </osSpecifics>
         </service>
     </services>
