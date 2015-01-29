@@ -21,11 +21,22 @@ def cprint(color, message):
 
     print color + message + colors['ENDC']
 
+def demoter(user_uid, user_gid):
+    def result():
+        os.setgid(user_uid)
+        os.setuid(user_uid)
+    return result
 
 class Master(Script):
     """Manages a Chorus server"""
 
     def install(self, env):
+        self.install_packages(env)
+
+        pprint(self.create_user(env))
+
+        demoterFunction = demoter(*self.create_user(env))
+
         config = Script.get_config()['configurations']['installation-config']
         # pprint(Script.get_config())
         # pprint(env)
@@ -63,18 +74,26 @@ class Master(Script):
         installationProcess = Popen(
             "/usr/bin/env bash %s" % installerPath,
             stdin = PIPE, stdout = PIPE, stderr = PIPE,
+            preexec_fn=demoterFunction(),
             bufsize = 1,
             shell = True
         )
 
-        installationProcess.stdin.write("\n".join(installationOptions) + "\n")
+        stdout,stderr = installationProcess.communicate("\n".join(installationOptions) + "\n")
+        installationProcess.wait()
 
-        print installationProcess.stdout.read()
+        print stdout
 
-        stderr = installationProcess.stderr.read()
         if (len(stderr) > 0):
             cprint('FAIL', "There were errors during the installation:")
             print stderr
+            sys.exit(1)
+        elif (stdout.find("An error has occurred. Trying to back out and restore previous state") != -1):
+            cprint('FAIL', "The installation encountered an error and attempted to roll back:")
+
+            with open('%s/install.log' % os.path.abspath(config['chorus.installation.directory']), 'r') as f:
+                print f.read()
+
             sys.exit(1)
         else:
             cprint('OKGREEN', "Installation finished!")
@@ -94,6 +113,12 @@ class Master(Script):
 
     def configure(self, env):
         print "configure"
+
+    def create_user(self, env):
+        os.system('useradd chorus')
+        os.system('echo "chorus" | passwd --stdin chorus')
+
+        return int(os.popen('id --user chorus').read().strip()), int(os.popen('id --group chorus').read().strip())
 
 if __name__ == "__main__":
     Master().execute()
