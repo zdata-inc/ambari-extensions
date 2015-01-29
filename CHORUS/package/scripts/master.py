@@ -69,11 +69,12 @@ class Master(Script):
 
         installationProcess.stdin.write("\n".join(installationOptions) + "\n")
 
-        installationProcess.wait()
+        print installationProcess.stdout.read()
 
-        if (len(installationProcess.stderr.read()) > 0):
+        stderr = installationProcess.stderr.read()
+        if (len(stderr) > 0):
             cprint('FAIL', "There were errors during the installation:")
-            print installationProcess.stderr.read()
+            print stderr
             sys.exit(1)
         else:
             cprint('OKGREEN', "Installation finished!")
