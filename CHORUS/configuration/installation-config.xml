@@ -24,7 +24,7 @@
     </property>
     <property>
         <name>chorus.security.salt</name>
-        <value></value>
+        <value>generate</value>
         <description>Enter passphrase used to generate a recoverable secret key for encrypting passwords.  By default one will be generated randomly.</description>
     </property>
 </configuration>
