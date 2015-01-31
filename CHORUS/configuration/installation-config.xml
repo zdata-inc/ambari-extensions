@@ -3,7 +3,7 @@
 
 <configuration>
     <property>
-        <name>chorus.termsaccepted</name> //Accept Chorus Terms
+        <name>chorus.termsaccepted</name>
         <value></value>
         <description>By setting this value to yes, you agree you have read and accepted the Chorus license agreement. Installation will not occur if the value is anything other than 'yes'.</description>
     </property>
