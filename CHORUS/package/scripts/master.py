@@ -32,6 +32,7 @@ class Master(Script):
         if (not os.path.exists(os.path.abspath(config['chorus.installation.directory']))):
             utilities.cprint('warning', 'Given installation directory does not exist, creating...')
             os.makedirs(os.path.abspath(config['chorus.installation.directory']))
+            os.chown(os.path.abspath(config['chorus.installation.directory']), chorusUID, chorusGID)
 
         installationOptions.append(os.path.abspath(config['chorus.installation.directory']))
 
@@ -39,6 +40,7 @@ class Master(Script):
         if (not os.path.exists(os.path.abspath(config['chorus.installation.datadirectory']))):
             utilities.cprint('warning', 'Given data directory does not exist, creating...')
             os.makedirs(os.path.abspath(config['chorus.installation.datadirectory']))
+            os.chown(os.path.abspath(config['chorus.installation.datadirectory']), chorusUID, chorusGID)
 
         installationOptions.append(os.path.abspath(config['chorus.installation.datadirectory']))
 
