@@ -1,6 +1,7 @@
 import os
 from subprocess import Popen, PIPE
 from textwrap import dedent
+from collections import namedtuple
 
 def cprint(color, message):
     colors = {
@@ -28,23 +29,36 @@ def create_user(user):
         fi
         """ % (user)))
 
-    return int(os.popen("id --user %s" % user).read().strip()), int(os.popen('id --group %s' % user).read().strip())
+    return {
+        'uid': int(os.popen("id --user %s" % user).read().strip()),
+        'gid': int(os.popen('id --group %s' % user).read().strip())
+    }
 
-def demoter(user_uid, user_gid):
+def demoter(userAccount):
     def result():
-        os.setgid(user_uid)
-        os.setuid(user_uid)
+        os.setgid(userAccount['gid'])
+        os.setuid(userAccount['uid'])
     return result
 
-def run(cmd, options={}, communicate=False, uid=None, gid=None):
-    if (uid != None and gid != None):
-        options['preexec_fn'] = demoter(uid, gid)
+def run(cmd, options={}, communicate=None, user=None):
+    if (user != None):
+        options['preexec_fn'] = demoter(user)
 
-    if (communicate):
-        options['stdin']   = PIPE
-        options['stdout']  = PIPE
-        options['stderr']  = PIPE
-        options['bufsize'] = 1
-        options['shell']   = True
+    if (communicate != None):
+        process = Popen(cmd,
+            stdin = PIPE, stdout = PIPE, stderr = PIPE,
+            bufsize = 1,
+            shell = True,
+            **options
+        )
+        out, err = process.communicate(communicate)
+        process.wait()
 
-    return Popen(cmd, **options)
+        if (len(err) > 0):
+            raise Exception(err)
+        if (process.returncode != 0)
+            raise Exception("Non-zero exit code " + process.returncode)
+
+        return out
+    else:
+        return Popen(cmd, **options)
