@@ -56,8 +56,8 @@ def run(cmd, options={}, communicate=None, user=None):
 
         if (len(err) > 0):
             raise Exception(err)
-        if (process.returncode != 0)
-            raise Exception("Non-zero exit code " + process.returncode)
+        if (process.returncode != 0):
+            raise Exception("Non-zero exit code " + str(process.returncode))
 
         return out
     else:
