@@ -1,7 +1,10 @@
+"""
+Ambari service implementation for Chorus master.
+"""
+
 import sys
 import os
-from resource_management import *
-from resource_management.core.exceptions import ComponentIsNotRunning
+from resource_management import Script
 from library.chorus import Chorus
 from library import utilities
 from pprint import pprint
@@ -12,14 +15,22 @@ class Master(Script):
     chorusInstance = None
 
     def _chorus(self):
-        if (self.chorusInstance == None):
+        """
+        Creates Chorus instance for the current installation of Chorus.
+        """
+
+        if self.chorusInstance == None:
             import params
             self.chorusInstance = Chorus(params)
 
         return self.chorusInstance
 
     def install(self, env):
-        if (not os.path.exists(self._chorus().params.installerPath)):
+        """
+        Install Chorus with error handling.
+        """
+
+        if not os.path.exists(self._chorus().params.installerPath):
             raise AttributeError('Installer could not be found at ' + self._chorus().params.installerPath)
 
         self.install_packages(env)
@@ -38,17 +49,34 @@ class Master(Script):
             print "Installation finished successfully!"
 
     def start(self, env):
+        """
+        Configure and start Chorus.
+        """
+
         self._chorus().configure()
         self._chorus().start()
 
     def stop(self, env):
+        """
+        Stop Chorus.
+        """
+
         self._chorus().stop()
 
 
     def status(self, env):
-        self._chorus().isRunning()
+        """
+        Verify Chorus is running.
+        Throw ComponentIsNotRunning if one or more of its services aren't active.
+        """
+
+        self._chorus().is_running()
 
     def configure(self, env):
+        """
+        Perform configurations on Chorus.
+        """
+
         self._chorus().configure()
 
 if __name__ == "__main__":
