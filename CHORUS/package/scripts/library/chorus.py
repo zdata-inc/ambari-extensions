@@ -121,13 +121,12 @@ class Chorus(object):
         """
 
         pid_files = {
-            'solr': os.path.join(self.params.INSTALLATION_DIRECTORY, "tmp/pids/solr-production.pid"),
-            'nginx': os.path.join(self.params.INSTALLATION_DIRECTORY, "tmp/pids/nginx.pid"),
-            'jetty': os.path.join(self.params.INSTALLATION_DIRECTORY, "tmp/pids/jetty.pid"),
-            'schedulrer': os.path.join(self.params.INSTALLATION_DIRECTORY, "tmp/pids/scheduler.production.pid"),
-            'worker': os.path.join(self.params.INSTALLATION_DIRECTORY, "tmp/pids/worker.production.pid"),
-            'mizuno': os.path.join(self.params.INSTALLATION_DIRECTORY, "tmp/pids/mizuno.pid"),
-            'postgres': os.path.join(self.params.INSTALLATION_DIRECTORY, "postgres-db/postmaster.pid")
+            'solr': os.path.join(self.params.INSTALLATION_DIRECTORY, "shared/tmp/pids/solr-production.pid"),
+            'nginx': os.path.join(self.params.INSTALLATION_DIRECTORY, "shared/tmp/pids/nginx.pid"),
+            'jetty': os.path.join(self.params.INSTALLATION_DIRECTORY, "shared/tmp/pids/jetty.pid"),
+            'schedulrer': os.path.join(self.params.INSTALLATION_DIRECTORY, "shared/tmp/pids/scheduler.production.pid"),
+            'worker': os.path.join(self.params.INSTALLATION_DIRECTORY, "shared/tmp/pids/worker.production.pid"),
+            'postgres': os.path.join(self.params.INSTALLATION_DIRECTORY, "db/postmaster.pid")
         }
 
         not_running = []
