@@ -19,16 +19,16 @@ class Master(Script):
         return self.chorusInstance
 
     def install(self, env):
-        if (not os.path.exists(installerPath)):
-            raise AttributeException('Installer could not be found at ' + installerPath)
+        if (not os.path.exists(self._chorus().params.installerPath)):
+            raise AttributeError('Installer could not be found at ' + self._chorus().params.installerPath)
 
         self.install_packages(env)
-        env.set_params(params)
+        env.set_params(self._chorus().params)
 
         # Install
         try:
             print self._chorus().install()
-        except AttributeException as e:
+        except AttributeError as e:
             print "Configuration error: ", e
             sys.exit(1)
         except Exception as e:
@@ -38,6 +38,7 @@ class Master(Script):
             print "Installation finished successfully!"
 
     def start(self, env):
+        self._chorus().configure()
         self._chorus().start()
 
     def stop(self, env):
@@ -45,8 +46,7 @@ class Master(Script):
 
 
     def status(self, env):
-        if (not self._chorus().isRunning()):
-            raise ComponentIsNotRunning()
+        self._chorus().isRunning()
 
     def configure(self, env):
         self._chorus().configure()

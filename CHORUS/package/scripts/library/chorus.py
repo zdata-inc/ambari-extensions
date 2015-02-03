@@ -15,16 +15,17 @@ class Chorus:
         return self._account
 
     def createDirectory(self, directory):
+        user = self.user()
         os.makedirs(directory)
-        os.chown(directory, **self.user())
+        os.chown(directory, user['uid'], user['gid'])
 
     def install(self):
-        self.configure(self.params)
+        self.configure()
 
         try:
             installOutput = utilities.run("/usr/bin/env bash %s" % self.params.installerPath, communicate=self.buildInstallationParameters(), user=self.user())
         except Exception as e:
-            raise Exception("There were errors during the installation: %s" % stderr)
+            raise Exception("There were errors during the installation: %s" % e)
 
         if (installOutput.find("An error has occurred. Trying to back out and restore previous state") != -1):
             with open('%s/install.log' % os.path.abspath(config['chorus.installation.directory']), 'r') as f:
@@ -40,13 +41,13 @@ class Chorus:
 
         # Installation Directory
         if (not os.path.exists(self.params.installationDirectory)):
-            raise AttributeException("Installation directory '%s' does not exist." % self.params.installationDirectory)
+            raise AttributeError("Installation directory '%s' does not exist." % self.params.installationDirectory)
 
         installationOptions.append(self.params.installationDirectory)
 
         # Data directory
         if (not os.path.exists(self.params.dataDirectory)):
-            raise AttributeException("Data directory '%s' does not exist." % self.params.dataDirectory)
+            raise AttributeError("Data directory '%s' does not exist." % self.params.dataDirectory)
 
         installationOptions.append(self.params.dataDirectory)
 
@@ -56,13 +57,11 @@ class Chorus:
         return "\n".join(installationOptions) + "\n"
 
     def configure(self):
-        configurations['installerPath'] = self.params.installerPath
-
         if (not os.path.exists(self.params.installationDirectory)):
-            createDirectory(self.params.installationDirectory)
+            self.createDirectory(self.params.installationDirectory)
 
         if (not os.path.exists(self.params.dataDirectory)):
-            createDirectory(self.params.dataDirectory)
+            self.createDirectory(self.params.dataDirectory)
 
         ## More configurations here in the future
 
@@ -72,7 +71,7 @@ class Chorus:
     def stop(self):
         print utilities.run(os.path.join("source " + self.params.installationDirectory, "chorus_path.sh") + " && chorus_control.sh stop", communicate="", user=self.user())
 
-    def status(self):
+    def isRunning(self):
         pidFiles = {
             'solr': os.path.join(self.params.installationDirectory, "tmp/pids/solr-production.pid"),
             'nginx': os.path.join(self.params.installationDirectory, "tmp/pids/nginx.pid"),
@@ -83,5 +82,13 @@ class Chorus:
             'postgres': os.path.join(self.params.installationDirectory, "postgres-db/postmaster.pid")
         }
 
-        for pid in pidFiles:
-            check_process_status(pid)
+        notRunning = []
+
+        for process, pid in pidFiles.iteritems():
+            try:
+                check_process_status(pid)
+            except ComponentIsNotRunning as e:
+                notRunning.push(process)
+
+        if (len(notRunning) > 0):
+            raise ComponentIsNotRunning("\n".join(notRunning) + " aren't currently running")
