@@ -1,6 +1,9 @@
 from resource_management import Script
 
-config = Script.get_config()['configurations']['installation-config']
+allConfigurations = Script.get_config()
+
+
+config = allConfigurations['configurations']['installation-config']
 
 TERMS_ACCEPTED = config['chorus.termsaccepted'] == 'yes'
 SECURITY_SALT = '' if config['chorus.security.salt'] == 'generate' else config['chorus.security.salt']
