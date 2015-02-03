@@ -7,8 +7,6 @@ import os
 from resource_management import Script
 from resource_management.core.exceptions import ComponentIsNotRunning
 from library.chorus import Chorus
-from library import utilities
-from pprint import pprint
 
 class Master(Script):
     """Manages a Chorus server"""
