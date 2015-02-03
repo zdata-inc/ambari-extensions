@@ -43,7 +43,7 @@ class Master(Script):
         except AttributeError as e:
             print "Configuration error: ", e
             sys.exit(1)
-        except Exception as e:
+        except StandardError as e:
             print e
             sys.exit(1)
         else:
