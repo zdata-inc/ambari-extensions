@@ -36,6 +36,10 @@
                     </packages>
                 </osSpecific>
             </osSpecifics>
+
+            <configuration-dependencies>
+                <config-type>installation-config</config-type>
+            </configuration-dependencies>
         </service>
     </services>
 </metainfo>
