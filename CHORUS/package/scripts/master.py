@@ -38,11 +38,11 @@ class Master(Script):
         # Install
         try:
             print self._chorus().install()
-        except AttributeError as e:
-            print "Configuration error: ", e
+        except AttributeError as exception:
+            print "Configuration error: ", exception
             sys.exit(1)
-        except StandardError as e:
-            print e
+        except StandardError as exception:
+            print exception
             sys.exit(1)
         else:
             print "Installation finished successfully!"
@@ -69,7 +69,9 @@ class Master(Script):
         Throw ComponentIsNotRunning if one or more of its services aren't active.
         """
 
-        self._chorus().is_running()
+        result = self._chorus().is_running()
+        if result != True:
+            raise ComponentIsNotRunning("\n".join(result) + " aren't currently running")
 
     def configure(self, env):
         """

@@ -117,6 +117,7 @@ class Chorus(object):
     def is_running(self):
         """
         Check if Chorus is running by verifying the processes using their various pid files.
+        Returns true if all are running, or an array of process which should be running.
         """
 
         pid_files = {
@@ -138,4 +139,6 @@ class Chorus(object):
                 not_running.append(process)
 
         if len(not_running) > 0:
-            raise ComponentIsNotRunning("\n".join(not_running) + " aren't currently running")
+            return not_running
+        else:
+            return True
