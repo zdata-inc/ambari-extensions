@@ -5,6 +5,7 @@ Ambari service implementation for Chorus master.
 import sys
 import os
 from resource_management import Script
+from resource_management.core.exceptions import ComponentIsNotRunning
 from library.chorus import Chorus
 from library import utilities
 from pprint import pprint
@@ -30,8 +31,8 @@ class Master(Script):
         Install Chorus with error handling.
         """
 
-        if not os.path.exists(self._chorus().params.installerPath):
-            raise AttributeError('Installer could not be found at ' + self._chorus().params.installerPath)
+        if not os.path.exists(self._chorus().params.installer_path):
+            raise AttributeError('Installer could not be found at ' + self._chorus().params.installer_path)
 
         self.install_packages(env)
         env.set_params(self._chorus().params)

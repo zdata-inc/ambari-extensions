@@ -47,7 +47,7 @@ class Chorus(object):
 
         try:
             install_output = utilities.run(
-                "/usr/bin/env bash %s" % self.params.installerPath,
+                "/usr/bin/env bash %s" % self.params.installer_path,
                 communicate=self._build_installation_parameters(),
                 user=self.user()
             )
@@ -55,7 +55,7 @@ class Chorus(object):
             raise Exception("There were errors during the installation: %s" % exception)
 
         if install_output.find("An error has occurred. Trying to back out and restore previous state") != -1:
-            with open(os.path.join(self.params.installationDirectory, 'install.log'), 'r') as filehandle:
+            with open(os.path.join(self.params.installation_directory, 'install.log'), 'r') as filehandle:
                 raise Exception("The installation encountered an error and attempted to roll back: %s" % filehandle.read())
 
         return install_output
@@ -68,22 +68,22 @@ class Chorus(object):
         installation_options = []
 
         # Terms accepted
-        installation_options.append('y' if self.params.termsAccepted else 'n')
+        installation_options.append('y' if self.params.terms_accepted else 'n')
 
         # Installation Directory
-        if not os.path.exists(self.params.installationDirectory):
-            raise AttributeError("Installation directory '%s' does not exist." % self.params.installationDirectory)
+        if not os.path.exists(self.params.installation_directory):
+            raise AttributeError("Installation directory '%s' does not exist." % self.params.installation_directory)
 
-        installation_options.append(self.params.installationDirectory)
+        installation_options.append(self.params.installation_directory)
 
         # Data directory
-        if not os.path.exists(self.params.dataDirectory):
-            raise AttributeError("Data directory '%s' does not exist." % self.params.dataDirectory)
+        if not os.path.exists(self.params.data_directory):
+            raise AttributeError("Data directory '%s' does not exist." % self.params.data_directory)
 
-        installation_options.append(self.params.dataDirectory)
+        installation_options.append(self.params.data_directory)
 
         # Salt
-        installation_options.append(self.params.securitySalt)
+        installation_options.append(self.params.security_salt)
 
         return "\n".join(installation_options) + "\n"
 
@@ -92,11 +92,11 @@ class Chorus(object):
         Prepare the system for Chorus to be installed.
         """
 
-        if not os.path.exists(self.params.installationDirectory):
-            self.create_directory(self.params.installationDirectory)
+        if not os.path.exists(self.params.installation_directory):
+            self.create_directory(self.params.installation_directory)
 
-        if not os.path.exists(self.params.dataDirectory):
-            self.create_directory(self.params.dataDirectory)
+        if not os.path.exists(self.params.data_directory):
+            self.create_directory(self.params.data_directory)
 
         ## More configurations here in the future
 
@@ -105,14 +105,14 @@ class Chorus(object):
         Start Chorus as the chorus user using chorus_control.sh
         """
 
-        print utilities.run(os.path.join("source " + self.params.installationDirectory, "chorus_path.sh") + " && chorus_control.sh start", communicate="", user=self.user())
+        print utilities.run(os.path.join("source " + self.params.installation_directory, "chorus_path.sh") + " && chorus_control.sh start", communicate="", user=self.user())
 
     def stop(self):
         """
         Stop Chorus as the chorus user using chorus_control.sh
         """
 
-        print utilities.run(os.path.join("source " + self.params.installationDirectory, "chorus_path.sh") + " && chorus_control.sh stop", communicate="", user=self.user())
+        print utilities.run(os.path.join("source " + self.params.installation_directory, "chorus_path.sh") + " && chorus_control.sh stop", communicate="", user=self.user())
 
     def is_running(self):
         """
@@ -120,13 +120,13 @@ class Chorus(object):
         """
 
         pid_files = {
-            'solr': os.path.join(self.params.installationDirectory, "tmp/pids/solr-production.pid"),
-            'nginx': os.path.join(self.params.installationDirectory, "tmp/pids/nginx.pid"),
-            'jetty': os.path.join(self.params.installationDirectory, "tmp/pids/jetty.pid"),
-            'schedulrer': os.path.join(self.params.installationDirectory, "tmp/pids/scheduler.production.pid"),
-            'worker': os.path.join(self.params.installationDirectory, "tmp/pids/worker.production.pid"),
-            'mizuno': os.path.join(self.params.installationDirectory, "tmp/pids/mizuno.pid"),
-            'postgres': os.path.join(self.params.installationDirectory, "postgres-db/postmaster.pid")
+            'solr': os.path.join(self.params.installation_directory, "tmp/pids/solr-production.pid"),
+            'nginx': os.path.join(self.params.installation_directory, "tmp/pids/nginx.pid"),
+            'jetty': os.path.join(self.params.installation_directory, "tmp/pids/jetty.pid"),
+            'schedulrer': os.path.join(self.params.installation_directory, "tmp/pids/scheduler.production.pid"),
+            'worker': os.path.join(self.params.installation_directory, "tmp/pids/worker.production.pid"),
+            'mizuno': os.path.join(self.params.installation_directory, "tmp/pids/mizuno.pid"),
+            'postgres': os.path.join(self.params.installation_directory, "postgres-db/postmaster.pid")
         }
 
         not_running = []
