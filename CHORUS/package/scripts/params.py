@@ -1,5 +1,4 @@
-from resource_management import *
-import os
+from resource_management import Script
 
 config = Script.get_config()['configurations']['installation-config']
 
