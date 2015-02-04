@@ -20,6 +20,13 @@
                         <scriptType>PYTHON</scriptType>
                         <timeout>4800</timeout>
                     </commandScript>
+                    <configFiles>
+                        <configFile>
+                            <type>xml</type>
+                            <fileName>installation-config.xml</fileName>
+                            <dictionaryName>installation-config</dictionaryName>
+                        </configFile>
+                    </configFiles>
                 </component>
             </components>
 
