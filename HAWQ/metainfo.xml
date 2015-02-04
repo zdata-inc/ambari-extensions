@@ -37,24 +37,23 @@
 					</commandScript>
 				</component>
 
-				<component>
-					<name>HAWQ_CLIENT</name>
-					<displayName>Hawq Client</displayName>
-					<category>CLIENT</category>
-					<cardinality>1+</cardinality>
-					<commandScript>
-						<script>scripts/client.py</script>
-						<scriptType>PYTHON</scriptType>
-						<timeout>600</timeout>
-					</commandScript>
-				</component>
 			</components>
-			
-			<osSpecifics>
-				<osSpecific>
-					<osFamily>any</osFamily>  <!-- note: use osType rather than osFamily for Ambari 1.5.0 and 1.5.1 -->
-				</osSpecific>
-			</osSpecifics>
+
+            <osSpecifics>
+                <osSpecific>
+                    <osFamily>any</osFamily>
+                       <packages>
+                          <package>
+                              <name>hawq</name>
+                          </package>
+                       </packages>
+                    </osSpecific>
+            </osSpecifics>
+
+            <requiredServices>
+                <service>HDFS</service>
+            </requiredServices>
+
 		</service>
 	</services>
 </metainfo>
