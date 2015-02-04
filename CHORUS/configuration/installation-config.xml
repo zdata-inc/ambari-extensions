@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
 
-<configuration>
+<configuration supports_final="true" xmlns:xi="http://www.w3.org/2001/XInclude">
     <property>
         <name>chorus.termsaccepted</name>
         <value></value>
@@ -16,6 +16,7 @@
         <name>chorus.installation.directory</name>
         <value>/usr/local/chorus</value>
         <description>The absolute path to the install location. You must have write permissions to the location you specify.</description>
+        <final>true</final>
     </property>
     <property>
         <name>chorus.installation.datadirectory</name>
