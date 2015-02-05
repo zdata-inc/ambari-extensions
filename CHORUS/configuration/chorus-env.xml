@@ -28,4 +28,34 @@
         <value>generate</value>
         <description>Enter passphrase used to generate a recoverable secret key for encrypting passwords.  By default one will be generated randomly.</description>
     </property>
+    <property>
+        <name>chorus.server.port</name>
+        <value>8080</value>
+        <description>The port used to access Chorus.</description>
+    </property>
+    <property>
+        <name>chorus.server.timeout</name>
+        <value>480</value>
+        <description>Number of minutes before a user is logged out due to inactiveity.</description>
+    </property>
+    <property>
+        <name>chorus.server.defaultpreviewrowlimit</name>
+        <value>500</value>
+        <description>Default number of rows to show in a preview.</description>
+    </property>
+    <property>
+        <name>chorus.server.executiontimeout</name>
+        <value>10</value>
+        <description>Maximum execution time for visualizations and workflows, in minutes.</description>
+    </property>
+    <property>
+        <name>chorus.server.loglevel</name>
+        <value>info</value>
+        <description>Chorus log level.</description>
+    </property>
+    <property>
+        <name>chorus.server.mailenabled</name>
+        <value>false</value>
+        <description>Chorus mailing enabled.</description>
+    </property>
 </configuration>
