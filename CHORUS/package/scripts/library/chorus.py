@@ -4,7 +4,6 @@ Contains class used to install and manage a Chorus installation
 
 import os
 from library import utilities
-from resource_management import check_process_status
 from resource_management.core.exceptions import ComponentIsNotRunning
 
 class Chorus(object):
@@ -126,15 +125,19 @@ class Chorus(object):
             'jetty': os.path.join(self.params.INSTALLATION_DIRECTORY, "shared/tmp/pids/jetty.pid"),
             'schedulrer': os.path.join(self.params.INSTALLATION_DIRECTORY, "shared/tmp/pids/scheduler.production.pid"),
             'worker': os.path.join(self.params.INSTALLATION_DIRECTORY, "shared/tmp/pids/worker.production.pid"),
-            'postgres': os.path.join(self.params.INSTALLATION_DIRECTORY, "db/postmaster.pid")
+            'postgres': os.path.join(self.params.DATA_DIRECTORY, "db/postmaster.pid")
         }
 
         not_running = []
 
-        for process, pid in pid_files.iteritems():
-            try:
-                check_process_status(pid)
-            except ComponentIsNotRunning:
+        for process, pidFile in pid_files.iteritems():
+            pid = None
+
+            if process == 'postgres':
+                with open(pidFile, 'r') as filehandle:
+                    pid = int(filehandle.readlines()[0])
+
+            if not utilities.is_process_running(pidFile, pid):
                 not_running.append(process)
 
         if len(not_running) > 0:
