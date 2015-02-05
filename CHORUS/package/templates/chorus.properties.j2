@@ -1,0 +1,95 @@
+# Only defaults that should apply to all applications should go in here,
+# optional configurations should only go into chorus.properties.example
+
+# Server Settings
+
+server_port = {{SERVER_PORT}}
+postgres_port = 8543
+solr_port = 8983
+
+java_options = -Djava.security.egd=file:/dev/./urandom -server -Xmx4096m -Xms2048m -Xmn1365m -XX:MaxPermSize=256m -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:ParallelGCThreads=3 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=./ -XX:+CMSClassUnloadingEnabled
+
+#java_options = -Djava.security.egd=file:/dev/./urandom -server -Xmx2048m -Xms512m -XX:MaxPermSize=128m
+
+# Runtime Settings
+
+# The default session timeout time (length of time that you need to remain
+# inactive for you to be logged out) is 8 hours.
+session_timeout_minutes = {{SERVER_TIMEOUT}}
+
+clean_expired_sessions_interval_hours = 24
+delete_unimported_csv_files_interval_hours = 6
+delete_unimported_csv_files_after_hours = 24
+instance_poll_interval_minutes = 5
+reindex_search_data_interval_hours = 24
+reset_counter_cache_interval_hours = 24
+
+sandbox_recommended_size_in_gb = 5
+
+# The number of rows to be shown in a preview by default.
+default_preview_row_limit = {{DEFAULT_PREVIEW_ROW_LIMIT}}
+
+# Maximum execution time of visualizations and workfiles, in minutes
+execution_timeout_in_minutes = {{EXECUTION_TIMEOUT}}
+
+# Database connection login timeout, in seconds
+database_login_timeout = 10
+
+# Restrict data source creation to administrators, default => false
+models.data_source.restrict_creation = false
+
+# Concurrency Settings
+
+# Configure thread pool size of webserver and worker processes.
+#
+# The # of webserver threads determines the maximum number of simultaneous web
+# requests. The # of worker threads determines the maximum number of
+# asychronous jobs, such as table copying or importing, that can be run
+# simultaneously.
+#
+# Each web or worker thread may use its own connection to the local Postgresql
+# database, thus the sum of 'worker_threads' + 'webserver_threads' must be less
+# than the 'max_connections' configured in postgresql.conf.
+#
+# The 'max_connections' parameter may be based on your operating system's kernel
+# shared memory size. For example, on OS X this parameter will default to 20.
+
+worker_threads = 10
+database_threads = 100
+webserver_threads = 40
+
+# File Size Settings
+
+file_sizes_mb.workfiles = 10
+file_sizes_mb.csv_imports = 100
+file_sizes_mb.user_icon = 5
+file_sizes_mb.workspace_icon = 5
+file_sizes_mb.attachment = 10
+file_sizes_mb.hd_upload = 4096
+
+# Logging Settings
+
+logging.loglevel = {{LOG_LEVEL}}
+
+# Mail Settings
+
+mail.enabled = {{MAIL_ENABLED}}
+
+# Workflow
+workflow.url=http://localhost:9090
+
+# Jdbc schema blacklists
+#
+# Each jdbc_schema_blacklist.<database_type> specifies a list of schemas
+# that will be excluded from display, index, and search. (Effectively excluded
+# from Chorus).
+#
+# For any jdbc data source type, specify a list of case-sensitive
+# schema names. <database_type> should be the first match  in /\Ajdbc:([^:]+)/.
+#
+# For example, <database_type> for the jdbc url jdbc:postgresql://myhost:5432/postgres
+# is postgresql.
+
+jdbc_schema_blacklist.postgresql = [information_schema, pg_catalog]
+jdbc_schema_blacklist.sqlserver = [db_accessadmin, db_backupoperator, db_datareader, db_datawriter, db_ddladmin, db_denydatareader, db_denydatawriter, db_owner, db_securityadmin, dbo, INFORMATION_SCHEMA, sys]
+jdbc_schema_blacklist.teradata = [All, Crashdumps, DBC, dbcmngr, Default, EXTUSER, LockLogShredder, PUBLIC, SQLJ, SysAdmin, SYSBAR, SYSLIB, SYSSPATIAL, SystemFe, SYSUDTLIB, Sys_Calendar, TDPUSER, TDQCD, TDStats, tdwm, TD_SYSFNLIB, TD_SYSXML]

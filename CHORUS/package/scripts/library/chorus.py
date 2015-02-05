@@ -5,6 +5,7 @@ Contains class used to install and manage a Chorus installation
 import os
 from library import utilities
 from resource_management.core.exceptions import ComponentIsNotRunning
+from resource_management import *
 
 class Chorus(object):
     """
@@ -96,6 +97,11 @@ class Chorus(object):
 
         if not os.path.exists(self.params.DATA_DIRECTORY):
             self.create_directory(self.params.DATA_DIRECTORY)
+
+        TemplateConfig(
+            os.path.join(self.params.INSTALLATION_DIRECTORY, 'shared', 'chorus.properties'),
+            owner=self.user()['uid'], mode=0600
+        )
 
         ## More configurations here in the future
 

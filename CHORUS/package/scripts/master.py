@@ -28,6 +28,7 @@ class Master(Script):
         """
         Install Chorus with error handling.
         """
+        self.configEnv(env)
 
         if not os.path.exists(self._chorus().params.INSTALLER_PATH):
             raise AttributeError('Installer could not be found at ' + self._chorus().params.INSTALLER_PATH)
@@ -51,6 +52,7 @@ class Master(Script):
         """
         Configure and start Chorus.
         """
+        self.configEnv(env)
 
         self._chorus().configure()
         self._chorus().start()
@@ -59,6 +61,7 @@ class Master(Script):
         """
         Stop Chorus.
         """
+        self.configEnv(env)
 
         self._chorus().stop()
 
@@ -68,6 +71,7 @@ class Master(Script):
         Verify Chorus is running.
         Throw ComponentIsNotRunning if one or more of its services aren't active.
         """
+        self.configEnv(env)
 
         result = self._chorus().is_running()
         if result != True:
@@ -77,8 +81,13 @@ class Master(Script):
         """
         Perform configurations on Chorus.
         """
+        self.configEnv(env)
 
         self._chorus().configure()
+
+    def configEnv(self, env):
+        import params
+        env.set_params(params)
 
 if __name__ == "__main__":
     Master().execute()
