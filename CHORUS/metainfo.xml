@@ -20,13 +20,6 @@
                         <scriptType>PYTHON</scriptType>
                         <timeout>4800</timeout>
                     </commandScript>
-                    <configFiles>
-                        <configFile>
-                            <type>xml</type>
-                            <fileName>installation-config.xml</fileName>
-                            <dictionaryName>installation-config</dictionaryName>
-                        </configFile>
-                    </configFiles>
                 </component>
             </components>
 
@@ -45,7 +38,7 @@
             </osSpecifics>
 
             <configuration-dependencies>
-                <config-type>installation-config</config-type>
+                <config-type>chorus-env</config-type>
             </configuration-dependencies>
         </service>
     </services>

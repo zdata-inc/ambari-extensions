@@ -23,7 +23,7 @@
         <value>/data/chorus</value>
         <description>The absolute path to the data directory. You must have write permissions to the location you specify.  Recommended data directory is at least 500GB.</description>
     </property>
-    <property>
+    <property require-input="false">
         <name>chorus.security.salt</name>
         <value>generate</value>
         <description>Enter passphrase used to generate a recoverable secret key for encrypting passwords.  By default one will be generated randomly.</description>

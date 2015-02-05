@@ -3,7 +3,7 @@ from resource_management import Script
 allConfigurations = Script.get_config()
 
 
-config = allConfigurations['configurations']['installation-config']
+config = allConfigurations['configurations']['chorus-env']
 
 TERMS_ACCEPTED = config['chorus.termsaccepted'] == 'yes'
 SECURITY_SALT = '' if config['chorus.security.salt'] == 'generate' else config['chorus.security.salt']
