@@ -118,7 +118,7 @@ def is_process_running(pid_file, pid=None):
     if pid == None:
         with open(pid_file, 'r') as filehandle:
             try:
-                pid = int(f.read())
+                pid = int(filehandle.read())
             except:
                 return False
 
@@ -131,5 +131,5 @@ def is_process_running(pid_file, pid=None):
         os.kill(pid, 0)
     except OSError:
         return False
-    
+
     return True
