@@ -1,8 +1,29 @@
-import sys
 from resource_management import *
+from utils import * 
+import sys
+
 class Slave(Script):
+ 
+  # This installation assumes that the /etc/hosts file includes the host names and all interface address names for every machine participating in your HAWQ system.
+  # In the future, we can check to make sure this is true.
   def install(self, env):
-    print 'Install the Sample Srv Slave';
+    import params
+    
+    # Install hawq package
+    self.install_packages(env)
+    
+    # Add user
+    hawq_useradd()
+
+    # Modify system level settings for Hawq
+    hawq_modify_kernel_parameters()
+    hawq_modify_security_parameters()
+    hawq_modify_mount_options()
+
+    os.system("mkdir -p " + DATA_DIRECTORY)
+    os.system("chown -R "+ hawq_user +" "+DATA_DIRECTORY)
+
+    sys.exit(1)
   def stop(self, env):
     print 'Stop the Sample Srv Slave';
   def start(self, env):

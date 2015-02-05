@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+	<property>
+		<name>ARRAY_NAME</name>
+		<value>"zData Hawq Cluster"</value>
+		<description>Name of this Hawq system enclosed in quotes.</description>
+	</property>
+	<property>
+		<name>SEG_PREFIX</name>
+		<value>gpseg</value>
+		<description>Naming convention for utility-generated data directories.</description>
+	</property>
+	<property>
+		<name>PORT_BASE</name>
+		<value>40000</value>
+		<description>Base number by which primary segment port numbers are calculated.</description>
+	</property>
+	<property>
+		<name>DATA_DIRECTORY</name>
+		<value>/data1/primary /data2/primary</value>
+		<description>File system location(s) where primary segment data directories
+		 will be created. The number of locations in the list dictate
+		 the number of primary segments that will get created per
+		 physical host (if multiple addresses for a host are listed in
+		 the hostfile, the number of segments will be spread evenly across
+		 the specified interface addresses).</description>
+	</property>
+	<property>
+		<name>MASTER_HOSTNAME</name>
+		<value>mdw</value>
+		<description>OS-configured hostname or IP address of the master host.</description>
+	</property>
+	<property>
+		<name>MASTER_DIRECTORY</name>
+		<value>/data/master</value>
+		<description>File system location where the master data directory will be created.</description>
+	</property>
+	<property>
+		<name>MASTER_PORT</name>
+		<value>5432</value>
+		<description>Port number for the master instance.</description>
+	</property>
+	<property>
+		<name>TRUSTED_SHELL</name>
+		<value>ssh</value>
+		<description>Shell utility used to connect to remote hosts.</description>
+	</property>
+	<property>
+		<name>CHECK_POINT_SEGMENTS</name>
+		<value>8</value>
+		<description>Maximum log file segments between automatic WAL checkpoints.</description>
+	</property>
+	<property>
+		<name>ENCODING</name>
+		<value>UNICODE</value>
+		<description>Default server-side character set encoding.</description>
+	</property>
+	<property>
+		<name>DATABASE_NAME</name>
+		<value>zdata</value>
+		<description>Create a database of this name after initialization.</description>
+	</property>
+     <property>
+        <name>DFS_NAME</name>
+        <value>hdfs</value>
+        <description>The name of the DFS service.</description>
+      </property>
+     <property>
+        <name>DFS_URL</name>
+        <value>localhost:9000/gpsql</value>
+        <description></description>
+     </property>
+      <property>
+          <name>KERBEROS_KEYFILE</name>
+          <value>/etc/krb5.keytab</value>
+          <description></description>
+      </property>
+      <property>
+          <name>ENABLE_SECURE_FILESYSTEM</name>
+          <value>off</value>
+          <description></description>
+      </property>
+</configuration>
