@@ -75,7 +75,7 @@ class Master(Script):
 
         result = self._chorus().is_running()
         if result != True:
-            raise ComponentIsNotRunning(", ".join(result) + " aren't currently running")
+            raise ComponentIsNotRunning(", ".join(result) + " " + ("isn't" if len(result) == 1 else "aren't") + " currently running")
 
     def configure(self, env):
         """
