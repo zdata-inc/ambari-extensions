@@ -123,7 +123,7 @@ class Chorus(object):
             'solr': os.path.join(self.params.INSTALLATION_DIRECTORY, "shared/tmp/pids/solr-production.pid"),
             'nginx': os.path.join(self.params.INSTALLATION_DIRECTORY, "shared/tmp/pids/nginx.pid"),
             'jetty': os.path.join(self.params.INSTALLATION_DIRECTORY, "shared/tmp/pids/jetty.pid"),
-            'schedulrer': os.path.join(self.params.INSTALLATION_DIRECTORY, "shared/tmp/pids/scheduler.production.pid"),
+            'scheduler': os.path.join(self.params.INSTALLATION_DIRECTORY, "shared/tmp/pids/scheduler.production.pid"),
             'worker': os.path.join(self.params.INSTALLATION_DIRECTORY, "shared/tmp/pids/worker.production.pid"),
             'postgres': os.path.join(self.params.DATA_DIRECTORY, "db/postmaster.pid")
         }
