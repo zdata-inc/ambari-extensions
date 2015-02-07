@@ -22,8 +22,7 @@ class Slave(Script):
 
     os.system("mkdir -p " + params.DATA_DIRECTORY)
     os.system("chown -R "+ params.hawq_user +" "+params.DATA_DIRECTORY)
-
-    sys.exit(1)
+  
   def stop(self, env):
     print 'Stop the Sample Srv Slave';
   def start(self, env):
