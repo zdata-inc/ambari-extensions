@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+
+<reposinfo>
+    <os family="redhat6">
+        <repo>
+            <baseurl>http://localhost/phd</baseurl>
+            <repoid>Local-PHD-Repo</repoid>
+            <reponame>Local-PHD-Repo</reponame>
+        </repo>
+    </os>
+</reposinfo>
