@@ -4,8 +4,8 @@ import os
 # FIXME Find a better way to do this without os.system calls if possible. Handle error checking.
 def hawq_useradd():
   import params
-  os.system("/usr/sbin/useradd "+params.hawq_user)
-  os.system("echo -e \""+params.hawq_password+"\n"+ params.hawq_password+"\" | passwd "+params.hawq_user)
+  os.system("/usr/sbin/useradd "+params.hawq_user +" 2> /dev/null")
+  os.system("echo -e \""+params.hawq_password+"\n"+ params.hawq_password+"\" | passwd "+params.hawq_user + " 2>/dev/null")
   os.system("echo "+ params.source_cmd +" >> /home/"+params.hawq_user+"/.bashrc")
 
 def hawq_modify_kernel_parameters():
