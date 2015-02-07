@@ -1,5 +1,4 @@
-# -*- mode: ruby -*-
-# vi: set ft=ruby :
+# vim: set ft=ruby:
 
 # Generate ssh key
 `ssh-keygen -t rsa -f private_key -N ''` unless File.exists? 'private_key'
@@ -29,7 +28,7 @@ Vagrant.configure(2) do |config|
 
             ips.first
         rescue StandardError => exc
-            return
+            puts exc
         end
     end
 
@@ -41,9 +40,7 @@ Vagrant.configure(2) do |config|
             v.memory = 2048
         end
 
-        node.vm.synced_folder 'CHORUS', '/var/lib/ambari-server/resources/stacks/HDP/2.0.6/services/CHORUS', create: true
-        node.vm.synced_folder 'HAWQ', '/var/lib/ambari-server/resources/stacks/HDP/2.0.6/services/HAWQ', create: true
-        node.vm.synced_folder 'GREENPLUM', '/var/lib/ambari-server/resources/stacks/HDP/2.0.6/services/GREENPLUM', create: true
+        node.vm.synced_folder '1.0.0.zData', '/var/lib/ambari-server/resources/stacks/PHD/1.0.0.zData', create: true
         
         node.vm.provision 'shell', path: 'vagrant/bootstrap.sh'
         node.vm.provision 'shell', path: 'vagrant/bootstrap-master.sh'
