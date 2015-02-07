@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+
+<metainfo>
+    <extends>3.0.0.0</extends>
+    <versions>
+        <active>true</active>
+    </versions>
+</metainfo>
