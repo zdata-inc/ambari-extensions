@@ -3,5 +3,5 @@
     <versions>
         <active>true</active>
     </versions>
-    <extends>3.0.0.0</extends>
+    <extends>2.2</extends>
 </metainfo>
