@@ -11,6 +11,7 @@ if [ -f "$PHD_DOWNLOAD_PATH" -a -f "$PADS_DOWNLOAD_PATH" ]; then
   tar -xvf $PHD_DOWNLOAD_PATH -C $LOCAL_REPO_DIR
   tar -xvf $PADS_DOWNLOAD_PATH -C $LOCAL_REPO_DIR
   createrepo $LOCAL_REPO_DIR
+  service httpd start
 else
   echo "Could not find neccesary files to create local repo"
 fi

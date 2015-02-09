@@ -20,10 +20,9 @@ class Slave(Script):
     hawq_modify_security_parameters()
     hawq_modify_mount_options()
 
-    os.system("mkdir -p " + DATA_DIRECTORY)
-    os.system("chown -R "+ hawq_user +" "+DATA_DIRECTORY)
-
-    sys.exit(1)
+    os.system("mkdir -p " + params.DATA_DIRECTORY)
+    os.system("chown -R "+ params.hawq_user +" "+params.DATA_DIRECTORY)
+  
   def stop(self, env):
     print 'Stop the Sample Srv Slave';
   def start(self, env):

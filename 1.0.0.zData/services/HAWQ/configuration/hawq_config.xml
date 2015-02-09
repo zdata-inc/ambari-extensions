@@ -28,11 +28,6 @@
 		 the specified interface addresses).</description>
 	</property>
 	<property>
-		<name>MASTER_HOSTNAME</name>
-		<value>mdw</value>
-		<description>OS-configured hostname or IP address of the master host.</description>
-	</property>
-	<property>
 		<name>MASTER_DIRECTORY</name>
 		<value>/data/master</value>
 		<description>File system location where the master data directory will be created.</description>
@@ -69,7 +64,7 @@
       </property>
      <property>
         <name>DFS_URL</name>
-        <value>localhost:9000/gpsql</value>
+        <value>master.ambaricluster.local:8020</value>
         <description></description>
      </property>
       <property>
