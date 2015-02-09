@@ -25,6 +25,8 @@ Vagrant
 
     ```
     vagrant up
+    # OR
+    vagrant up master
     ```
 
 3. Connect, vms created: master, slave0, slave1
