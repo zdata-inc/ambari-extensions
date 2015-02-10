@@ -1,7 +1,9 @@
 # vim: set ft=ruby:
 
 # Generate ssh key
-`ssh-keygen -t rsa -f private_key -N ''` unless File.exists? 'private_key'
+Dir.chdir(File.dirname(__FILE__)) do 
+    `ssh-keygen -t rsa -f private_key -N ''` unless File.exists? 'private_key'
+end
 
 Vagrant.configure(2) do |config|
     config.vm.box = 'chef/centos-6.5'
