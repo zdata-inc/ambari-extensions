@@ -49,15 +49,11 @@ class Chorus(object):
         if not os.path.exists(self.params.DATA_DIRECTORY):
             self.create_directory(self.params.DATA_DIRECTORY)
 
-        try:
-            install_output = utilities.run(
-                "/usr/bin/env bash %s" % self.params.INSTALLER_PATH,
-                communicate=self._build_installation_parameters(),
-                user=self.user()
-            )
-
-        except Exception as exception:
-            raise Exception("There were errors during the installation: %s" % exception)
+        install_output = utilities.run(
+            "/usr/bin/env bash %s" % self.params.INSTALLER_PATH,
+            communicate=self._build_installation_parameters(),
+            user=self.user()
+        )
 
         if install_output.find("An error has occurred. Trying to back out and restore previous state") != -1:
             with open(os.path.join(self.params.INSTALLATION_DIRECTORY, 'install.log'), 'r') as filehandle:

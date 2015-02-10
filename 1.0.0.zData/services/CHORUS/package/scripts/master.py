@@ -43,7 +43,7 @@ class Master(Script):
             print "Configuration error: ", exception
             sys.exit(1)
         except StandardError as exception:
-            print exception
+            print "There were errors during the installation: %s" % exception
             sys.exit(1)
         else:
             print "Installation finished successfully!"
