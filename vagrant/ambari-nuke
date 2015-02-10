@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+[ $EUID == 0 ] || exec sudo bash "$0" "$@"
+
+echo "Are you sure? (Press Enter)"
+read $sure
+
+ambari-server stop && \
+ambari-server reset -s && \
+ambari-server start
