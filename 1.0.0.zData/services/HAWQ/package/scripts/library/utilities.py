@@ -17,3 +17,9 @@ def appendBashProfile(user, toBeAppended, run=False, allowDuplicates=False):
 
     if run:
         Execute(toBeAppended)
+
+def kernelParameters(parameters):
+    for key, value in parameters.iteritems():
+        print key + ": " + value
+        # Execute('sysctl -w %s=%s' % (key, value))
+    pass
