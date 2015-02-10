@@ -2,6 +2,7 @@ from resource_management import *
 from utils import * 
 import sys
 import os
+import library
 
 class Master(Script):
 
@@ -9,6 +10,9 @@ class Master(Script):
   # In the future, we can check to make sure this is true.
   def install(self, env):
     import params
+
+    library.hawq_master.install(env)
+    sys.exit(1)
 
     # Install hawq package
     self.install_packages(env)

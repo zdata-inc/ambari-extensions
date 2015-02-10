@@ -9,9 +9,9 @@ hawq_user = "gpadmin"
 hawq_password = "changeme"
 
 # Important paths, directories, and files
-hawq_default_install_path = "/usr/local/hawq/"
-hawq_environment_path = hawq_default_install_path+"greenplum_path.sh"
-hawq_hostfile_segments = hawq_default_install_path+"hostfile"
+hawq_install_path = "/usr/local/hawq/"
+hawq_environment_path = os.path.join(hawq_install_path, "greenplum_path.sh")
+hawq_hostfile_segments = os.path.join(hawq_install_path, "hostfile")
 sysctl_conf_file = "/etc/sysctl.conf"
 security_conf_file = "/etc/security/limits.conf"
 MASTER_DIRECTORY = config["configurations"]["hawq_config"]["MASTER_DIRECTORY"]
