@@ -47,18 +47,23 @@ def create_user(user):
         'gid': int(os.popen('id --group %s' % user).read().strip())
     }
 
-def _demoter(user):
+def _preCommandExecution(user=None, setLang=True):
     """
-    Creates an executable method which changes the
-    current process's uid and gid to those given.
+    Creates an executable method which prepares
+    the child process to be run
     """
     def result():
         """
-        Changes the uid and gid to their new values.
+        Configures environment as specified
         Have to change gid first.
         """
-        os.setgid(user['gid'])
-        os.setuid(user['uid'])
+        if setLang:
+            os.environ["LANG"] = "en_GB.UTF-8"
+
+        if user != None:
+            os.setgid(user['gid'])
+            os.setuid(user['uid'])
+
     return result
 
 def run(cmd, options=None, communicate=None, user=None):
@@ -75,8 +80,7 @@ def run(cmd, options=None, communicate=None, user=None):
     if options == None:
         options = {}
 
-    if user != None:
-        options['preexec_fn'] = _demoter(user)
+    options['preexec_fn'] = _preCommandExecution(user)
 
     if communicate != None:
         process = Popen(cmd,
