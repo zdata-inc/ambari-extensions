@@ -96,6 +96,7 @@ def install(env):
 
     # TODO: HAWQ Mount Options
 
+    # Create data directories
     for directory in params.MASTER_DIRECTORY.split():
         Directory(
             directory,
@@ -104,6 +105,25 @@ def install(env):
             owner=params.hawq_user,
             recursive=True
         )
+
+    # Create gpinitsystem_config file
+    Directory(
+        params.gpconfigs_path,
+        action="create",
+        mode=0755,
+        owner=params.hawq_user
+    )
+
+    TemplateConfig(
+        params.gpinitsystem_config_path,
+        owner=params.hawq_user, mode=0644
+    )
+
+    # Install
+    Execute(
+        format("gpinitsystem -c {params.gpinitsystem_config_path} -h {params.hawq_hostfile_path} -a"),
+        user=params.hawq_user
+    )
 
 def configure():
     pass
