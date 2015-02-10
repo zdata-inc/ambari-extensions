@@ -6,7 +6,7 @@ def hawq_useradd():
   import params
   os.system("/usr/sbin/useradd "+params.hawq_user +" 2> /dev/null")
   os.system("echo -e \""+params.hawq_password+"\n"+ params.hawq_password+"\" | passwd "+params.hawq_user + " 2>/dev/null")
-  os.system("/usr/sbin/usermod -a -G hdfs "+params.hawq_user)
+  os.system("/usr/sbin/usermod -a -G hadoop "+params.hawq_user)
   os.system("echo "+ params.source_cmd +" >> /home/"+params.hawq_user+"/.bashrc")
 
 
