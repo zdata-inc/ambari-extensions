@@ -6,7 +6,7 @@ PHD_DIR=PHD-2.1.0.0-175
 
 if [ -f "$PHD_DOWNLOAD_PATH" -a -f "$PADS_DOWNLOAD_PATH" ]; then 
   echo "Creating local repo"
-  yum install --disablerepo=Local-PHD-Repo -y createrepo
+  yum install --disablerepo=Local-PHD-Repo -y httpd createrepo
   mkdir -p $LOCAL_REPO_DIR
   tar -xvf $PHD_DOWNLOAD_PATH -C $LOCAL_REPO_DIR
   tar -xvf $PADS_DOWNLOAD_PATH -C $LOCAL_REPO_DIR
