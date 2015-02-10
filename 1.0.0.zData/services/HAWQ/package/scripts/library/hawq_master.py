@@ -72,7 +72,12 @@ def install(env):
             'sysctl.net.core.wmen_max': '2097152'
         })
 
-    
+    TemplateConfig(
+        params.security_conf_file,
+        template_tag="limits",
+        owner=params.hawq_user, mode=0644
+    )
+
 
 def configure():
     pass
