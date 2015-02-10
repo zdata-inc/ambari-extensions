@@ -16,9 +16,9 @@ sysctl_conf_file = "/etc/sysctl.conf"
 security_conf_file = "/etc/security/limits.d/hawq.conf"
 MASTER_DIRECTORY = config["configurations"]["hawq_config"]["MASTER_DIRECTORY"]
 DATA_DIRECTORY = config["configurations"]["hawq_config"]["DATA_DIRECTORY"]
-gpconfigs_dir = "/home/"+hawq_user+"/gpconfigs/"
-gpinitsystem_config_file = gpconfigs_dir+"gpinitsystem_config"
-MACHINE_LIST_FILE = gpconfigs_dir+"hostfile_gpinitsystem"
+gpconfigs_path = "/home/"+hawq_user+"/gpconfigs/"
+gpinitsystem_config_path = gpconfigs_path+"gpinitsystem_config"
+MACHINE_LIST_FILE = gpconfigs_path+"hostfile_gpinitsystem"
 
 # Host info
 hawq_master_hosts = default("/clusterHostInfo/hawq_master_hosts",[])
@@ -30,8 +30,8 @@ standby_master_hostname = ""
 source_cmd = "source "+hawq_environment_path+"; "
 exkeys_cmd = "gpssh-exkeys -f "+hawq_hostfile_path+"; "
 export_mdd_cmd = "export MASTER_DATA_DIRECTORY="+ MASTER_DIRECTORY +"/gpseg-1"
-gpinitsystem_cmd = "gpinitsystem -c " + gpinitsystem_config_file +" -h "+ hawq_hostfile_path + " -a; "
-gpinitsystem_with_standby_cmd = "gpinitsystem -c " + gpinitsystem_config_file +" -h "+ hawq_hostfile_path + "-s "+ standby_master_hostname +" -a; " 
+gpinitsystem_cmd = "gpinitsystem -c " + gpinitsystem_config_path +" -h "+ hawq_hostfile_path + " -a; "
+gpinitsystem_with_standby_cmd = "gpinitsystem -c " + gpinitsystem_config_path +" -h "+ hawq_hostfile_path + "-s "+ standby_master_hostname +" -a; " 
 
 # User configurations
 ARRAY_NAME = config["configurations"]["hawq_config"]["ARRAY_NAME"]

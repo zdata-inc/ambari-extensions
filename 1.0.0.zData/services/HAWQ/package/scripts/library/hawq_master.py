@@ -13,6 +13,13 @@ def install(env):
     # Source hawq functions for hawq admin, save to bash profile
     utilities.appendBashProfile(params.hawq_user, "source %s;" % params.hawq_environment_path, run=True)
 
+    # Export master data directory environment variable
+    utilities.appendBashProfile(
+        params.hawq_user,
+        "export MASTER_DATA_DIRECTORY=%s/gpseg-1" % params.MASTER_DIRECTORY,
+        run=True
+    )
+
     # Source hawq functions for root as well
     Execute("source %s" % params.hawq_environment_path)
 
