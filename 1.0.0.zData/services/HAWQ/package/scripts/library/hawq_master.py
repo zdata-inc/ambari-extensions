@@ -9,7 +9,12 @@ def install(env):
 
     # Add Hawq User
     User(params.hawq_user, action="create", groups="hadoop", password=params.hawq_password, shell="/bin/bash")
+
+    # Source hawq functions for hawq admin, save to bash profile
     utilities.appendBashProfile(params.hawq_user, "source %s;" % params.hawq_environment_path, run=True)
+
+    # Source hawq functions for root as well
+    Execute("source %s" % params.hawq_environment_path)
 
     # Hostfile Segments
     TemplateConfig(
@@ -17,8 +22,11 @@ def install(env):
         owner=params.hawq_user, mode=0644
     )
 
-    Execute("gpssh-exkeys -f %s;" % params.hawq_hostfile_path, user=params.hawq_user, environment={})
+    # Exchange private keys for root and gpadmin
+    Execute("source %s; gpssh-exkeys -f %s;" % (params.hawq_environment_path, params.hawq_hostfile_path))
+    Execute("gpssh-exkeys -f %s;" % params.hawq_hostfile_path, user=params.hawq_user)
 
+    # Configure kernel paramters
     if System.get_instance().os_family == "redhat":
         utilities.setKernelParameters({
             'kernel.shmmax': '500000000',
@@ -72,6 +80,7 @@ def install(env):
             'sysctl.net.core.wmen_max': '2097152'
         })
 
+    # Configure security limits
     TemplateConfig(
         params.security_conf_file,
         template_tag="limits",
