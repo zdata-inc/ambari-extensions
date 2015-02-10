@@ -11,13 +11,13 @@ class Master(Script):
   def install(self, env):
     import params
 
+    # Install hawq package
+    self.install_packages(env)
+
     env.set_params(params)
 
     hawq_master.install(env)
     sys.exit(1)
-
-    # Install hawq package
-    self.install_packages(env)
 
     # Add user
     hawq_useradd()
