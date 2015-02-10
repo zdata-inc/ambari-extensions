@@ -87,6 +87,15 @@ def install(env):
         owner=params.hawq_user, mode=0644
     )
 
+    # TODO: HAWQ Mount Options
+    
+    Directory(
+        params.MASTER_DIRECTORY,
+        action="create",
+        mode=0755,
+        owner=params.hawq_user,
+        recursive=True
+    )
 
 def configure():
     pass
