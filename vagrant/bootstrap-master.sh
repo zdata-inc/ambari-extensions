@@ -5,11 +5,6 @@ sudo ambari-server setup -s
 
 sudo sh -c 'echo "client.api.port=8080" >> /etc/ambari-server/conf/ambari.properties'
 
-# Change to regex later...
-if [ -f "/vagrant/artifacts/PHD-2.1.0.0-175.tar.gz" ]; then
-  /vagrant/vagrant/setupRepo.sh
-fi
-
 sudo ambari-server start
 
 sudo chkconfig postgresql on

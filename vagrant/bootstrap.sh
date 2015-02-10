@@ -2,8 +2,6 @@ STABLE_REPO_URL=http://public-repo-1.hortonworks.com/ambari/centos6/1.x/updates/
 TRUNK_REPO_URL=http://s3.amazonaws.com/dev.hortonworks.com/ambari/centos6/1.x/updates/1.7.0.trunk/ambari.repo
 AMBARI_REPO=$TRUNK_REPO_URL
 
-sudo yum install -y vim
-
 # Create shared RSA keys
 sudo su - <<'EOF'
 if [ ! -f ~/.ssh ]; then
@@ -23,6 +21,11 @@ fi
 if [ ! -f ambari.repo ]; then
     wget $AMBARI_REPO -q -O ambari.repo
     sudo cp ambari.repo /etc/yum.repos.d/ambari.repo
+fi
+
+# Change to regex later...
+if [ -f "/vagrant/artifacts/PHD-2.1.0.0-175.tar.gz" ]; then
+  /vagrant/vagrant/setupRepo.sh
 fi
 
 umask 022
