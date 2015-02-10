@@ -43,7 +43,11 @@ class Chorus(object):
         Prepare and install Chorus onto the system via a given self extracting shell script.
         """
 
-        self.configure()
+        if not os.path.exists(self.params.INSTALLATION_DIRECTORY):
+            self.create_directory(self.params.INSTALLATION_DIRECTORY)
+
+        if not os.path.exists(self.params.DATA_DIRECTORY):
+            self.create_directory(self.params.DATA_DIRECTORY)
 
         try:
             install_output = utilities.run(
@@ -51,12 +55,15 @@ class Chorus(object):
                 communicate=self._build_installation_parameters(),
                 user=self.user()
             )
+
         except Exception as exception:
             raise Exception("There were errors during the installation: %s" % exception)
 
         if install_output.find("An error has occurred. Trying to back out and restore previous state") != -1:
             with open(os.path.join(self.params.INSTALLATION_DIRECTORY, 'install.log'), 'r') as filehandle:
                 raise Exception("The installation encountered an error and attempted to roll back: %s" % filehandle.read())
+
+        self.configure()
 
         return install_output
 
@@ -91,12 +98,6 @@ class Chorus(object):
         """
         Prepare the system for Chorus to be installed.
         """
-
-        if not os.path.exists(self.params.INSTALLATION_DIRECTORY):
-            self.create_directory(self.params.INSTALLATION_DIRECTORY)
-
-        if not os.path.exists(self.params.DATA_DIRECTORY):
-            self.create_directory(self.params.DATA_DIRECTORY)
 
         TemplateConfig(
             os.path.join(self.params.INSTALLATION_DIRECTORY, 'shared', 'chorus.properties'),
