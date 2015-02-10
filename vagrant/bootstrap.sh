@@ -24,7 +24,7 @@ if [ ! -f ambari.repo ]; then
 fi
 
 # Change to regex later...
-if [ -f "/vagrant/artifacts/PHD-2.1.0.0-175.tar.gz" ]; then
+if find /vagrant/artifacts -name 'PHD*' -or -name 'PADS*' -quit &> /dev/null; then
   /vagrant/vagrant/setupRepo.sh
 fi
 
