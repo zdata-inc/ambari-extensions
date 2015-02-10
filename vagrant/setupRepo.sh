@@ -1,4 +1,6 @@
 #!/bin/bash
+[ $EUID == 0 ] || exec sudo bash "$0" "$@"
+
 PHD_DOWNLOAD_PATH=/vagrant/artifacts/PHD-2.1.0.0-175.tar.gz
 PADS_DOWNLOAD_PATH=/vagrant/artifacts/PADS-1.2.1.0-10335.tar.gz
 LOCAL_REPO_DIR=/var/www/html/phd/
