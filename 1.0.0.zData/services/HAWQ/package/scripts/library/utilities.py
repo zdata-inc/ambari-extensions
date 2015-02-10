@@ -10,10 +10,6 @@ def _lines_contain(haystack, needle):
 
     return False;
 
-def _file_contains(file, needle):
-    with open(file, 'r') as filehandle:
-        return _lines_contain(filehandle.readlines(), needle)
-
 def appendBashProfile(user, toBeAppended, run=False, allowDuplicates=False):
     bashrc = "/home/%s/.bashrc" % user
     command = json.dumps(toBeAppended)[1:-1]
