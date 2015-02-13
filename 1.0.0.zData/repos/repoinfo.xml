@@ -17,26 +17,14 @@
 -->
 <reposinfo>
   <latest>http://public-repo-1.hortonworks.com/HDP/hdp_urlinfo.json</latest>
-  <os family="redhat6">
+  <os type="redhat6">
     <repo>
-      <baseurl>REPLACE_WITH_CENTOS6_URL</baseurl>
+      <baseurl>http://public-repo-1.hortonworks.com/HDP/centos6/2.x/updates/2.1.1.0</baseurl>
       <repoid>HDP-2.1</repoid>
       <reponame>HDP</reponame>
     </repo>
     <repo>
       <baseurl>http://public-repo-1.hortonworks.com/HDP-UTILS-1.1.0.19/repos/centos6</baseurl>
-      <repoid>HDP-UTILS-1.1.0.19</repoid>
-      <reponame>HDP-UTILS</reponame>
-    </repo>
-  </os>
-  <os family="redhat5">
-    <repo>
-      <baseurl>REPLACE_WITH_CENTOS5_URL</baseurl>
-      <repoid>HDP-2.1</repoid>
-      <reponame>HDP</reponame>
-    </repo>
-    <repo>
-      <baseurl>http://public-repo-1.hortonworks.com/HDP-UTILS-1.1.0.19/repos/centos5</baseurl>
       <repoid>HDP-UTILS-1.1.0.19</repoid>
       <reponame>HDP-UTILS</reponame>
     </repo>
@@ -46,26 +34,38 @@
       <reponame>Local-PHD-Repo</reponame>
     </repo>
   </os>
-  <os family="suse11">
+  <os type="redhat5">
     <repo>
-      <baseurl>REPLACE_WITH_SUSE11_URL</baseurl>
+      <baseurl>http://s3.amazonaws.com/dev.hortonworks.com/HDP/centos5/2.x/updates/2.1.5.0/</baseurl>
       <repoid>HDP-2.1</repoid>
       <reponame>HDP</reponame>
     </repo>
     <repo>
-      <baseurl>http://public-repo-1.hortonworks.com/HDP-UTILS-1.1.0.19/repos/suse11sp3</baseurl>
+      <baseurl>http://s3.amazonaws.com/dev.hortonworks.com/HDP-UTILS-1.1.0.19/repos/centos5</baseurl>
       <repoid>HDP-UTILS-1.1.0.19</repoid>
       <reponame>HDP-UTILS</reponame>
     </repo>
   </os>
-  <os family="ubuntu12">
+  <os type="suse11">
     <repo>
-      <baseurl>REPLACE_WITH_UBUNTU12_URL</baseurl>
+      <baseurl>http://s3.amazonaws.com/dev.hortonworks.com/HDP/suse11/2.x/updates/2.1.5.0/</baseurl>
       <repoid>HDP-2.1</repoid>
       <reponame>HDP</reponame>
     </repo>
     <repo>
-      <baseurl>http://public-repo-1.hortonworks.com/HDP-UTILS-1.1.0.19/repos/ubuntu12</baseurl>
+      <baseurl>http://s3.amazonaws.com/dev.hortonworks.com/HDP-UTILS-1.1.0.19/repos/suse11sp3</baseurl>
+      <repoid>HDP-UTILS-1.1.0.19</repoid>
+      <reponame>HDP-UTILS</reponame>
+    </repo>
+  </os>
+  <os type="ubuntu12">
+    <repo>
+      <baseurl>http://s3.amazonaws.com/dev.hortonworks.com/HDP/ubuntu12/2.x/updates/2.1.5.0/</baseurl>
+      <repoid>HDP-2.1</repoid>
+      <reponame>HDP</reponame>
+    </repo>
+    <repo>
+      <baseurl>http://s3.amazonaws.com/dev.hortonworks.com/HDP-UTILS-1.1.0.19/repos/ubuntu12</baseurl>
       <repoid>HDP-UTILS-1.1.0.19</repoid>
       <reponame>HDP-UTILS</reponame>
     </repo>
