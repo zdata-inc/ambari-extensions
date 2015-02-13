@@ -9,6 +9,7 @@ if [ ! -f ~/.ssh ]; then
 fi
 sh -c 'cat /vagrant/private_key.pub >> ~/.ssh/authorized_keys'
 sh -c 'cp /vagrant/private_key ~/.ssh/id_rsa'
+sh -c 'cp /vagrant/private_key.pub ~/.ssh/id_rsa.pub'
 EOF
 
 # Add Epel repo

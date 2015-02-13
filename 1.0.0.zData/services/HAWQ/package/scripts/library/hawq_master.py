@@ -31,7 +31,7 @@ def install(env):
 
     # Exchange private keys for root and gpadmin
     Execute("source %s; gpssh-exkeys -f %s;" % (params.hawq_environment_path, params.hawq_hostfile_path))
-    Execute("gpssh-exkeys -f %s;" % params.hawq_hostfile_path, user=params.hawq_user)
+    Execute("su - %s -c 'gpssh-exkeys -f %s;'" % (params.hawq_user, params.hawq_hostfile_path))
 
     # Configure kernel paramters
     if System.get_instance().os_family == "redhat":

@@ -6,9 +6,19 @@ import logging
 def _lines_contain(haystack, needle):
     for line in haystack:
         if line.strip() == needle.strip():
-            return True;
+            return True
 
-    return False;
+    return False
+
+def _lines_startsWith(haystack, prefix):
+    """
+    Checks if one of a group of lines starts with a given prefix.
+    """
+    for line in haystack:
+        if line.strip().startswith(prefix.strip()):
+            return True
+
+    return False
 
 def appendBashProfile(user, toBeAppended, run=False, allowDuplicates=False):
     bashrc = "/home/%s/.bashrc" % user
@@ -36,7 +46,7 @@ def setKernelParameter(name, value, logoutput=True):
 
         with open('/etc/sysctl.conf', 'a+') as filehandle:
             line = format("{name} = {value}\n")
-            if not _lines_contain(filehandle.readlines(), line):
+            if not _lines_startsWith(filehandle.readlines(), (name + " =", name + "=")):
                 logLine += " Saved"
                 filehandle.write(line)
             else:
