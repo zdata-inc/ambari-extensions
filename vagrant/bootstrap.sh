@@ -1,6 +1,4 @@
-STABLE_REPO_URL=http://public-repo-1.hortonworks.com/ambari/centos6/1.x/updates/1.6.1/ambari.repo
-TRUNK_REPO_URL=http://s3.amazonaws.com/dev.hortonworks.com/ambari/centos6/1.x/updates/1.7.0.trunk/ambari.repo
-AMBARI_REPO=$TRUNK_REPO_URL
+AMBARI_REPO=http://public-repo-1.hortonworks.com/ambari/centos6/1.x/updates/1.7.0/ambari.repo
 
 yum install -y screen vim
 
