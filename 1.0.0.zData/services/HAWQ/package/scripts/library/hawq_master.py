@@ -108,7 +108,7 @@ def install(env):
 
     # Create gpinitsystem_config file
     Directory(
-        params.gpconfigs_path,
+        params.gpconfigs_path.rstrip("/"),
         action="create",
         mode=0755,
         owner=params.hawq_user
