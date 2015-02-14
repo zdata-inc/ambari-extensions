@@ -8,7 +8,7 @@ def install(env):
     import params
 
     # Add Hawq User
-    User(params.hawq_user, action="create", groups="hadoop", password=params.hawq_password, shell="/bin/bash")
+    User(params.hawq_user, action="create", groups="hdfs", password=params.hawq_password, shell="/bin/bash")
 
     # Source hawq functions for hawq admin, save to bash profile
     utilities.appendBashProfile(params.hawq_user, "source %s;" % params.hawq_environment_path, run=True)
