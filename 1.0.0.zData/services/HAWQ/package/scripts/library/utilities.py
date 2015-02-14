@@ -15,7 +15,7 @@ def _lines_startsWith(haystack, prefix):
     Checks if one of a group of lines starts with a given prefix.
     """
     for line in haystack:
-        if line.strip().startswith(prefix.strip()):
+        if line.strip().startswith(prefix):
             return True
 
     return False
