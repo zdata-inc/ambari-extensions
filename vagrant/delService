@@ -1,14 +1,21 @@
 #!/bin/bash
-service=$1
+cluster=$1
+service=$2
 if [ -z "$service" ]; then
    echo "No serviced passed in. Exiting..."
+   exit
+fi
+
+if [ -z "$cluster" ]; then
+  echo "No cluster specified"
+  exit
 fi
 
 echo "Are you sure? (Press Enter)"
 read $sure
 
 # Stop Service
-curl -u admin:admin  -H "X-Requested-By: ambari" -X PUT -d '{"RequestInfo":{"context":"Stop Service"},"Body":{"ServiceInfo":{"state":"INSTALLED"}}}' http://localhost:8080/api/v1/clusters/abc/services/$service
+curl -u admin:admin  -H "X-Requested-By: ambari" -X PUT -d '{"RequestInfo":{"context":"Stop Service"},"Body":{"ServiceInfo":{"state":"INSTALLED"}}}' http://localhost:8080/api/v1/clusters/$cluster/services/$service
 
 # Start Service
-curl -H "X-Requested-By: ambari"  -u admin:admin -X DELETE  http://localhost:8080/api/v1/clusters/abc/services/$service
+curl -H "X-Requested-By: ambari"  -u admin:admin -X DELETE  http://localhost:8080/api/v1/clusters/$cluster/services/$service
