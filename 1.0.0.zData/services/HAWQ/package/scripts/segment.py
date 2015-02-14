@@ -1,5 +1,6 @@
 from resource_management import *
 from utils import * 
+from library import hawq_slave
 import sys
 
 class Slave(Script):
@@ -8,20 +9,14 @@ class Slave(Script):
   # In the future, we can check to make sure this is true.
   def install(self, env):
     import params
-    
+
     # Install hawq package
     self.install_packages(env)
-    
-    # Add user
-    hawq_useradd()
 
-    # Modify system level settings for Hawq
-    hawq_modify_kernel_parameters()
-    hawq_modify_security_parameters()
-    hawq_modify_mount_options()
+    env.set_params(params)
 
-    os.system("mkdir -p " + params.DATA_DIRECTORY)
-    os.system("chown -R "+ params.hawq_user +" "+params.DATA_DIRECTORY)
+    hawq_slave.install(env)
+    sys.exit(1)
   
   def stop(self, env):
     print 'Stop the Sample Srv Slave';

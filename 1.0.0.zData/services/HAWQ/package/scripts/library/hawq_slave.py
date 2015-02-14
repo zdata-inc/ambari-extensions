@@ -2,14 +2,26 @@ import os
 from library import utilities
 from resource_management.core.exceptions import ComponentIsNotRunning
 from resource_management import *
+from library import hawq
 
-class HawqSlave(object):
-    def install(self):
+def install(env):
+    import params
 
-    def configure(self):
+    create_user()
+    configure_kernel_parameters()
+    configure_security_limits()
+    # configure_mount_options()
 
-    def start(self):
+    create_data_dirs(params.MASTER_DIRECTORY.split())
 
-    def stop(self):
+def configure():
+    pass
 
-    def is_running(self):
+def start():
+    pass
+
+def stop():
+    pass
+
+def is_running():
+    pass
