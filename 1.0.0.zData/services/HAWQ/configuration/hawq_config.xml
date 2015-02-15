@@ -2,6 +2,10 @@
 <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
 
 <configuration>
+    <property>
+        <name>hadoop_home</name>
+        <value>/usr/lib/hadoop</value>
+        <description>Absolute path to where Hadoop is installed at.</description>
 	<property>
 		<name>ARRAY_NAME</name>
 		<value>"zData Hawq Cluster"</value>
