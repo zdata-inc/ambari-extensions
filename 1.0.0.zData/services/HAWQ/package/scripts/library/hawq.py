@@ -13,7 +13,7 @@ def create_user():
 
     # Source hawq functions for hawq admin, save to bash profile
     utilities.appendBashProfile(params.hawq_user, "source %s;" % params.hawq_environment_path, run=True)
-    # TODO add hawq specific environment variables for psql
+
     utilities.appendBashProfile(params.hawq_user, "export PGPORT=%s" % params.MASTER_PORT)
     utilities.appendBashProfile(params.hawq_user, "export PGUSER=%s" % params.hawq_user)
     utilities.appendBashProfile(params.hawq_user, "export PGDATABASE=%s" % params.DATABASE_NAME)
