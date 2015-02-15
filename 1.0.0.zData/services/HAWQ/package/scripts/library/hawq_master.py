@@ -8,7 +8,7 @@ from library import hawq
 def install(env):
     import params
 
-    hawq.create_user();
+    hawq.create_user()
 
     # Source hawq functions for root as well
     Execute("source %s" % params.hawq_environment_path)
