@@ -66,10 +66,22 @@ def configure():
     pass
 
 def start():
-    pass
+    Execute(
+        format("gpstart -a -v"),
+        user=params.hawq_user
+    )
 
 def stop():
-    pass
+    Execute(
+        format("gpstop -a -M smart -v"),
+        user=params.hawq_user
+    )
+
+def force_stop():
+    Execute(
+        format("gpstop -a -M fast -v"),
+        user=params.hawq_user
+    )
 
 def is_running():
     pass
