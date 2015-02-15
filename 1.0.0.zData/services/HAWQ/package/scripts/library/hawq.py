@@ -2,6 +2,7 @@ import os
 from library import utilities
 from resource_management import *
 from resource_management.core.exceptions import ComponentIsNotRunning
+from ambari_commons import OSCheck
 
 def create_user():
     import params
@@ -35,7 +36,7 @@ def create_data_dirs(data_directories):
     )
 
 def configure_kernel_parameters():
-    if System.get_instance().os_family == "redhat" and OSCheck.get_os_major_verison() == 6:
+    if System.get_instance().os_family == "redhat" and OSCheck.get_os_major_version() == 6:
         utilities.setKernelParameters({
             'kernel.shmmax': '500000000',
             'kernel.shmmni': '4096',
