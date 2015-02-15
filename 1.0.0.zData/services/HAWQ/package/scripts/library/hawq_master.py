@@ -27,7 +27,16 @@ def install(env):
     hawq.configure_security_limits()
     # hawq.configure_mount_options()
 
-    hawq.create_data_dirs(params.MASTER_DIRECTORY.split())
+    hawq.create_data_dirs(params.DATA_DIRECTORY.split())
+
+    # Create master directory
+    Directory(
+        params.MASTER_DIRECTORY,
+        action="create",
+        mode=0755,
+        recursive=True,
+        owner=params.hawq_user
+    )
 
     # Create gpinitsystem_config file
     Directory(
