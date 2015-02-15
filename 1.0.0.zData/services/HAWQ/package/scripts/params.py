@@ -19,6 +19,7 @@ DATA_DIRECTORY = config["configurations"]["hawq_config"]["DATA_DIRECTORY"]
 gpconfigs_path = "/home/"+hawq_user+"/gpconfigs/"
 gpinitsystem_config_path = gpconfigs_path+"gpinitsystem_config"
 MACHINE_LIST_FILE = gpconfigs_path+"hostfile_gpinitsystem"
+hadoop_home=config["configurations"]["hawq_config"]["hadoop_home"]
 
 # Host info
 hawq_master_hosts = default("/clusterHostInfo/hawq_master_hosts",[])
