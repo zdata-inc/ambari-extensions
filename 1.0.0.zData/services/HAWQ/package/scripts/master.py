@@ -17,7 +17,6 @@ class Master(Script):
     env.set_params(params)
 
     hawq_master.install(env)
-    sys.exit(1)
 
   def stop(self, env):
     print 'Stop the Hawq Master';

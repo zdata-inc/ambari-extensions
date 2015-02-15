@@ -16,7 +16,6 @@ class Slave(Script):
     env.set_params(params)
 
     hawq_slave.install(env)
-    sys.exit(1)
   
   def stop(self, env):
     print 'Stop the Sample Srv Slave';
