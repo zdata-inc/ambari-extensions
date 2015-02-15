@@ -29,13 +29,6 @@ def create_data_dirs(data_directories):
         recursive=True
     )
 
-    # Export master data directory environment variable
-    utilities.appendBashProfile(
-        params.hawq_user,
-        "export MASTER_DATA_DIRECTORY=%s/gpseg-1" % params.MASTER_DIRECTORY,
-        run=True
-    )
-
 def configure_kernel_parameters():
     if System.get_instance().os_family == "redhat" and int(OSCheck.get_os_major_version()) >= 6:
         utilities.setKernelParameters({

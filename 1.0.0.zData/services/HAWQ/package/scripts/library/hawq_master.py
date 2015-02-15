@@ -36,6 +36,13 @@ def install(env):
         owner=params.hawq_user
     )
 
+    # Export master data directory environment variable
+    utilities.appendBashProfile(
+        params.hawq_user,
+        "export MASTER_DATA_DIRECTORY=%s/gpseg-1" % params.MASTER_DIRECTORY,
+        run=True
+    )
+
     # Create gpinitsystem_config file
     Directory(
         params.gpconfigs_path.rstrip("/"),
