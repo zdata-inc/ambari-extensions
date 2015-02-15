@@ -12,8 +12,5 @@ sudo chkconfig ambari-server on
 
 sudo sh -c 'echo "export SERVICES=/var/lib/ambari-server/resources/stacks/HDP/2.0.6/services/" >> ~/.bashrc'
 
-# Fix for gotcha #1
-sed -i "s;^127\.0\.0\.1\(.*\);127.0.0.1 localhost;"
-
 echo 'URL: http://master.ambaricluster.local:8080'
 echo 'Default username and password: admin/admin'
