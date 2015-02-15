@@ -7,12 +7,12 @@ from library import hawq
 def install(env):
     import params
 
-    create_user()
-    configure_kernel_parameters()
-    configure_security_limits()
-    # configure_mount_options()
+    hawq.create_user()
+    hawq.configure_kernel_parameters()
+    hawq.configure_security_limits()
+    # hawq.configure_mount_options()
 
-    create_data_dirs(params.MASTER_DIRECTORY.split())
+    hawq.create_data_dirs(params.MASTER_DIRECTORY.split())
 
 def configure():
     pass
