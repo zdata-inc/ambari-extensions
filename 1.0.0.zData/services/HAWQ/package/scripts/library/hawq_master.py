@@ -27,8 +27,6 @@ def install(env):
     hawq.configure_security_limits()
     # hawq.configure_mount_options()
 
-    hawq.create_data_dirs(params.DATA_DIRECTORY.split())
-
     # Create master directory
     Directory(
         params.MASTER_DIRECTORY,
