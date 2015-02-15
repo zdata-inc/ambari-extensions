@@ -36,7 +36,7 @@ def create_data_dirs(data_directories):
     )
 
 def configure_kernel_parameters():
-    if System.get_instance().os_family == "redhat" and OSCheck.get_os_major_version() == 6:
+    if System.get_instance().os_family == "redhat" and int(OSCheck.get_os_major_version()) >= 6:
         utilities.setKernelParameters({
             'kernel.shmmax': '500000000',
             'kernel.shmmni': '4096',
