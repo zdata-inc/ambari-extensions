@@ -21,7 +21,7 @@ def install(env):
     )
 
     # Exchange private keys for root and gpadmin
-    for i in range(3)
+    for i in range(3):
         try:
             Execute("source %s; gpssh-exkeys -f %s;" % (params.hawq_environment_path, params.hawq_hostfile_path))
         except Fail as exception:
