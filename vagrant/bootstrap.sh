@@ -1,3 +1,4 @@
+#!/bin/bash
 # AMBARI_REPO=http://public-repo-1.hortonworks.com/ambari/centos6/1.x/updates/1.7.0/ambari.repo
 AMBARI_REPO=http://s3.amazonaws.com/dev.hortonworks.com/ambari/centos6/1.x/updates/1.7.0.trunk/ambari.repo
 
@@ -23,11 +24,6 @@ fi
 if [ ! -f ambari.repo ]; then
     wget $AMBARI_REPO -q -O ambari.repo
     sudo cp ambari.repo /etc/yum.repos.d/ambari.repo
-fi
-
-# Change to regex later...
-if find /vagrant/artifacts -name 'PHD*' -or -name 'PADS*' -quit &> /dev/null; then
-  /vagrant/vagrant/setupRepo.sh
 fi
 
 umask 022

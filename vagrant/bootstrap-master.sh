@@ -1,3 +1,10 @@
+#!/bin/bash
+
+# Setup repo
+if find /vagrant/artifacts -name 'PHD*' -or -name 'PADS*' -quit &> /dev/null; then
+    /vagrant/vagrant/setupRepo.sh
+fi
+
 sudo yum install -y ambari-server httpd
 
 sudo service postgresql initdb
