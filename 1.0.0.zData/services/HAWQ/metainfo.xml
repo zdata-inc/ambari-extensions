@@ -54,6 +54,10 @@
                 <service>HDFS</service>
             </requiredServices>
 
+            <configuration-dependencies>
+                <config-type>hawq-env</config-type>
+            </configuration-dependencies>
+
 		</service>
 	</services>
 </metainfo>
