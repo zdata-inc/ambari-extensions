@@ -3,7 +3,7 @@
   "_comment" : "blockedRole-blockedCommand: [blockerRole1-blockerCommand1, blockerRole2-blockerCommand2, ...]",
   "general_deps" : {
     "_comment" : "dependencies for all cases",
-    "HAWQ_MASTER-INSTALL": ["HAWQ_SLAVE-INSTALL"],
+    "HAWQ_MASTER-INSTALL": ["HAWQ_SLAVE-INSTALL", "NAMENODE-START", "DATANODE-START"],
     "NAGIOS_SERVER-INSTALL" : ["HIVE_CLIENT-INSTALL", "HCAT-INSTALL",
         "MAPREDUCE_CLIENT-INSTALL", "OOZIE_CLIENT-INSTALL"],
     "HBASE_MASTER-START": ["ZOOKEEPER_SERVER-START"],
