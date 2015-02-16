@@ -18,12 +18,15 @@ class Master(Script):
     hawq_master.install(env)
 
   def stop(self, env):
-    print 'Stop the Hawq Master';
+    hawq_master.start()
+
   def start(self, env):
-    print 'Start the Hawq Master';
+    hawq_master.stop()
+
   def status(self, env):
     if not hawq_master.is_running():
       raise ComponentIsNotRunning()
+
   def configure(self, env):
     print 'Configure the Hawq Master';
 
