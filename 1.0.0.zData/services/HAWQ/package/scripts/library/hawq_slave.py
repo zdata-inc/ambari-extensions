@@ -24,10 +24,11 @@ def stop():
     pass
 
 def is_running():
+    import params
     from glob import glob
 
-    for pidFile in glob(hawq_slave_pids_glob):
-        if not hawq.is_running(pidFile)
+    for pidFile in glob(params.hawq_slave_pids_glob):
+        if not hawq.is_running(pidFile):
             return False
 
     return True
