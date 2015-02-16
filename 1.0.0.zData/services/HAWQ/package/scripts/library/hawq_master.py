@@ -14,9 +14,14 @@ def install(env):
     # Source hawq functions for root as well
     Execute("source %s" % params.hawq_environment_path)
 
-    # Hostfile Segments
+    # Hostfiles
     TemplateConfig(
         params.hawq_hostfile_seg_path,
+        owner=params.hawq_user, mode=0644
+    )
+
+    TemplateConfig(
+        params.hawq_hostfile_all_path,
         owner=params.hawq_user, mode=0644
     )
 
