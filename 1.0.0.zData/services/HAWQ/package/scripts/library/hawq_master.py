@@ -25,6 +25,8 @@ def install(env):
         try:
             Execute("gpssh-exkeys -f %s -p %s;" % (params.hawq_hostfile_seg_path, params.hawq_password), user=params.hawq_user)
         except Fail as exception:
+            if i == 2:
+                raise exception
             time.sleep(15)
             continue
         break
