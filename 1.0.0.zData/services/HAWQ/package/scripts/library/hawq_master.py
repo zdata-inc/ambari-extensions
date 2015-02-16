@@ -99,12 +99,16 @@ def configure():
     pass
 
 def start():
+    import params
+
     Execute(
         format("gpstart -a -v"),
         user=params.hawq_user
     )
 
 def stop():
+    import params
+
     Execute(
         format("gpstop -a -M smart -v"),
         user=params.hawq_user
