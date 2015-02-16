@@ -3,9 +3,20 @@
 
 <configuration>
     <property>
+        <name>hawq_user</name>
+        <value>gpadmin</value>
+        <description>Username of Hawq user.</description>
+    </property>
+    <property>
+        <name>hawq_password</name>
+        <value></value>
+        <description>Password of the Hawq user.</description>
+    </property>
+    <property>
         <name>hadoop_home</name>
         <value>/usr/lib/hadoop</value>
         <description>Absolute path to where Hadoop is installed at.</description>
+    </property>
 	<property>
 		<name>ARRAY_NAME</name>
 		<value>"zData Hawq Cluster"</value>

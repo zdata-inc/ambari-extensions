@@ -5,13 +5,14 @@ config = Script.get_config()
 tmp_dir = Script.get_tmp_dir()
 
 # User info
-hawq_user = "gpadmin"
-hawq_password = "changeme"
+hawq_user = config["configurations"]["hawq_config"]["hawq_user"]
+hawq_password = config["configurations"]["hawq_config"]["hawq_password"] 
 
 # Important paths, directories, and files
 hawq_install_path = "/usr/local/hawq/"
 hawq_environment_path = os.path.join(hawq_install_path, "greenplum_path.sh")
-hawq_hostfile_path = os.path.join(hawq_install_path, "hostfile")
+hawq_hostfile_all_path = os.path.join(hawq_install_path, "hostfile_all")
+hawq_hostfile_seg_path = os.path.join(hawq_install_path, "hostfile_segments")
 sysctl_conf_file = "/etc/sysctl.conf"
 security_conf_file = "/etc/security/limits.d/hawq.conf"
 MASTER_DIRECTORY = config["configurations"]["hawq_config"]["MASTER_DIRECTORY"]
@@ -29,10 +30,10 @@ standby_master_hostname = ""
 
 # Common commands
 source_cmd = "source "+hawq_environment_path+"; "
-exkeys_cmd = "gpssh-exkeys -f "+hawq_hostfile_path+"; "
+exkeys_cmd = "gpssh-exkeys -f "+hawq_hostfile_seg_path+"; "
 export_mdd_cmd = "export MASTER_DATA_DIRECTORY="+ MASTER_DIRECTORY +"/gpseg-1"
-gpinitsystem_cmd = "gpinitsystem -c " + gpinitsystem_config_path +" -h "+ hawq_hostfile_path + " -a; "
-gpinitsystem_with_standby_cmd = "gpinitsystem -c " + gpinitsystem_config_path +" -h "+ hawq_hostfile_path + "-s "+ standby_master_hostname +" -a; " 
+gpinitsystem_cmd = "gpinitsystem -c " + gpinitsystem_config_path +" -h "+ hawq_hostfile_seg_path + " -a; "
+gpinitsystem_with_standby_cmd = "gpinitsystem -c " + gpinitsystem_config_path +" -h "+ hawq_hostfile_seg_path + "-s "+ standby_master_hostname +" -a; " 
 
 # User configurations
 ARRAY_NAME = config["configurations"]["hawq_config"]["ARRAY_NAME"]

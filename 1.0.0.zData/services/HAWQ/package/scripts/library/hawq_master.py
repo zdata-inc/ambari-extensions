@@ -15,13 +15,13 @@ def install(env):
 
     # Hostfile Segments
     TemplateConfig(
-        params.hawq_hostfile_path,
+        params.hawq_hostfile_seg_path,
         owner=params.hawq_user, mode=0644
     )
 
     # Exchange private keys for root and gpadmin
-    Execute("source %s; gpssh-exkeys -f %s;" % (params.hawq_environment_path, params.hawq_hostfile_path))
-    Execute("gpssh-exkeys -f %s -p %s;" % (params.hawq_hostfile_path, params.hawq_password), user=params.hawq_user)
+    Execute("source %s; gpssh-exkeys -f %s;" % (params.hawq_environment_path, params.hawq_hostfile_seg_path))
+    Execute("gpssh-exkeys -f %s -p %s;" % (params.hawq_hostfile_seg_path, params.hawq_password), user=params.hawq_user)
 
     hawq.configure_kernel_parameters()
     hawq.configure_security_limits()
@@ -58,7 +58,14 @@ def install(env):
 
     # Install
     Execute(
-        format("gpinitsystem -c {params.gpinitsystem_config_path} -h {params.hawq_hostfile_path} -a"),
+        format("gpinitsystem -c {params.gpinitsystem_config_path} -h {params.hawq_hostfile_seg_path} -a"),
+        user=params.hawq_user
+    )
+
+    # Validates various platform-specific, HAWQ, and HDFS specific configuration settings. Stores results in home dir hawq user.
+    Execute(
+        format("gpcheck -f %s --zipout" % params.hawq_hostfile_all_path),
+        cwd="~",
         user=params.hawq_user
     )
 
