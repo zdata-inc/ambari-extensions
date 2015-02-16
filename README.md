@@ -41,6 +41,13 @@ Vagrant
     vagrant ssh slave1
     ```
 
+Retrieve Artifacts
+------------------
+
+Visit https://network.pivotal.io/products/pivotal-hd
+Download "Pivotal HD 2.1.0"
+Download "PHD 2.1.0: Pivotal HAWQ 1.2.1.0"
+
 
 Gotchas
 -------
