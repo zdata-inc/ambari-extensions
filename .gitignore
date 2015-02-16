@@ -1,5 +1,4 @@
 .vagrant
-**.DS_Store
 
 private_key
 private_key.pub
