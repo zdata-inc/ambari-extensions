@@ -1,9 +1,7 @@
 #!/bin/bash
 
 # Setup repo
-if find /vagrant/artifacts -name 'PHD*' -or -name 'PADS*' -quit &> /dev/null; then
-    /vagrant/build/setupRepo.sh
-fi
+/vagrant/build/setup-repo.sh
 
 sudo yum install -y ambari-server httpd
 
