@@ -11,9 +11,10 @@ The vagrant installation method is not tested on Windows, and most likely will n
  - Vagrant
  - Vagrant Plugin: Hostmanager
 
-   ``` bash
-   vagrant plugin install vagrant-hostmanager
-   ```
+    ```bash
+    vagrant plugin install vagrant-hostmanager
+
+    ```
 
 ### Installation
 
@@ -21,7 +22,9 @@ The vagrant installation method is not tested on Windows, and most likely will n
 1. Run vagrant up to create and provision the virtual machines.  This step will install Ambari automatically.  
     __Warning:__ Each of the three virtual machines requires 4GB of RAM, only spin up one or two if RAM is limited!  
 
-    ``` bash
+    ```bash
     vagrant up # Start master, slave0, and slave1
     vagrant up master slave0 # Start only master and slave0
     ```
+
+2. 
