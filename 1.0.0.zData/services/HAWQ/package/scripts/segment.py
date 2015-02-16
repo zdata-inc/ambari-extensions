@@ -21,7 +21,9 @@ class Slave(Script):
   def start(self, env):
     print 'Start the Sample Srv Slave';
   def status(self, env):
-    print 'Status of the Sample Srv Slave';
+    if not hawq_master.is_running():
+      raise ComponentIsNotRunning()
+
   def configure(self, env):
     print 'Configure the Sample Srv Slave';
 if __name__ == "__main__":

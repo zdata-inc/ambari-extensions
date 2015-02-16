@@ -52,4 +52,4 @@ ENABLE_SECURE_FILESYSTEM = config["configurations"]["hawq-env"]["ENABLE_SECURE_F
 
 # Pids
 hawq_master_pid_path = os.path.join(MASTER_DIRECTORY, SEG_PREFIX + '-1/postmaster.pid')
-# hawq_slave_pid_path = os.path.join()
+hawq_slave_pids_glob = "/data[0-9]/primary/gpseg[0-9]/postmaster.pid"
