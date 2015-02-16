@@ -18,10 +18,10 @@ class Master(Script):
     hawq_master.install(env)
 
   def stop(self, env):
-    hawq_master.start()
+    hawq_master.stop()
 
   def start(self, env):
-    hawq_master.stop()
+    hawq_master.start()
 
   def status(self, env):
     if not hawq_master.is_running():
