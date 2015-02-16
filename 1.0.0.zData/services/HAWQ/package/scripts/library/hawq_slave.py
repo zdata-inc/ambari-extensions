@@ -18,17 +18,25 @@ def configure():
     pass
 
 def start():
-    pass
+    import params
+    from glob import glob
+
+    for segmentPath in glob(params.hawq_slave_glob):
+        Execute('pg_ctl -D "%s" start' % segmentPath, user=params.hawq_user)
 
 def stop():
-    pass
+    import params
+    from glob import glob
+
+    for segmentPath in glob(params.hawq_slave_glob):
+        Execute('pg_ctl -D "%s" stop' % segmentPath, user=params.hawq_user)
 
 def is_running():
     import params
     from glob import glob
 
-    for pidFile in glob(params.hawq_slave_pids_glob):
-        if not hawq.is_running(pidFile):
+    for segmentPath in glob(params.hawq_slave_glob):
+        if not hawq.is_running(os.path.join(segmentPath, 'postmaster.pid')):
             return False
 
     return True
