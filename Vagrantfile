@@ -39,7 +39,7 @@ Vagrant.configure(2) do |config|
         node.vm.hostname = "master.ambaricluster.local"
 
         node.vm.provider 'virtualbox' do |v|
-            v.memory = 2048
+            v.memory = 4096
         end
 
         node.vm.synced_folder '1.0.0.zData', '/var/lib/ambari-server/resources/stacks/HDP/1.0.0.zData', create: true
@@ -53,6 +53,10 @@ Vagrant.configure(2) do |config|
         config.vm.define "slave#{i}" do |node|
             node.vm.network 'private_network', type: :dhcp
             node.vm.hostname = "slave#{i}.ambaricluster.local"
+
+            node.vm.provider 'virtualbox' do |v|
+                v.memory = 4096
+            end
 
             node.vm.provision 'shell', path: 'vagrant/bootstrap.sh'
             node.vm.provision 'shell', path: 'vagrant/bootstrap-slave.sh'
