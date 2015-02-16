@@ -1,7 +1,8 @@
 import os
 import utilities
+import time
 
-from resource_management.core.exceptions import ComponentIsNotRunning
+from resource_management.core.exceptions import ComponentIsNotRunning, Fail
 from resource_management import *
 from library import hawq
 
@@ -20,8 +21,14 @@ def install(env):
     )
 
     # Exchange private keys for root and gpadmin
+    for i in range(3):
+        try:
+            Execute("gpssh-exkeys -f %s -p %s;" % (params.hawq_hostfile_seg_path, params.hawq_password), user=params.hawq_user)
+        except Fail as exception:
+            time.sleep(15)
+            continue
+        break
     Execute("source %s; gpssh-exkeys -f %s;" % (params.hawq_environment_path, params.hawq_hostfile_seg_path))
-    Execute("gpssh-exkeys -f %s -p %s;" % (params.hawq_hostfile_seg_path, params.hawq_password), user=params.hawq_user)
 
     hawq.configure_kernel_parameters()
     hawq.configure_security_limits()

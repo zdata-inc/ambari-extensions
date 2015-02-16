@@ -49,7 +49,7 @@
 	</property>
 	<property>
 		<name>MASTER_PORT</name>
-		<value>5432</value>
+		<value>6543</value>
 		<description>Port number for the master instance.</description>
 	</property>
 	<property>
