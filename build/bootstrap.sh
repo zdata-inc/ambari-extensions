@@ -45,5 +45,5 @@ if [ -f /vagrant/.vimrc ]; then
     sudo cp /vagrant/.vimrc /root/.vimrc
 fi
 
-# Fix for gotcha #1
+# Fix for issue #1
 sed -i "s;^127\.0\.0\.1\(.*\);127.0.0.1 localhost;" /etc/hosts
