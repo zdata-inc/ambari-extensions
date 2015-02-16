@@ -74,11 +74,14 @@ def is_process_running(pid_file, pid=None):
         return False
 
     if pid == None:
-        with open(pid_file, 'r') as filehandle:
-            try:
-                pid = int(filehandle.read())
-            except:
-                return False
+        try:
+            with open(pid_file, 'r') as filehandle:
+                try:
+                    pid = int(filehandle.read())
+                except:
+                    return False
+        except IOError:
+            return False
 
     try:
         # Kill will not actually kill the process
