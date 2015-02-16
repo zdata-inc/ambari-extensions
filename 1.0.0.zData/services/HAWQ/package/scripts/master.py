@@ -1,6 +1,6 @@
-from resource_management import *
 import sys
 import os
+from resource_management import *
 from library import hawq_master
 
 class Master(Script):
@@ -22,7 +22,8 @@ class Master(Script):
   def start(self, env):
     print 'Start the Hawq Master';
   def status(self, env):
-    print 'Status of the Hawq Master';
+    if not hawq_master.is_running():
+      raise ComponentIsNotRunning()
   def configure(self, env):
     print 'Configure the Hawq Master';
 

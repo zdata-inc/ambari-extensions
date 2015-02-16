@@ -117,7 +117,9 @@ def force_stop():
     )
 
 def is_running():
-    pass
+    import params
+
+    return hawq.is_running(params.hawq_master_pid_path)
 
 def check_hawq_installed():
     import params
