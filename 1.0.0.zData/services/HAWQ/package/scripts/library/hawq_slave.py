@@ -18,18 +18,10 @@ def configure():
     pass
 
 def start():
-    import params
-    from glob import glob
-
-    for segmentPath in glob(params.hawq_slave_glob):
-        Execute('pg_ctl -D "%s" start' % segmentPath, user=params.hawq_user)
+    pass
 
 def stop():
-    import params
-    from glob import glob
-
-    for segmentPath in glob(params.hawq_slave_glob):
-        Execute('pg_ctl -D "%s" stop' % segmentPath, user=params.hawq_user)
+    pass
 
 def is_running():
     import params
