@@ -1,5 +1,4 @@
 from resource_management import *
-from utils import * 
 from library import hawq_slave
 import sys
 

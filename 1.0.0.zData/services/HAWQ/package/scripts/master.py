@@ -1,5 +1,4 @@
 from resource_management import *
-from utils import * 
 import sys
 import os
 from library import hawq_master
