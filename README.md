@@ -1,19 +1,12 @@
-File Explanations
------------------
-__GREENPLUM__  
-Service definition Pivotal Greenplum that can be copied into an Ambari Stack directory.
+zData Ambari Stack
+==================
+Ambari is a tool which makes provisioning, managing, and monitoring of Apache Hadoop deployments easy.  zData's stack builds atop Ambari to provide easy deployment and management of HAWQ, Chorus, and soon other Pivotal technologies.
 
-__HAWQ__  
-Service definition for Pivotal Hawq that can be copied into an Ambari Stack directory.
+[Visit the project's documentation for quick start guides and more information.](http://zdata-inc.github.io/ambari-stack)
 
-__vagrant__  
-Contains bash scripts which provision the different nodes of the local cluster.
 
-__Vagrantfile__  
-Vagrantfile for bringing up a virtual Ambari cluster with Pivotal services to install.
-
-Vagrant
--------
+Getting started with Vagrant
+----------------------------
 
 1. Requires the following plugins: vagrant-hostmanager
 
@@ -40,6 +33,8 @@ Vagrant
     vagrant ssh slave0
     vagrant ssh slave1
     ```
+
+More information about getting started with Ambari using vagrant [is available here](http://zdata-inc.github.io/ambari-stack/getting-setup/with-vagrant.html).
 
 Retrieve Artifacts
 ------------------
