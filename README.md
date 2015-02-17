@@ -24,9 +24,9 @@ Vagrant
 2. Create boxes
 
     ```
-    vagrant up
-    # OR
-    vagrant up master
+    ./vagrant/up.sh 5 # Bring up master, slave1, slave2, ..., slave5
+    ./vagrant/up.sh 1 # Bring up master and slave1
+    ./vagrant/up.sh 0 # Just bring up master
     ```
 
 3. Connect, vms created: master, slave0, slave1
