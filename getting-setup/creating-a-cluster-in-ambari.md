@@ -9,7 +9,7 @@ Now you need to define a cluster in Ambari, and install the needed components on
 
 ### Creating A Cluster
 
-1. You'll need to visit the installation page for the Ambari server.  If you use the hostname scheme accompanied with the included vagrant scripts that url is [http://master.ambaricluster.local:8080](http://master.ambaricluster.local:8080).  
+1. First you'll need to access the Ambari web application.  If you use the hostname scheme accompanied with the included vagrant scripts that url is [http://master.ambaricluster.local:8080](http://master.ambaricluster.local:8080).  
 
 2. You'll need to login to Ambari.  By default the login is: admin / admin.  
 
