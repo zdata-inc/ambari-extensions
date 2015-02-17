@@ -47,7 +47,7 @@ def setKernelParameter(name, value, logoutput=True):
 
         with open('/etc/sysctl.conf', 'a+') as filehandle:
             line = format("{name} = {value}\n")
-            if not _lines_startsWith(filehandle.readlines(), (name + " =", name + "=")):
+            if not _lines_contain(filehandle.readlines(), line):
                 logLine += " Saved"
                 filehandle.write(line)
             else:

@@ -3,6 +3,7 @@
 AMBARI_REPO=http://s3.amazonaws.com/dev.hortonworks.com/ambari/centos6/1.x/updates/1.7.0.trunk/ambari.repo
 
 yum install -y screen vim
+echo "export PATH=/vagrant/build:$PATH" >> ~/.bashrc
 
 # Create shared RSA keys
 sudo su - <<'EOF'
@@ -44,5 +45,5 @@ if [ -f /vagrant/.vimrc ]; then
     sudo cp /vagrant/.vimrc /root/.vimrc
 fi
 
-# Fix for gotcha #1
+# Fix for issue #1
 sed -i "s;^127\.0\.0\.1\(.*\);127.0.0.1 localhost;" /etc/hosts
