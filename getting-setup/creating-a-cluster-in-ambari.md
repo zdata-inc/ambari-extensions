@@ -25,7 +25,7 @@ Now you need to define a cluster in Ambari, and install the needed components on
 
     TODO: IMAGE
 
-6. After registration of the machines has completed you'll be prompted to install services on them.  The smallest complete stack for HAWQ contains HDFS, Nagios, Zookeeper, Ganglia, and Hawq.  Select these and any other services you may want and proceed.
+6. After registration of the machines has completed you'll be prompted to install services on them.  The smallest complete stack for HAWQ contains HDFS, Nagios, Zookeeper, Ganglia, and HAWQ.  Select these and any other services you may want and proceed.
 
     TODO IMAGE
 
@@ -33,11 +33,11 @@ Now you need to define a cluster in Ambari, and install the needed components on
 
     TODO IMAGE
 
-8. At this point you'll need to configure each of the components to be installed.  For our purposes of just deploy a small cluster to practice with the defaults are fine.  You'll need to input some information for Nagios and Hawq.
+8. At this point you'll need to configure each of the components to be installed.  For our purposes of just deploy a small cluster to practice with the defaults are fine.  You'll need to input some information for Nagios and HAWQ.
 
-    For Nagios, you must input information to create an admin account, as well as an email for alerts to be sent ot.
+    For Nagios, you must input information to create an admin account, as well as an email for alerts to be sent to.
 
-    For Hawq, you must input at least the password for the hawq administration user and the url for the hdfs namenode.  If you're using vagrant that url will be: `hdfs://master.ambaricluster.local:8020` TODO.
+    For HAWQ, you must input at least the password for the HAWQ administration user and the url for the hdfs namenode.  If you're using vagrant that url will be: `hdfs://master.ambaricluster.local:8020` TODO.
 
     TODO IMAGE
 
