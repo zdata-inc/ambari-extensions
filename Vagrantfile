@@ -50,6 +50,7 @@ Vagrant.configure(2) do |config|
     end
 
     2.times.each do |i|
+        i += 1
         config.vm.define "slave#{i}" do |node|
             node.vm.network 'private_network', type: :dhcp
             node.vm.hostname = "slave#{i}.ambaricluster.local"
