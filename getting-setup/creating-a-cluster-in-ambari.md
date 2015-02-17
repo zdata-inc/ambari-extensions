@@ -13,19 +13,23 @@ Now you need to define a cluster in Ambari, and install the needed components on
 
 2. You'll need to login to Ambari.  By default the login is: admin / admin.  
 
-3. After logging into a freshly install Ambari server, you should see the below screen.  Click on the 'Create a New Cluster TODO' button.
+3. After logging into a freshly install Ambari server, you should see the below screen.  Click on the 'Launch Install Wizard' button.
 
     TODO: IMAGE
 
-4. First you'll need to select a stack, we recommend the 1.0.0.zData stack, as it's currently the only stack which can install HAWQ.
+4. First you'll need to name your cluster and select its stack.  The name can be anything, but for the stack we recommend 1.0.0.zData, as it's currently the only stack which can install HAWQ.
 
-5. Next you'll need to input each of the machines to provision, as well as a private key which will allow you to login as root on each machine.  If you used vagrant to setup these machines their hostnames should be `slave0.ambaricluster.local`, `slave1.ambaricluster.local`, etc.; and the private key will be located in the project's root named private_key.
+    Next you will need to toggle down the 'Advanced Repository Options', and uncheck suse11.  You will also want to change the `Local-PHD-Repo` to the local repository containing Pivotal's PHD and PADS rpms.  For vagrant installations the creation of this repository is automatically done during provisioning by the [setup-repo.sh script](TODO LINK) so the Ambari server's domain can be used here (which is `http://master.ambaricluster.local` by default).
+
+    TODO IMAGE
+
+5. Next you'll need to input each of the machines to provision, as well as a private key which will allow you to login as root on each machine.  If you used vagrant to setup these machines their hostnames should be `slave1.ambaricluster.local`, `slave2.ambaricluster.local`, etc., and the private key will be located in the project's root as a file named private_key.
 
     After you click Next TODO, you'll see progress indicators showing the registration of the machines, and the installation of the Ambari agent.
 
     TODO: IMAGE
 
-6. After registration of the machines has completed you'll be prompted to install services on them.  The smallest complete stack for HAWQ contains HDFS, Nagios, Zookeeper, Ganglia, and HAWQ.  Select these and any other services you may want and proceed.
+6. After registration has completed you will be prompted to install services on each of the machines.  The smallest complete stack for HAWQ contains HDFS, Nagios, Zookeeper, Ganglia, and HAWQ.  Select these and any other services you may want and proceed.
 
     TODO IMAGE
 
