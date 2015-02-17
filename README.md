@@ -39,6 +39,5 @@ More information about getting started with Ambari using vagrant [is available h
 Retrieve Artifacts
 ------------------
 
-Visit https://network.pivotal.io/products/pivotal-hd
-Download "Pivotal HD 2.1.0"
-Download "PHD 2.1.0: Pivotal HAWQ 1.2.1.0"
+To install HAWQ you will need some files from Pivotal.  
+You can find these files at https://network.pivotal.io/products/pivotal-hd.  Create an account if you don't have one already, and download `Pivotal HD 2.1.0` and `PHD 2.1.0: Pivotal HAWQ 1.2.1.0`.  Place the downloaded files in the artifacts folder located in the project root.
