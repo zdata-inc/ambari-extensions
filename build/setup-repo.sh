@@ -9,8 +9,8 @@ if find /vagrant/artifacts -name 'PHD*' -or -name 'PADS*' -quit &> /dev/null; th
   yum install -y httpd createrepo
 
   mkdir -p $LOCAL_REPO_DIR
-  tar -xvf PHD*.tar.gz -C $LOCAL_REPO_DIR
-  tar -xvf PADS*.tar.gz -C $LOCAL_REPO_DIR
+  tar -xvf /vagrant/artifacts/PHD*.tar.gz -C $LOCAL_REPO_DIR
+  tar -xvf /vagrant/artifacts/PADS*.tar.gz -C $LOCAL_REPO_DIR
   createrepo $LOCAL_REPO_DIR
 
   service httpd start
