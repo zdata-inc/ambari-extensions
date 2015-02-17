@@ -8,6 +8,12 @@
     <link rel="stylesheet" href="{{ site.baseurl }}/stylesheets/styles.css">
     <link rel="stylesheet" href="{{ site.baseurl }}/stylesheets/pygment_trac.css">
     <script src="{{ site.baseurl }}/javascripts/scale.fix.js"></script>
+    {% if page.blips %}
+      <script src="{{ site.baseurl }}/javascripts/moving-pngs.js"></script>
+      {% for blip in page.blips %}
+      <script src="{{ site.baseurl }}{{ blip }}"></script>
+      {% endfor %}
+    {% endif %}
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
