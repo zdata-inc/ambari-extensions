@@ -42,7 +42,7 @@ Vagrant.configure(2) do |config|
             v.memory = 4096
         end
 
-        node.vm.synced_folder 'src', '/var/lib/ambari-server/resources/stacks/HDP/development.zData', create: true
+        node.vm.synced_folder 'src', '/var/lib/ambari-server/resources/stacks/HDP/9.9.9.zData', create: true
         
         node.vm.provision 'shell', path: 'build/bootstrap.sh'
         node.vm.provision 'shell', path: 'build/bootstrap-master.sh'
