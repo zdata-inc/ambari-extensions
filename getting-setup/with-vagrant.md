@@ -27,6 +27,6 @@ The vagrant installation method is not tested on Windows, and most likely will n
     ./build/up.sh 5 # Start master and five slaves
     ```
 
-2. After all hosts have been provisioned, connect to the master at <a href="http://master.ambaricluster.local" target="_blank">http://master.ambaricluster.local</a>.
+2. After all hosts have been provisioned, connect to the master at <a href="http://master.ambaricluster.local:8080" target="_blank">http://master.ambaricluster.local:8080</a>.
 
 3. Next we'll want to go through [how to create a cluster with Ambari]({{ baseurl }}/getting-setup/creating-a-cluster-in-ambari.html).
