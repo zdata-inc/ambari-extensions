@@ -1,6 +1,8 @@
 ---
 layout: default
 title: Getting Setup With Vagrant
+
+blips: /moving-images/getting-setup-with-vagrant/blips.js
 ---
 
 ### Note Regarding Windows:
@@ -8,12 +10,11 @@ The vagrant installation method is not tested on Windows, and most likely will n
 
 ### Prerequisites:
 
- - Vagrant
- - Vagrant Plugin: Hostmanager
+ - [Vagrant](https://www.vagrantup.com)
+ - [Vagrant Plugin: Hostmanager](https://github.com/smdahlen/vagrant-hostmanager)
 
     ```bash
     vagrant plugin install vagrant-hostmanager
-
     ```
 
 ### Installation
@@ -42,7 +43,7 @@ Now you need to define a cluster in Ambari, and install the needed components on
 
 3. After logging into a freshly install Ambari server, you should see a screen similar to the one below.  Click on the 'Launch Install Wizard' button.
 
-    TODO: IMAGE
+    {% include moving-image.html id="step1" width="800" height="450" image="/moving-images/getting-setup-with-vagrant/step1_packed.png" %}
 
 4. First you'll need to name your cluster and select its stack.  The name can be anything, but for the stack we recommend 1.0.0.zData, as it's currently the only stack which can install HAWQ.
 
