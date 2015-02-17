@@ -19,7 +19,11 @@ The vagrant installation method is not tested on Windows, and most likely will n
 
 ### Installation
 
-1. Run ./build/up.sh to create and provision the virtual machines.  This step will install Ambari automatically.  
+1. First you will need to retrieve certain artifacts from Pivotal.  Visit https://network.pivotal.io/products/pivotal-hd, create an account if you don't have one already.
+
+2. Next download `Pivotal HD 2.1.0`, `PHD 2.1.0: Pivotal HAWQ 1.2.1.0` and place them in the artifacts directory.
+
+3. Run ./build/up.sh to create and provision the virtual machines.  This step will install Ambari automatically.  
     __Warning:__ Each of the virtual machines requires 4GB of RAM, only spin up one or two if RAM is limited!  
 
     ```bash
