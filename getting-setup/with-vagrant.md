@@ -29,4 +29,4 @@ The vagrant installation method is not tested on Windows, and most likely will n
 
 2. After all hosts have been provisioned, connect to the master at <a href="http://master.ambaricluster.local:8080" target="_blank">http://master.ambaricluster.local:8080</a>.
 
-3. Next we'll want to go through [how to create a cluster with Ambari]({{ baseurl }}/getting-setup/creating-a-cluster-in-ambari.html).
+3. Next we'll want to go through [how to create a cluster with Ambari]({{ site.baseurl }}/getting-setup/creating-a-cluster-in-ambari.html).
