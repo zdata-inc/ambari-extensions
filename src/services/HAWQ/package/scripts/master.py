@@ -17,6 +17,8 @@ class Master(Script):
 
     hawq_master.install(env)
 
+    hawq_master.stop()
+
   def stop(self, env):
     hawq_master.stop()
 
