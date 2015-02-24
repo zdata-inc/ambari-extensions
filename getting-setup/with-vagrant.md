@@ -49,13 +49,13 @@ Now you need to define a cluster in Ambari, and install the needed components on
 
     Next you will need to toggle down the 'Advanced Repository Options', and uncheck suse11.  You will also want to change the `Local-PHD-Repo` to the local repository containing Pivotal's PHD and PADS rpms.  For vagrant installations the creation of this repository is automatically done during provisioning by the [setup-repo.sh script](TODO LINK) so the Ambari server's domain can be used here (which is `http://master.ambaricluster.local` by default).
 
-    TODO IMAGE
+    {% include moving-image.html id="step2" width="800" height="450" image="/moving-images/getting-setup-with-vagrant/step2_packed.png" %}
 
 5. Next you'll need to input each of the machines to provision, as well as a private key which will allow you to login as root on each machine.  If you used vagrant to setup these machines their hostnames should be `slave1.ambaricluster.local`, `slave2.ambaricluster.local`, etc., and the private key will be located in the project's root as a file named private_key.
 
     After you click Next TODO, you'll see progress indicators showing the registration of the machines, and the installation of the Ambari agent.
 
-    TODO: IMAGE
+    {% include moving-image.html id="step3" width="800" height="450" image="/moving-images/getting-setup-with-vagrant/step3_packed.png" %}
 
 6. After registration has completed you will be prompted to install services on each of the machines.  The smallest complete stack for HAWQ contains HDFS, Nagios, Zookeeper, Ganglia, and HAWQ.  Select these and any other services you may want and proceed.
 
