@@ -2,8 +2,7 @@
     <canvas id="moving_image_{{ include.id }}" class="moving_image_{{ include.id }}" width="{{ include.width }}" height="{{ include.height }}">
         <div id="anim_fallback" class="moving-image-{{ include.id }}" style="width: {{ include.width }}px; height: {{ include.height }}px; position: relative;"></div>
     </canvas>
+    <script type="text/javascript">
+    new movingPNG("{{ site.base_url }}{{ include.image }}", {{ include.id }}_timeline, document.getElementById("moving_image_{{ include.id }}"));
+    </script>
 </div>
-
-<script type="text/javascript">
-new movingPNG("{{ site.base_url }}{{ include.image }}", {{ include.id }}_timeline, document.getElementById("moving_image_{{ include.id }}"));
-</script>
