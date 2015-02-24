@@ -42,7 +42,7 @@ var create_partial = function(func) {
 };
 
 var movingPNG = function (source_url, timeline, canvasEl, delayFactor, endHangLength) {
-    delayFactor = delayFactor || 0.7;
+    delayFactor = delayFactor || 1;
     endHangLength = 4000;
 
     var context = null;
