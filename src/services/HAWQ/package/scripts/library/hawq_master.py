@@ -71,27 +71,14 @@ def install(env):
     )
 
     # Install
-
-    initSystemException=None
-    try:
-        Execute(
-            format("gpinitsystem -c {params.gpinitsystem_config_path} -h {params.hawq_hostfile_seg_path} -a"),
-            user=params.hawq_user
-        )
-    except Fail as exception:
-        initSystemException = exception
-
-    if not check_hawq_installed():
-        if initSystemException != None:
-            raise initSystemException
-        else:
-            raise Fail('HAWQ master directory was not created correctly.')
-    else:
-        print exception
+    Execute(
+        format("gpinitsystem -a -c %s" % params.gpinitsystem_config_path),
+        user=params.hawq_user
+    )
 
     # Validates various platform-specific, HAWQ, and HDFS specific configuration settings. Stores results in home dir hawq user.
     Execute(
-        format("gpcheck -f %s --zipout" % params.hawq_hostfile_all_path),
+        "gpcheck -f %s --zipout" % params.hawq_hostfile_all_path,
         user=params.hawq_user
     )
 

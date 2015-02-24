@@ -2,6 +2,7 @@
 
 private_key
 private_key.pub
+.DS_Store
 
 artifacts
 !artifacts/.gitkeep

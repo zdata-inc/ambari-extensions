@@ -19,8 +19,7 @@ MASTER_DIRECTORY = config["configurations"]["hawq-env"]["MASTER_DIRECTORY"]
 DATA_DIRECTORY = config["configurations"]["hawq-env"]["DATA_DIRECTORY"]
 gpconfigs_path = "/home/"+hawq_user+"/gpconfigs/"
 gpinitsystem_config_path = gpconfigs_path+"gpinitsystem_config"
-MACHINE_LIST_FILE = gpconfigs_path+"hostfile_gpinitsystem"
-hadoop_home=config["configurations"]["hawq-env"]["hadoop_home"]
+hadoop_home = config["configurations"]["hawq-env"]["hadoop_home"]
 
 # Host info
 hawq_master_hosts = default("/clusterHostInfo/hawq_master_hosts",[])
@@ -32,8 +31,6 @@ standby_master_hostname = ""
 source_cmd = "source "+hawq_environment_path+"; "
 exkeys_cmd = "gpssh-exkeys -f "+hawq_hostfile_seg_path+"; "
 export_mdd_cmd = "export MASTER_DATA_DIRECTORY="+ MASTER_DIRECTORY +"/gpseg-1"
-gpinitsystem_cmd = "gpinitsystem -c " + gpinitsystem_config_path +" -h "+ hawq_hostfile_seg_path + " -a; "
-gpinitsystem_with_standby_cmd = "gpinitsystem -c " + gpinitsystem_config_path +" -h "+ hawq_hostfile_seg_path + "-s "+ standby_master_hostname +" -a; " 
 
 # User configurations
 ARRAY_NAME = config["configurations"]["hawq-env"]["ARRAY_NAME"]

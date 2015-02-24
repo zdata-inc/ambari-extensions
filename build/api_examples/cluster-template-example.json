@@ -1,0 +1,30 @@
+{
+  "blueprint" : "zdata",
+  "default_password" : "admin",
+  "host_groups" :[
+    {
+      "name" : "host_group_1", 
+      "hosts" : [         
+        {
+          "fqdn" : "master.ambaricluster.local"
+        }
+      ]
+    },
+    {
+      "name" : "host_group_2",
+      "hosts" : [
+        {
+          "fqdn" : "slave1.ambaricluster.local"
+        }
+      ]
+    },
+    {
+      "name" : "host_group_3",
+      "hosts" : [
+        {
+          "fqdn" : "slave2.ambaricluster.local"
+        }
+      ]
+    }
+  ]
+}

@@ -17,7 +17,6 @@ def create_user():
     utilities.appendBashProfile(params.hawq_user, "export PGPORT=%s" % params.MASTER_PORT)
     utilities.appendBashProfile(params.hawq_user, "export PGUSER=%s" % params.hawq_user)
     utilities.appendBashProfile(params.hawq_user, "export PGDATABASE=%s" % params.DATABASE_NAME)
-    utilities.appendBashProfile(params.hawq_user, "export PGHOST=%s" % params.hawq_master_hosts[0])
     utilities.appendBashProfile(params.hawq_user, "export HADOOP_HOME=%s" % params.hadoop_home)
 
 def create_data_dirs(data_directories):

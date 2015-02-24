@@ -7,8 +7,8 @@ vagrant up master
 
 echo "Starting slaves"
 
-if typeof parallel; then
-    seq -f 'slave%g' 2 | parallel --no-notice vagrant up
+if type parallel &>/dev/null; then
+    seq -f 'slave%g' $1 | parallel --no-notice vagrant up
 else
     for i in `seq -f 'slave%g' $1`; do
         vagrant up $i
