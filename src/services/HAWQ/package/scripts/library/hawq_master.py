@@ -71,13 +71,10 @@ def install(env):
     )
 
     # Install
-    try:
-        Execute(
-            format("gpinitsystem -a -c %s" % gpinitsystem_config_path),
-            user=params.hawq_user
-        )
-    except Fail as exception:
-        raise exception
+    Execute(
+        format("gpinitsystem -a -c %s" % params.gpinitsystem_config_path),
+        user=params.hawq_user
+    )
 
     # Validates various platform-specific, HAWQ, and HDFS specific configuration settings. Stores results in home dir hawq user.
     Execute(
