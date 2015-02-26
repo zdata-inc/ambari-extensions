@@ -320,6 +320,25 @@ a.buttons:hover {
 	text-decoration: none;
 }
 
+/* Pattern - moving png */
+.moving-image-container {
+  position: relative;
+}
+.moving-image-container::after {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; right: 0; bottom: 0;
+
+  background-color: rgba(0, 0, 0, .2);
+  -webkit-transition: background-color 100ms ease-in-out;
+  -moz-transition: background-color 100ms ease-in-out;
+  -o-transition: background-color 100ms ease-in-out;
+  transition: background-color 100ms ease-in-out;
+}
+.moving-image-container.running::after {
+  background-color: transparent;
+}
+
 
 /* Section - for main page content */
 
