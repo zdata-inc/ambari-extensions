@@ -53,7 +53,7 @@ var create_partial = function(func) {
  */
 var movingPNG = function (options) {
     options.delayFactor = options.hasOwnProperty('delayFactor') ? options.delayFactor : 0.7;
-    options.endHangLength = options.hasOwnProperty('endHangTime') ? options.endHangTime : 4000;
+    options.endHangLength = options.hasOwnProperty('endHangLength') ? options.endHangLength : 4000;
     options.autostart = options.hasOwnProperty('autostart') ? options.autostart : true;
     options.loop = options.hasOwnProperty('loop') ? options.loop : true;
 
@@ -101,7 +101,6 @@ var movingPNG = function (options) {
     var stop = function() {
         running = false;
         currentRuntime = 0;
-        lastRun = 0;
     };
 
     var isRunning = function() {
