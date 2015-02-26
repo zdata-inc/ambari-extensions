@@ -77,10 +77,14 @@ def install(env):
     )
 
     # Validates various platform-specific, HAWQ, and HDFS specific configuration settings. Stores results in home dir hawq user.
-    Execute(
-        "gpcheck -f %s --zipout" % params.hawq_hostfile_all_path,
-        user=params.hawq_user
-    )
+    try:
+        Execute(
+            "gpcheck -f %s --zipout" % params.hawq_hostfile_all_path,
+            user=params.hawq_user
+        )
+    except Fail as e:
+        print "Failed to run gpcheck! \n"
+        print e
 
 def configure():
     pass
