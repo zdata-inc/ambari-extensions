@@ -55,9 +55,11 @@ Now you need to define a cluster in Ambari, and install the needed components on
 
     After you click Register and Confirm, you'll see progress indicators showing the installation of the Ambari agent, and the registration of the machines to the Ambari cluster.
 
+    {% include moving-image.html id="step3" width="800" height="450" image="/moving-images/getting-setup-with-vagrant/step3_packed.png" %}
+
 6. After registration has completed you will be prompted to install services on each of the machines.  The smallest complete stack for HAWQ contains HDFS, Nagios, Zookeeper, Ganglia, and HAWQ.  Select these and any other services you may want and proceed.
 
-    {% include moving-image.html id="step3" width="800" height="450" image="/moving-images/getting-setup-with-vagrant/step3_packed.png" %}
+    TODO IMAGE
 
 7. You'll now be asked to decide where to install what components.  For small installations it is recommended to put the master components on the Ambari server, and use the slaves for HDFS datanodes and HAWQ segments.  Larger deployments may distribute their components differently.
 
