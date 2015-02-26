@@ -3,7 +3,7 @@ from library import hawq_slave
 import sys
 
 class Slave(Script):
- 
+
   # This installation assumes that the /etc/hosts file includes the host names and all interface address names for every machine participating in your HAWQ system.
   # In the future, we can check to make sure this is true.
   def install(self, env):
@@ -15,7 +15,7 @@ class Slave(Script):
     env.set_params(params)
 
     hawq_slave.install(env)
-  
+
   def stop(self, env):
     hawq_slave.stop()
 
