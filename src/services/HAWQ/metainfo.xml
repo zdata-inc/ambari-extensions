@@ -11,7 +11,7 @@
 			<displayName>Hawq</displayName>
 			<comment>Pivotal Hawq</comment>
 			<version>0.1</version>
-			
+
 			<components>
 				<component>
 					<name>HAWQ_MASTER</name>
@@ -24,7 +24,7 @@
 						<timeout>4800</timeout>
 					</commandScript>
 				</component>
-			
+
 				<component>
 					<name>HAWQ_SLAVE</name>
 					<displayName>Hawq Segment</displayName>
