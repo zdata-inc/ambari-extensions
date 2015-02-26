@@ -1,8 +1,26 @@
-<div>
-    <canvas id="moving_image_{{ include.id }}" class="moving_image_{{ include.id }}" width="{{ include.width }}" height="{{ include.height }}">
+<div class="moving-image-container moving-image-{{ include.id }}-container">
+    <canvas id="moving_image_{{ include.id }}" width="{{ include.width }}" height="{{ include.height }}">
         <div id="anim_fallback" class="moving-image-{{ include.id }}" style="width: {{ include.width }}px; height: {{ include.height }}px; position: relative;"></div>
     </canvas>
     <script type="text/javascript">
-    new movingPNG("{{ site.base_url }}{{ include.image }}", {{ include.id }}_timeline, document.getElementById("moving_image_{{ include.id }}"));
+    (function (canvas) {
+        var container = canvas.parentNode;
+
+        var image = new movingPNG({
+            sourceUrl: "{{ site.base_url }}{{ include.image }}",
+            timeline: {{ include.id }}_timeline,
+            canvasEl: canvas,
+            endHangLength: 1500,
+            autostart: false
+        });
+        container.addEventListener('mouseover', function(evt) {
+            container.className += ' running';
+            image.start();
+        });
+        container.addEventListener('mouseout', function(evt) {
+            container.className = container.className.replace(' running', '');
+            image.pause();
+        });
+    })(document.getElementById("moving_image_{{ include.id }}"));
     </script>
 </div>
