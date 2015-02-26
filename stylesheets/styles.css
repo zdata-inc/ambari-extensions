@@ -321,8 +321,13 @@ a.buttons:hover {
 }
 
 /* Pattern - moving png */
+.moving-image canvas {
+  padding: 0;
+  margin: 0;
+}
 .moving-image-container {
   position: relative;
+  margin: 2em 0;
 }
 .moving-image-container::after {
   content: '';
