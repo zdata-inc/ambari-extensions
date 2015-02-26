@@ -1,7 +1,7 @@
 # vim: set ft=ruby:
 
 # Generate ssh key
-Dir.chdir(File.dirname(__FILE__)) do 
+Dir.chdir(File.dirname(__FILE__)) do
     `ssh-keygen -t rsa -f private_key -N ''` unless File.exists? 'private_key'
 end
 
@@ -43,7 +43,7 @@ Vagrant.configure(2) do |config|
         end
 
         node.vm.synced_folder 'src', '/var/lib/ambari-server/resources/stacks/HDP/9.9.9.zData', create: true
-        
+
         node.vm.provision 'shell', privileged: false, inline: 'echo "export PATH=/vagrant/build:$PATH" >> ~/.bashrc'
         node.vm.provision 'shell', path: 'build/bootstrap.sh'
         node.vm.provision 'shell', path: 'build/bootstrap-master.sh'
