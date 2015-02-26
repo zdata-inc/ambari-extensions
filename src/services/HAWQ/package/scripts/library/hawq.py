@@ -13,7 +13,7 @@ def create_user():
 
     # Source hawq functions for hawq admin, save to bash profile
     utilities.appendBashProfile(params.hawq_user, "source %s;" % params.hawq_environment_path, run=True)
-    utilities.appendBashProfile(user, "export HADOOP_HOME=%s" % params.hadoop_home)
+    utilities.appendBashProfile(params.hawq_user, "export HADOOP_HOME=%s" % params.hadoop_home)
 
 def add_environmental_variables(user=None):
     import params
