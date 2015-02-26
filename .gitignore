@@ -1,4 +1,5 @@
 .vagrant
+/debug
 
 private_key
 private_key.pub
