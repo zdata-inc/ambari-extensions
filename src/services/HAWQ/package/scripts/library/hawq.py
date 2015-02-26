@@ -13,11 +13,16 @@ def create_user():
 
     # Source hawq functions for hawq admin, save to bash profile
     utilities.appendBashProfile(params.hawq_user, "source %s;" % params.hawq_environment_path, run=True)
+    utilities.appendBashProfile(user, "export HADOOP_HOME=%s" % params.hadoop_home)
 
-    utilities.appendBashProfile(params.hawq_user, "export PGPORT=%s" % params.MASTER_PORT)
-    utilities.appendBashProfile(params.hawq_user, "export PGUSER=%s" % params.hawq_user)
-    utilities.appendBashProfile(params.hawq_user, "export PGDATABASE=%s" % params.DATABASE_NAME)
-    utilities.appendBashProfile(params.hawq_user, "export HADOOP_HOME=%s" % params.hadoop_home)
+def add_environmental_variables(user=None):
+    import params
+
+    user = params.hawq_user if user == None else user
+
+    utilities.appendBashProfile(user, "export PGPORT=%s" % params.MASTER_PORT)
+    utilities.appendBashProfile(user, "export PGUSER=%s" % params.hawq_user)
+    utilities.appendBashProfile(user, "export PGDATABASE=%s" % params.DATABASE_NAME)
 
 def create_data_dirs(data_directories):
     import params
