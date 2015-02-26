@@ -41,13 +41,30 @@ var create_partial = function(func) {
     };
 };
 
-var movingPNG = function (source_url, timeline, canvasEl, delayFactor, endHangLength) {
-    delayFactor = delayFactor || 0.7;
-    endHangLength = 4000;
+/**
+ * Options:
+ *  - sourceUrl - (required) Url for the packed png.
+ *  - timeline - (required) Object which holds the blips information.
+ *  - canvasEl - (required) Canvas element to paint image onto.
+ *  - delayFactor - Offset timing by a multiplier.  Default 1.0.
+ *  - loop - Should the movingPNG automatically loop?  Default true.
+ *  - endHangLength - Length of time to wait at the end before looping.  Default 4000ms.
+ *  - autostart - Should the movingPNG start on page load?  Default true
+ */
+var movingPNG = function (options) {
+    options.delayFactor = options.hasOwnProperty('delayFactor') ? options.delayFactor : 0.7;
+    options.endHangLength = options.hasOwnProperty('endHangTime') ? options.endHangTime : 4000;
+    options.autostart = options.hasOwnProperty('autostart') ? options.autostart : true;
+    options.loop = options.hasOwnProperty('loop') ? options.loop : true;
+
+    if (!options.hasOwnProperty('sourceUrl') || !options.hasOwnProperty('timeline') || !options.hasOwnProperty('canvasEl'))
+        throw new Error('Missing one or more required settings for movingPNG.');
 
     var context = null;
     var image = new Image();
+    var timeline = options.timeline;
 
+    var running = false;
     var totalRuntime = 0;
     var currentRuntime = 0;
     var lastRun = 0;
@@ -55,16 +72,40 @@ var movingPNG = function (source_url, timeline, canvasEl, delayFactor, endHangLe
     var drawImage = null;
 
     var init = function() {
-        context = canvasEl.getContext('2d');
+        context = options.canvasEl.getContext('2d');
         image.onload = function() {
             drawImage = create_partial(context.drawImage, image);
-            window.requestAnimationFrame(animationLoop);
+
+            // Always let it run once so the initial image is displayed
+            start();
+            if (!options.autostart)
+                stop();
         }.bind(this);
 
-        image.src = source_url;
+        image.src = options.sourceUrl;
 
         totalRuntime = computeRuntime();
         lastRun = currentTime();
+    };
+
+    var start = function() {
+        lastRun = currentTime();
+        running = true;
+        window.requestAnimationFrame(animationLoop);
+    };
+
+    var pause = function() {
+        running = false;
+    };
+
+    var stop = function() {
+        running = false;
+        currentRuntime = 0;
+        lastRun = 0;
+    };
+
+    var isRunning = function() {
+        return running;
     };
 
     var currentTime = function() {
@@ -75,7 +116,7 @@ var movingPNG = function (source_url, timeline, canvasEl, delayFactor, endHangLe
         var runtime = 0;
         for (var j = 0; j < timeline.length - 1; ++j)
             runtime += timeline[j].delay;
-        return runtime + endHangLength;
+        return runtime + options.endHangLength;
     };
 
     var getFrame = function(currentTime) {
@@ -89,12 +130,17 @@ var movingPNG = function (source_url, timeline, canvasEl, delayFactor, endHangLe
         return j;
     };
 
-    var animationLoop = function(elapsedTime) {
+    var animationLoop = function(timestamp) {
         var elapsedTime = currentTime() - lastRun;
-        currentRuntime = (currentRuntime + elapsedTime) % totalRuntime;
+
+        currentRuntime = currentRuntime + elapsedTime;
+        if (!options.loop && currentRuntime > totalRuntime)
+            stop();
+
+        currentRuntime = currentRuntime % totalRuntime;
 
         var frame = getFrame(currentRuntime);
-        var delay = timeline[frame].delay * delayFactor;
+        var delay = timeline[frame].delay * options.delayFactor;
         var blits = timeline[frame].blit;
 
         for (j = 0; j < blits.length; ++j) {
@@ -111,10 +157,15 @@ var movingPNG = function (source_url, timeline, canvasEl, delayFactor, endHangLe
 
         lastRun = currentTime();
 
-        window.requestAnimationFrame(animationLoop);
+        if (running)
+            window.requestAnimationFrame(animationLoop);
     };
 
     animationLoop = animationLoop.bind(this);
+    this.start = start.bind(this);
+    this.stop = stop.bind(this);
+    this.pause = pause.bind(this);
+    this.isRunning = isRunning.bind(this);
 
     init();
 };
