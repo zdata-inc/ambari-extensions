@@ -11,6 +11,9 @@ def install(env):
 
     hawq.create_user()
 
+    # Set owner of hawq directory to hawq user
+    Execute(format("chown -R {params.hawq_user} {params.hawq_install_path}"))
+
     # Source hawq functions for root as well
     Execute("source %s" % params.hawq_environment_path)
 
