@@ -12,6 +12,7 @@ Getting started with Vagrant
 
     ```
     vagrant plugin install vagrant-hostmanager
+    vagrant plugin install vagrant-reload
     ```
 
 2. Create boxes
