@@ -78,7 +78,7 @@ def install(env):
     )
 
     Execute(
-        format("GP_CHECK_HDFS=echo gpinitsystem -a -c %s" % params.gpinitsystem_config_path),
+        format("gpinitsystem -a -c %s" % params.gpinitsystem_config_path),
         user=params.hawq_user
     )
 
