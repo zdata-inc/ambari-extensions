@@ -71,8 +71,14 @@ def install(env):
     )
 
     # Install
+    # Fixes issue #5
     Execute(
-        format("gpinitsystem -a -c %s" % params.gpinitsystem_config_path),
+        "sudo sed -i 's/GP_CHECK_HDFS=.*/GP_CHECK_HDFS=echo/' /usr/local/hawq/bin/lib/gp_bash_functions.sh",
+        user=params.hawq_user
+    )
+
+    Execute(
+        format("GP_CHECK_HDFS=echo gpinitsystem -a -c %s" % params.gpinitsystem_config_path),
         user=params.hawq_user
     )
 
