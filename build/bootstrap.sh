@@ -33,7 +33,7 @@ sudo yum install -y openssl ntp
 sudo chkconfig iptables off
 sudo service iptables stop
 
-sudo sh -c 'echo 0 > /selinux/enforce'
+sudo sed -i 's;SELINUX=.*;SELINUX=disabled;' /etc/selinux/config
 
 sudo service ntpd stop
 sudo ntpdate pool.ntp.org
