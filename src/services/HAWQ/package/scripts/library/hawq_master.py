@@ -1,6 +1,8 @@
 import os
 import utilities
 import time
+import re
+from glob import glob
 
 from resource_management.core.exceptions import ComponentIsNotRunning, Fail
 from resource_management import *
@@ -77,10 +79,27 @@ def install(env):
     # Fixes issue #5
     Execute("sed -i 's/GP_CHECK_HDFS=.*/GP_CHECK_HDFS=echo/' /usr/local/hawq/bin/lib/gp_bash_functions.sh")
 
-    Execute(
-        format("gpinitsystem -a -c %s" % params.gpinitsystem_config_path),
-        user=params.hawq_user
-    )
+    try:
+        Execute(
+            format("gpinitsystem -a -c %s" % params.gpinitsystem_config_path),
+            user=params.hawq_user
+        )
+    except Fail as exception:
+        print "gpinitsystem reported failure to install.  Scanning logs manually for consensus."
+
+        logfile = re.search(format(r'.*:-(/home/[^/]+/gpAdminLogs/gpinitsystem_[0-9]+\.log)'), str(exception))
+        if logfile == None:
+            print "No log file could be found to be scanned.  Failing."
+            raise exception
+
+        logfile = logfile.group(1)
+        print "Scanning log file: %s" % logfile
+
+        if hawq.scan_installation_logs(logfile):
+            print "Errors detected in logfile.  Failing"
+            raise exception
+        else:
+            print "No consensus.  Installation considered successful."
 
     # Validates various platform-specific, HAWQ, and HDFS specific configuration settings. Stores results in home dir hawq user.
     try:

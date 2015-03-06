@@ -3,6 +3,7 @@ from library import utilities
 from resource_management import *
 from resource_management.core.exceptions import ComponentIsNotRunning
 from ambari_commons import OSCheck
+import re
 
 def create_user():
     import params
@@ -97,6 +98,51 @@ def configure_security_limits():
         template_tag="limits",
         owner=params.hawq_user, mode=0644
     )
+
+def scan_installation_logs(logFile, minimumErrorLevel='info'):
+    """
+    Given a log file, return if there are any log lines with an error level above minimumErrorLevel.
+    """
+    logLevels = {'debug': 1, 'info': 2, 'warn': 3, 'error': 4, 'fatal': 5}
+
+    minimumErrorLevel = logLevels[minimumErrorLevel.lower()]
+    errorLines = []
+
+    with open(logFile, 'r') as filehandle:
+        for line in filehandle.readlines():
+            matches = re.findall(r"\[([A-Z]+)\]", line)
+            if len(matches) == 0:
+                continue
+
+            loglevel = logLevels[matches[0].lower()]
+            if loglevel > minimumErrorLevel:
+                errorLines.append(line)
+
+    # Don't care about the lines that say errors were found in logs, remove them
+    errorLines = remove_lines_between_dots_logs(errorLines)
+
+    return len(errorLines) > 0
+
+def remove_lines_between_dots_logs(lines):
+    """
+    Given a set of lines from a log file, remove all lines in between lines of asterisks.
+    """
+    inDots = False
+    linesToDelete = []
+    for i in range(len(lines)):
+        lineIsDots = False
+        if re.match(r".*:-\*+$", lines[i]) != None:
+            inDots = not inDots
+            lineIsDots = True
+
+        if inDots or lineIsDots:
+            linesToDelete.append(i)
+
+    linesToDelete.reverse()
+    for lineNumber in linesToDelete:
+        del lines[lineNumber]
+
+    return lines
 
 def configure_mount_options():
     # TODO Not implemented
