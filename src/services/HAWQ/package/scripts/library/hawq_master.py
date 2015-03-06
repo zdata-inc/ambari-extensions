@@ -100,6 +100,7 @@ def install(env):
             raise exception
         else:
             print "No consensus.  Installation considered successful."
+            print ">>>>> The log file located at %s should be reviewed so any reported warnings can be fixed!" % logfile
 
     # Validates various platform-specific, HAWQ, and HDFS specific configuration settings. Stores results in home dir hawq user.
     try:
