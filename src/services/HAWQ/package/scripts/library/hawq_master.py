@@ -8,7 +8,6 @@ from resource_management.core.exceptions import ComponentIsNotRunning, Fail
 from resource_management import *
 from library import hawq
 
-
 def create_user():
     import params
 
@@ -32,7 +31,7 @@ def exchange_keys():
     import params
 
     # Exchange private keys for root and gpadmin
-    Execute("gpssh-exkeys -f %s -p %s;" % (params.hawq_hostfile_seg_path, params.hawq_password), user=params.hawq_user, tries=3, try_sleep=15)
+    Execute('gpssh-exkeys -f"%s" -p"%s";' % (params.hawq_hostfile_seg_path, params.hawq_password), user=params.hawq_user, tries=3, try_sleep=15)
 
     Execute("source %s; gpssh-exkeys -f %s;" % (params.hawq_environment_path, params.hawq_hostfile_seg_path))
 
