@@ -3,7 +3,7 @@
   "_comment" : "blockedRole-blockedCommand: [blockerRole1-blockerCommand1, blockerRole2-blockerCommand2, ...]",
   "general_deps" : {
     "_comment" : "dependencies for all cases",
-    "HAWQ_MASTER-INSTALL": ["HAWQ_SLAVE-INSTALL", "NAMENODE-INSTALL", "NAMENODE-START", "DATANODE-START"],
+    "HAWQ_MASTER-INSTALL": ["HAWQ_SLAVE-INSTALL", "NAMENODE-INSTALL"],
     "HAWQ_SLAVE-START": ["HAWQ_MASTER-START"],
     "HAWQ_MASTER-START": ["NAMENODE-START"],
 
