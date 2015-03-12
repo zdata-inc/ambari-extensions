@@ -16,7 +16,7 @@ def create_user():
     utilities.appendBashProfile(params.hawq_user, "source %s;" % params.hawq_environment_path, run=True)
     utilities.appendBashProfile(params.hawq_user, "export HADOOP_HOME=%s" % params.hadoop_home)
 
-def add_environmental_variables(user=None):
+def add_psql_environment_variables(user=None):
     import params
 
     user = params.hawq_user if user == None else user
@@ -99,6 +99,20 @@ def configure_security_limits():
         owner=params.hawq_user, mode=0644
     )
 
+def configure_mount_options():
+    # TODO Not implemented
+    raise StandardError('Not implemented.')
+    pass
+
+def is_running(pidFile):
+    try:
+        with open(pidFile, 'r') as filehandle:
+            pid = int(filehandle.readlines()[0])
+            return utilities.is_process_running(pidFile, pid)
+
+    except IOError:
+        return False
+
 def scan_installation_logs(logFile, minimum_error_level='info'):
     """
     Given a log file, return if there are any log lines with an error level above minimum_error_level.
@@ -143,17 +157,3 @@ def remove_lines_between_dots_logs(lines):
         del lines[lineNumber]
 
     return lines
-
-def configure_mount_options():
-    # TODO Not implemented
-    raise StandardError('Not implemented.')
-    pass
-
-def is_running(pidFile):
-    try:
-        with open(pidFile, 'r') as filehandle:
-            pid = int(filehandle.readlines()[0])
-            return utilities.is_process_running(pidFile, pid)
-
-    except IOError:
-        return False
