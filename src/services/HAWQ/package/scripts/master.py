@@ -16,22 +16,25 @@ class Master(Script):
     env.set_params(params)
 
     hawq_master.create_user()
-    hawq_master.exchange_keys()
     hawq_master.create_host_files()
+    hawq_master.exchange_keys()
 
     hawq.configure_kernel_parameters()
     hawq.configure_security_limits()
     # hawq.configure_mount_options()
 
-    hawq_master.stop()
-
   def stop(self, env):
     hawq_master.stop()
 
   def start(self, env):
-    hawq_master.initalize()
-    hawq_master.gpcheck()
-    hawq_master.start()
+    import params
+    env.set_params(params)
+
+    if not hawq_master.is_hawq_initialized():
+      hawq_master.initialize()
+      hawq_master.gpcheck()
+    else:
+      hawq_master.start()
 
   def status(self, env):
     if not hawq_master.is_running():
