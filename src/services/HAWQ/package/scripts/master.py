@@ -1,7 +1,7 @@
 import sys
 import os
 from resource_management import *
-from library import hawq_master
+from library import hawq_master, hawq
 
 class Master(Script):
 
@@ -15,7 +15,13 @@ class Master(Script):
 
     env.set_params(params)
 
-    hawq_master.install(env)
+    hawq_master.create_user()
+    hawq_master.exchange_keys()
+    hawq_master.create_host_files()
+
+    hawq.configure_kernel_parameters()
+    hawq.configure_security_limits()
+    # hawq.configure_mount_options()
 
     hawq_master.stop()
 
@@ -23,6 +29,8 @@ class Master(Script):
     hawq_master.stop()
 
   def start(self, env):
+    hawq_master.initalize()
+    hawq_master.gpcheck()
     hawq_master.start()
 
   def status(self, env):

@@ -8,10 +8,18 @@ from resource_management.core.exceptions import ComponentIsNotRunning, Fail
 from resource_management import *
 from library import hawq
 
-def install(env):
+
+def create_user():
     import params
 
     hawq.create_user()
+
+    # Export master data directory environment variable
+    utilities.appendBashProfile(
+        params.hawq_user,
+        "export MASTER_DATA_DIRECTORY=%s/gpseg-1" % params.MASTER_DIRECTORY,
+        run=True
+    )
 
     # Set owner of hawq directory to hawq user
     Execute(format("chown -R {params.hawq_user} {params.hawq_install_path}"))
@@ -19,16 +27,9 @@ def install(env):
     # Source hawq functions for root as well
     Execute("source %s" % params.hawq_environment_path)
 
-    # Hostfiles
-    TemplateConfig(
-        params.hawq_hostfile_seg_path,
-        owner=params.hawq_user, mode=0644
-    )
 
-    TemplateConfig(
-        params.hawq_hostfile_all_path,
-        owner=params.hawq_user, mode=0644
-    )
+def exchange_keys():
+    import params
 
     # Exchange private keys for root and gpadmin
     for i in range(3):
@@ -42,25 +43,25 @@ def install(env):
         break
     Execute("source %s; gpssh-exkeys -f %s;" % (params.hawq_environment_path, params.hawq_hostfile_seg_path))
 
-    hawq.configure_kernel_parameters()
-    hawq.configure_security_limits()
-    # hawq.configure_mount_options()
+def create_host_files():
+    import params
+
+    # Hostfiles
+    TemplateConfig(
+        params.hawq_hostfile_seg_path,
+        owner=params.hawq_user, mode=0644
+    )
+
+    TemplateConfig(
+        params.hawq_hostfile_all_path,
+        owner=params.hawq_user, mode=0644
+    )
+
+def initialize():
+    import params
 
     # Create master directory
-    Directory(
-        params.MASTER_DIRECTORY,
-        action="create",
-        mode=0755,
-        recursive=True,
-        owner=params.hawq_user
-    )
-
-    # Export master data directory environment variable
-    utilities.appendBashProfile(
-        params.hawq_user,
-        "export MASTER_DATA_DIRECTORY=%s/gpseg-1" % params.MASTER_DIRECTORY,
-        run=True
-    )
+    hawq.create_data_dirs(params.MASTER_DIRECTORY)
 
     # Create gpinitsystem_config file
     Directory(
@@ -109,6 +110,13 @@ def install(env):
             print "No consensus.  Installation considered successful."
             print ">>>>> The log file located at %s should be reviewed so any reported warnings can be fixed!" % logfile
 
+def gpcheck():
+    """
+    Validates various platform-specific, HAWQ, and HDFS specific configuration settings. Stores results in home dir hawq user.
+    """
+    import params
+
+    # TODO Make multirunnable
     try:
         Execute(
             "gpcheck -f %s --zipout" % params.hawq_hostfile_all_path,
@@ -117,6 +125,7 @@ def install(env):
     except Fail as e:
         print "Failed to run gpcheck! \n"
         print e
+
 
 def configure():
     pass
