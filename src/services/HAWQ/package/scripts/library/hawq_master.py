@@ -102,6 +102,15 @@ def initialize():
             print "No consensus.  Installation considered successful."
             print ">>>>> The log file located at %s should be reviewed so any reported warnings can be fixed!" % logfile
 
+def is_hawq_initialized():
+    import params
+
+    try:
+        Execute('hadoop fs -ls "/gpseg*"', user=params.hawq_user)
+        return True
+    except Fail as e:
+        return False
+
 def gpcheck():
     """
     Validates various platform-specific, HAWQ, and HDFS specific configuration settings. Stores results in home dir hawq user.
