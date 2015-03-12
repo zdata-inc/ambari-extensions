@@ -32,15 +32,8 @@ def exchange_keys():
     import params
 
     # Exchange private keys for root and gpadmin
-    for i in range(3):
-        try:
-            Execute("gpssh-exkeys -f %s -p %s;" % (params.hawq_hostfile_seg_path, params.hawq_password), user=params.hawq_user)
-        except Fail as exception:
-            if i == 2:
-                raise exception
-            time.sleep(15)
-            continue
-        break
+    Execute("gpssh-exkeys -f %s -p %s;" % (params.hawq_hostfile_seg_path, params.hawq_password), user=params.hawq_user, tries=3, try_sleep=15)
+
     Execute("source %s; gpssh-exkeys -f %s;" % (params.hawq_environment_path, params.hawq_hostfile_seg_path))
 
 def create_host_files():
