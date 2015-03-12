@@ -10,28 +10,9 @@ Vagrant.configure(2) do |config|
 
     config.hostmanager.enabled = true
     config.hostmanager.manage_host = true
-
     config.hostmanager.ip_resolver = proc do |vm, resolving_vm|
-        begin
-            buffer = '';
-            vm.communicate.execute("/sbin/ifconfig") do |type, data|
-              buffer += data if type == :stdout
-            end
-
-            ips = []
-            ifconfigIPs = buffer.scan(/inet addr:(\d+\.\d+\.\d+\.\d+)/)
-            ifconfigIPs[0..ifconfigIPs.size].each do |ip|
-                ip = ip.first
-
-                next unless system "ping -c1 -t1 #{ip} > /dev/null"
-
-                ips.push(ip) unless ips.include? ip
-            end
-
-            ips.first
-        rescue StandardError => exc
-            puts exc
-        end
+        return if vm.id.nil?
+        `VBoxManage guestproperty get #{vm.id} "/VirtualBox/GuestInfo/Net/1/V4/IP"`.split()[1]
     end
 
     config.vm.define 'master', primary: true do |node|
@@ -63,6 +44,7 @@ Vagrant.configure(2) do |config|
             node.vm.provision 'shell', privileged: false, inline: 'echo "export PATH=/vagrant/build:$PATH" >> ~/.bashrc'
             node.vm.provision 'shell', path: 'build/bootstrap.sh'
             node.vm.provision 'shell', path: 'build/bootstrap-slave.sh'
+            node.vm.provision 'hostmanager'
             node.vm.provision :reload
         end
     end
