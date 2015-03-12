@@ -99,14 +99,14 @@ def configure_security_limits():
         owner=params.hawq_user, mode=0644
     )
 
-def scan_installation_logs(logFile, minimumErrorLevel='info'):
+def scan_installation_logs(logFile, minimum_error_level='info'):
     """
-    Given a log file, return if there are any log lines with an error level above minimumErrorLevel.
+    Given a log file, return if there are any log lines with an error level above minimum_error_level.
     """
     logLevels = {'debug': 1, 'info': 2, 'warn': 3, 'error': 4, 'fatal': 5}
 
-    minimumErrorLevel = logLevels[minimumErrorLevel.lower()]
-    errorLines = []
+    minimum_error_level = logLevels[minimum_error_level.lower()]
+    error_lines = []
 
     with open(logFile, 'r') as filehandle:
         for line in filehandle.readlines():
@@ -115,13 +115,13 @@ def scan_installation_logs(logFile, minimumErrorLevel='info'):
                 continue
 
             loglevel = logLevels[matches[0].lower()]
-            if loglevel > minimumErrorLevel:
-                errorLines.append(line)
+            if loglevel > minimum_error_level:
+                error_lines.append(line)
 
     # Don't care about the lines that say errors were found in logs, remove them
-    errorLines = remove_lines_between_dots_logs(errorLines)
+    error_lines = remove_lines_between_dots_logs(error_lines)
 
-    return len(errorLines) > 0
+    return error_lines
 
 def remove_lines_between_dots_logs(lines):
     """

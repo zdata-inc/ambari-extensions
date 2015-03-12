@@ -95,14 +95,20 @@ def install(env):
         logfile = logfile.group(1)
         print "Scanning log file: %s" % logfile
 
-        if hawq.scan_installation_logs(logfile):
-            print "Errors detected in logfile.  Failing"
+        log_file_errors = hawq.scan_installation_logs(logfile)
+        if len(log_file_errors) > 0:
+            print "Errors detected in logfile:"
+
+            for error in log_file_errors:
+                print " - %s" % error
+
+            print "Due to above errors HAWQ installation marked failed."
+
             raise exception
         else:
             print "No consensus.  Installation considered successful."
             print ">>>>> The log file located at %s should be reviewed so any reported warnings can be fixed!" % logfile
 
-    # Validates various platform-specific, HAWQ, and HDFS specific configuration settings. Stores results in home dir hawq user.
     try:
         Execute(
             "gpcheck -f %s --zipout" % params.hawq_hostfile_all_path,
