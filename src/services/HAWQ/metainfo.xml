@@ -46,6 +46,9 @@
                           <package>
                               <name>hawq</name>
                           </package>
+                          <package>
+                              <name>pxf-service</name>
+                          </package>
                        </packages>
                     </osSpecific>
             </osSpecifics>
