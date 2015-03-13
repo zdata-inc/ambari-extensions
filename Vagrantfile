@@ -12,7 +12,13 @@ Vagrant.configure(2) do |config|
     config.hostmanager.manage_host = true
     config.hostmanager.ip_resolver = proc do |vm, resolving_vm|
         return if vm.id.nil?
-        `VBoxManage guestproperty get #{vm.id} "/VirtualBox/GuestInfo/Net/1/V4/IP"`.split()[1]
+
+        buffer = '';
+        vm.communicate.execute('/sbin/ifconfig eth1 | grep "inet"') do |type, data|
+            buffer += data if type == :stdout
+        end
+
+        buffer.split("\n").first[/(\d+\.\d+\.\d+\.\d+)/, 1]
     end
 
     config.vm.define 'master', primary: true do |node|
