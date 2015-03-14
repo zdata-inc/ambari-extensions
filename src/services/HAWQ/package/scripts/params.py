@@ -28,9 +28,9 @@ hawq_all_hosts = set(hawq_master_hosts + hawq_segment_hosts)
 standby_master_hostname = ""
 
 # Common commands
-source_cmd = "source "+hawq_environment_path+"; "
-exkeys_cmd = "gpssh-exkeys -f "+hawq_hostfile_seg_path+"; "
-export_mdd_cmd = "export MASTER_DATA_DIRECTORY="+ MASTER_DIRECTORY +"/gpseg-1"
+source_cmd = "source %s; " % hawq_environment_path
+exkeys_cmd = "gpssh-exkeys -f %s; " % hawq_hostfile_seg_path
+export_mdd_cmd = "export MASTER_DATA_DIRECTORY=%s/gpseg-1" % MASTER_DIRECTORY
 
 # User configurations
 ARRAY_NAME = config["configurations"]["hawq-env"]["ARRAY_NAME"]
