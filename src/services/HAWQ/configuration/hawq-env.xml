@@ -5,11 +5,13 @@
     <property>
         <name>hawq_user</name>
         <value>gpadmin</value>
+        <property-type>USER</property-type>
         <description>Username of Hawq user.</description>
     </property>
     <property>
         <name>hawq_password</name>
         <value></value>
+        <property-type>PASSWORD</property-type>
         <description>Password of the Hawq user.</description>
     </property>
     <property>
@@ -19,7 +21,7 @@
     </property>
 	<property>
 		<name>ARRAY_NAME</name>
-		<value>"zData Hawq Cluster"</value>
+       <value>zData Hawq Cluster</value>
 		<description>Name of this Hawq system enclosed in quotes.</description>
 	</property>
 	<property>
