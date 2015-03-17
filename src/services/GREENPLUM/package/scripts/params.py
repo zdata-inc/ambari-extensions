@@ -32,11 +32,14 @@ portbase_replication = int(default('/configurations/greenplum-env/replication_po
 
 segment_prefix = default('/configurations/greenplum-env/segment_prefix', None)
 
-mirroring_enabled = default('/configurations/greenplum-mirroring/enable_mirroring', False)
+mirroring_enabled = default('/configurations/greenplum-mirroring/enable_mirroring', False) == "true"
 mirror_data_directory_template = default('/configurations/greenplum-mirroring/mirror_data_directory', False)
 portbase_mirror = default('/configurations/greenplum-mirroring/mirror_port_base', False)
 portbase_mirror_replication = default('/configurations/greenplum-mirroring/mirror_replication_port_base', False)
 
+# Import file paths
+greenplum_segments_file = path.join(installation_path, 'greenplum_segments')
+greenplum_initsystem_config_file = path.join('/home', admin_user, 'gpconfigs', 'gpinitsystem_config')
 
 # Hosts
 hostname = config['hostname']

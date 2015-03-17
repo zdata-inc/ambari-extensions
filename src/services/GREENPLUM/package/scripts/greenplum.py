@@ -13,9 +13,17 @@ def initialize(env):
 def preinstallation_configure(env):
     import params
 
+    # Create user
     User(
         params.admin_user,
         action="create", shell="/bin/bash"
+    )
+
+    Directory(
+        path.dirname(params.greenplum_initsystem_config_file),
+        action="create",
+        recursive=True,
+        owner=params.admin_user
     )
 
     # Create installation directory
@@ -35,7 +43,13 @@ def preinstallation_configure(env):
 
     # Create segment file
     TemplateConfig(
-        path.join(params.installation_path, 'greenplum_segments'),
+        params.greenplum_segments_file,
+        owner=params.admin_user, mode=0644
+    )
+
+    # Create gpinit_config file
+    TemplateConfig(
+        params.greenplum_initsystem_config_file,
         owner=params.admin_user, mode=0644
     )
 
