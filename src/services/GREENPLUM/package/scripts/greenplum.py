@@ -5,11 +5,7 @@ from pprint import pprint
 import utilities
 
 def install(env):
-    preinstallation_configure(env)
-
-
-
-    postinstallation_configure(env)
+    pass
 
 def initialize(env):
     pass

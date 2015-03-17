@@ -12,9 +12,14 @@ class Master(Script):
             sys.exit("Installation failed, license agreement not accepted.")
 
         env.set_params(params)
+
+        greenplum.preinstallation_configure(env)
+
         self.install_packages(env)
         greenplum.install(env)
         greenplum.initialize(env)
+
+        greenplum.postinstallation_configure(env)
 
         print 'Install the Greenplum Master'
         sys.exit(1)
