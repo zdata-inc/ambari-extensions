@@ -18,14 +18,14 @@
         <description>Number of segments to create per node.</description>
     </property>
     <property>
-        <name>data_directory</name>
-        <value>/data{{segment_number}}/primary</value>
-        <description>The data directory for a given segment.  Available templating values: {{segment_number}}.</description>
-    </property>
-    <property>
         <name>master_data_directory</name>
         <value>/data/master</value>
         <description>Location of the master data directory.</description>
+    </property>
+    <property>
+        <name>data_directory</name>
+        <value>/data{{segment_number}}/primary</value>
+        <description>The data directory for a given segment.  Available templating values: {{segment_number}}.</description>
     </property>
     <property>
         <name>master_port</name>
@@ -43,14 +43,14 @@
         <description>Maximum distance between WAL checkpoints.</description>
     </property>
     <property>
-        <name>replication_port_base</name>
-        <value>41000</value>
-        <description>Beginning value for the segment replication ports.</description>
-    </property>
-    <property>
         <name>port_base</name>
         <value>40000</value>
         <description>Beginning value for the segment ports.</description>
+    </property>
+    <property>
+        <name>replication_port_base</name>
+        <value>41000</value>
+        <description>Beginning value for the segment replication ports.</description>
     </property>
     <property>
         <name>segment_prefix</name>
