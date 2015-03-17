@@ -5,7 +5,7 @@
     <property>
         <name>enable_mirroring</name>
         <value>false</value>
-        <description>Configure segment mirroring between nodes.</description>
+        <description>Configure segment mirroring between nodes.  Possible values are 'true' and 'false'.</description>
     </property>
     <property>
         <name>mirror_data_directory</name>
