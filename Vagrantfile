@@ -1,6 +1,6 @@
 # vim: set ft=ruby:
 
-slaveCount = ENV['AMBARI_SLAVES'].to_i || 1
+slaveCount = (ENV['AMBARI_SLAVES'] || 1).to_i
 
 # Generate ssh key
 Dir.chdir(File.dirname(__FILE__)) do
