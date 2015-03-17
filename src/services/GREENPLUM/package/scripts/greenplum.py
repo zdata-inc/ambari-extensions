@@ -31,7 +31,7 @@ def preinstallation_configure(env):
 
     # Create data directories, mirror directories
     Directory(
-        params.data_directories() + params.mirror_data_directories(),
+        params.data_directories + params.mirror_data_directories,
         action="create",
         recursive=True,
         owner=params.admin_user, mode=0755

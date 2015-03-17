@@ -19,3 +19,8 @@ def append_bash_profile(user, to_be_appended, run=False, allow_duplicates=False)
 
     if run:
         Execute(to_be_appended)
+
+def call(*argv, **kwargs):
+    def call_fn(fn):
+        return fn(*argv, **kwargs)
+    return call_fn

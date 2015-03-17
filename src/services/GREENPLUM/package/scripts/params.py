@@ -1,6 +1,8 @@
 from resource_management.libraries.functions.default import default
 from resource_management import *
 from resource_management.core.source import InlineTemplate
+import utilities
+from os import path
 
 import status_params
 
@@ -45,20 +47,21 @@ all_nodes = set(master_nodes + segment_nodes)
 is_masternode = hostname in master_nodes
 is_segmentnode = hostname in segment_nodes
 
-
+@utilities.call()
 def data_directories():
     directories = []
     for segment_number in range(segments_per_node):
-        directories.append(InlineTemplate(data_directory_template, segment_number=segment_number).get_content())
+        directories.append(InlineTemplate(data_directory_template, segment_number=(segment_number + 1)).get_content())
 
     return directories
 
+@utilities.call()
 def mirror_data_directories():
     if not mirroring_enabled:
         return []
 
     directories = []
     for segment_number in range(segments_per_node):
-        directories.append(InlineTemplate(mirror_data_directory_template, segment_number=segment_number).get_content())
+        directories.append(InlineTemplate(mirror_data_directory_template, segment_number=(segment_number + 1)).get_content())
 
     return directories
