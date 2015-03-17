@@ -1,10 +1,17 @@
-from resource_management.libraries.functions.version import compare_versions
 from resource_management.libraries.functions.default import default
 from resource_management import *
+from resource_management.core.source import InlineTemplate
+
 import status_params
 
 config = Script.get_config()
 tmp_dir = Script.get_tmp_dir()
+
+license_accepted = default('/configurations/greenplum-env/accept_license_agreement', False) == "yes"
+installer_location = default('/configurations/greenplum-env/installer_location', None)
+
+installation_path = default('/configurations/greenplum-env/installation_path', None)
+admin_user = default('/configurations/greenplum-env/admin_user', None)
 
 cluster_name = default('/configurations/greenplum-env/cluster_name', None)
 database_name = default('/configurations/greenplum-env/database_name', None)
@@ -31,7 +38,27 @@ portbase_mirror_replication = default('/configurations/greenplum-mirroring/mirro
 
 # Hosts
 hostname = config['hostname']
-namenode_host = default('/clusterHostInfo/namenode_host', [])
-hdfs_slaves = default('/clusterHostInfo/slave_hosts', [])
+master_nodes = default("/clusterHostInfo/greenplum_master_hosts",[])
+segment_nodes = default("/clusterHostInfo/greenplum_slave_hosts", [])
+all_nodes = set(master_nodes + segment_nodes)
 
-is_namenode = hostname in namenode_host
+is_masternode = hostname in master_nodes
+is_segmentnode = hostname in segment_nodes
+
+
+def data_directories():
+    directories = []
+    for segment_number in range(segments_per_node):
+        directories.append(InlineTemplate(data_directory_template, segment_number=segment_number).get_content())
+
+    return directories
+
+def mirror_data_directories():
+    if not mirroring_enabled:
+        return []
+
+    directories = []
+    for segment_number in range(segments_per_node):
+        directories.append(InlineTemplate(mirror_data_directory_template, segment_number=segment_number).get_content())
+
+    return directories
