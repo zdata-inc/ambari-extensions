@@ -3,6 +3,26 @@
 
 <configuration>
     <property>
+        <name>accept_license_agreement</name>
+        <value></value>
+        <description>By setting this value to yes, you aggree you have read and accepted the Greenplum Database license agreenment.  Installation will not occur if value is anything other than 'yes'.</description>
+    </property>
+    <property>
+        <name>installer_location</name>
+        <value></value>
+        <description>Either a file path or URI to the Greenplum database installation zip.</description>
+    </property>
+    <property>
+        <name>installation_path</name>
+        <value>/usr/local/greenplum</value>
+        <description>The installation directory path.</description>
+    </property>
+    <property>
+        <name>admin_user</name>
+        <value>gpadmin</value>
+        <description>The Greenplum system user used to administer the cluster.</description>
+    </property>
+    <property>
         <name>cluster_name</name>
         <value>zData Greenplum Cluster</value>
         <description>Name of this Greenplum cluster.</description>
