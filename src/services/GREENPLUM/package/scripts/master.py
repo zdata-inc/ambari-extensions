@@ -1,5 +1,6 @@
 import sys
 import os
+import greenplum
 from resource_management import *
 
 class Master(Script):
@@ -7,20 +8,27 @@ class Master(Script):
     def install(self, env):
         import params
 
-        self.install_packages(env)
-        env.set_params(params)
+        if not params.license_accepted:
+            sys.exit("Installation failed, license agreement not accepted.")
 
-        self.configure(env)
+        env.set_params(params)
+        self.install_packages(env)
+        greenplum.install(env)
+        greenplum.initialize(env)
+
         print 'Install the Greenplum Master'
+        sys.exit(1)
  
     def stop(self, env):
         print 'Stop the Greenplum Master'
 
     def start(self, env):
+        self.configure(env)
         print 'Start the Greenplum Master'
 
     def configure(self, env):
-        
+        greenplum.preinstallation_configure(env)
+        greenplum.postinstallation_configure(env)
          
     def status(self, env):
         print 'Status of the Greenplum Master'
