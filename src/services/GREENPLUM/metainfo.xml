@@ -28,7 +28,8 @@
                 <component>
                     <name>GREENPLUM_SLAVE</name>
                     <displayName>Greenplum Segment</displayName>
-                    <category>1+</category>
+                    <category>SLAVE</category>
+                    <cardinality>1+</cardinality>
                     <commandScript>
                         <script>scripts/segment.py</script>
                         <scriptType>PYTHON</scriptType>
