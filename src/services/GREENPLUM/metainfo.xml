@@ -1,5 +1,46 @@
-<?xml version="1.0">
+<?xml version="1.0"?>
 
 <metainfo>
+    <schemaVersion>2.0</schemaVersion>
 
-    </metainfo>
+    <services>
+        <service>
+
+            <name>GREENPLUM</name>
+            <displayName>Greenplum</displayName>
+            <comment>Pivotal Greenplum</comment>
+            <version>0.0.1</version>
+
+            <components>
+                <component>
+                    <name>GREENPLUM_MASTER</name>
+                    <displayName>Greenplum Master</displayName>
+                    <category>MASTER</category>
+                    <cardinality>1-2</cardinality>
+
+                    <commandScript>
+                        <script>scripts/master.py</script>
+                        <scriptType>PYTHON</scriptType>
+                        <timeout>4800</timeout>
+                    </commandScript>
+                </component>
+
+                <component>
+                    <name>GREENPLUM_SLAVE</name>
+                    <displayName>Greenplum Segment</displayName>
+                    <category>1+</category>
+                    <commandScript>
+                        <script>scripts/segment.py</script>
+                        <scriptType>PYTHON</scriptType>
+                        <timeout>600</timeout>
+                    </commandScript>
+                </component>
+            </components>
+
+            <configuration-dependencies>
+                <config-type>greenplum-env</config-type>
+                <config-type>greenplum-mirroring</config-type>
+            </configuration-dependencies>
+        </service>
+    </services>
+</metainfo>

@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+    <property>
+        <name>cluster_name</name>
+        <value>zData Greenplum Cluster</value>
+        <description>Name of this Greenplum cluster.</description>
+    </property>
+    <property>
+        <name>database_name</name>
+        <value>zdata</value>
+        <description>Name of the database to create post installation.</description>
+    </property>
+    <property>
+        <name>segments_per_node</name>
+        <value>2</value>
+        <description>Number of segments to create per node.</description>
+    </property>
+    <property>
+        <name>data_directory</name>
+        <value>/data{{segment_number}}/primary</value>
+        <description>The data directory for a given segment.  Available templating values: {{segment_number}}.</description>
+    </property>
+    <property>
+        <name>master_data_directory</name>
+        <value>/data/master</value>
+        <description>Location of the master data directory.</description>
+    </property>
+    <property>
+        <name>master_port</name>
+        <value>6543</value>
+        <description>Port number for the master node.</description>
+    </property>
+    <property>
+        <name>encoding</name>
+        <value>unicode</value>
+        <description>default server-side character set encoding.</description>
+    </property>
+    <property>
+        <name>check_point_segments</name>
+        <value>8</value>
+        <description>Maximum distance between WAL checkpoints.</description>
+    </property>
+    <property>
+        <name>replication_port_base</name>
+        <value>41000</value>
+        <description>Beginning value for the segment replication ports.</description>
+    </property>
+    <property>
+        <name>port_base</name>
+        <value>40000</value>
+        <description>Beginning value for the segment ports.</description>
+    </property>
+    <property>
+        <name>segment_prefix</name>
+        <value>gpseg</value>
+        <description>Prefix for generated data directories.</description>
+    </property>
+</configuration>
