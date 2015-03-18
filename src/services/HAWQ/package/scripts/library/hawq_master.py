@@ -72,6 +72,12 @@ def initialize():
     # Fixes issue #5
     Execute("sed -i 's/GP_CHECK_HDFS=.*/GP_CHECK_HDFS=echo/' /usr/local/hawq/bin/lib/gp_bash_functions.sh")
 
+    Execute(
+        "hdfs dfs -mkdir hdfs://%s; hdfs dfs -chown %s:%s hdfs://%s;" % (params.DFS_URL, params.hawq_user, params.hawq_user, params.DFS_URL),
+        user="hdfs"
+    )
+        
+
     try:
         Execute(
             format("gpinitsystem -a -c %s" % params.gpinitsystem_config_path),
