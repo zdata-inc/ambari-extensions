@@ -18,9 +18,9 @@ Getting started with Vagrant
 2. Create boxes
 
     ```
-    ./build/up.sh 5 # Bring up master, slave1, slave2, ..., slave5
-    ./build/up.sh 1 # Bring up master and slave1
-    ./build/up.sh 0 # Just bring up master
+    AMBARI_SLAVES=5 vagrant up # Bring up master, slave1, slave2, ..., slave5
+    AMBARI_SLAVES=1 vagrant up # Bring up master and slave1
+    AMBARI_SLAVES=0 vagrant up # Bring up just master
     ```
 
 3. Connect, vms created: master, slave0, slave1

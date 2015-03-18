@@ -1,5 +1,7 @@
 # vim: set ft=ruby:
 
+slaveCount = ENV['AMBARI_SLAVES'].to_i || 1
+
 # Generate ssh key
 Dir.chdir(File.dirname(__FILE__)) do
     `ssh-keygen -t rsa -f private_key -N ''` unless File.exists? 'private_key'
@@ -38,7 +40,7 @@ Vagrant.configure(2) do |config|
         node.vm.provision 'hostmanager'
     end
 
-    10.times.each do |i|
+    slaveCount.times.each do |i|
         i += 1
         config.vm.define "slave#{i}" do |node|
             node.vm.network 'private_network', type: :dhcp

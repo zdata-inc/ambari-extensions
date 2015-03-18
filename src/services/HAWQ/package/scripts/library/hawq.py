@@ -9,7 +9,8 @@ def create_user():
     import params
 
     # Add Hawq User
-    User(params.hawq_user, action="create", groups="hdfs", shell="/bin/bash")
+    User(params.hawq_user, action="create", shell="/bin/bash")
+    Execute('usermod -a -G hdfs %s' % params.hawq_user)
     Execute('echo %s | passwd --stdin %s' % (params.hawq_password, params.hawq_user))
 
     # Source hawq functions for hawq admin, save to bash profile
