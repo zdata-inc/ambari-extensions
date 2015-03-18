@@ -4,8 +4,15 @@ from library import *
 
 class Slave(Script):
   def install(self, env):
-    
+
+    import params
+    env.set_params(params)
     self.install_packages(env)
+  
+    TemplateConfig(
+      params.pxf_env_script,
+    )
+    
     Execute("service pxf-service init")
 
   def stop(self, env):
