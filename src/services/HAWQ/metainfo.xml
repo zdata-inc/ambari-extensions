@@ -53,7 +53,8 @@
             </osSpecifics>
 
             <requiredServices>
-                <service>HDFS</service>
+              <service>HDFS</service>
+              <service>PXF</service>
             </requiredServices>
 
             <configuration-dependencies>
