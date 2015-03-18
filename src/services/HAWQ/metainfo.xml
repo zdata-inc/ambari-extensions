@@ -10,7 +10,7 @@
 			<name>HAWQ</name>
 			<displayName>Hawq</displayName>
 			<comment>Pivotal Hawq</comment>
-			<version>0.1</version>
+			<version>1.2.1</version>
 
 			<components>
 				<component>
@@ -36,7 +36,6 @@
 						<timeout>600</timeout>
 					</commandScript>
 				</component>
-
 			</components>
 
             <osSpecifics>
@@ -47,7 +46,7 @@
                               <name>hawq</name>
                           </package>
                           <package>
-                              <name>pxf-service</name>
+                              <name>ed</name>
                           </package>
                        </packages>
                     </osSpecific>
