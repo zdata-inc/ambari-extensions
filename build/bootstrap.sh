@@ -2,7 +2,21 @@
 # AMBARI_REPO=http://public-repo-1.hortonworks.com/ambari/centos6/1.x/updates/1.7.0/ambari.repo
 AMBARI_REPO=http://s3.amazonaws.com/dev.hortonworks.com/ambari/centos6/1.x/updates/1.7.0.trunk/ambari.repo
 
-yum install -y screen vim
+rpm --replacepkgs --nosignature -i \
+  /vagrant/artifacts/rpms/screen-4.0.3-16.el6.x86_64.rpm \
+  || yum install -y screen
+
+rpm --replacepkgs --nosignature -U \
+  /vagrant/artifacts/rpms/vim-common-7.2.411-1.8.el6.x86_64.rpm \
+  /vagrant/artifacts/rpms/perl-version-0.77-136.el6_6.1.x86_64.rpm \
+  /vagrant/artifacts/rpms/perl-libs-5.10.1-136.el6_6.1.x86_64.rpm \
+  /vagrant/artifacts/rpms/perl-5.10.1-136.el6_6.1.x86_64.rpm \
+  /vagrant/artifacts/rpms/perl-Pod-Escapes-1.04-136.el6_6.1.x86_64.rpm \
+  /vagrant/artifacts/rpms/perl-Pod-Simple-3.13-136.el6_6.1.x86_64.rpm \
+  /vagrant/artifacts/rpms/perl-Module-Pluggable-3.90-136.el6_6.1.x86_64.rpm \
+  /vagrant/artifacts/rpms/gpm-libs-1.20.6-12.el6.x86_64.rpm \
+  /vagrant/artifacts/rpms/vim-enhanced-7.2.411-1.8.el6.x86_64.rpm \
+  || yum install -y vim
 
 # Create shared RSA keys
 sudo su - <<'EOF'
@@ -28,7 +42,14 @@ fi
 
 umask 022
 
-sudo yum install -y openssl ntp
+rpm --replacepkgs --nosignature -U \
+  /vagrant/artifacts/rpms/openssl-1.0.1e-30.el6_6.5.x86_64.rpm \
+  || sudo yum install -y openssl
+
+rpm --replacepkgs --nosignature -U \
+  /vagrant/artifacts/rpms/ntpdate-4.2.6p5-3.el6.centos.x86_64.rpm \
+  /vagrant/artifacts/rpms/ntp-4.2.6p5-3.el6.centos.x86_64.rpm \
+  || sudo yum install -y ntp
 
 sudo chkconfig iptables off
 sudo service iptables stop
