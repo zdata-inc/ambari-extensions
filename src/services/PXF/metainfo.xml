@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!--
+     Describes the service, the components of the service and the management scripts to use for executing commands. A component of a service can be either a MASTER, SLAVE or CLIENT category. The <category> tells Ambari what default commands should be available to manage and monitor the component.
+     For each Component you specify the <commandScript> to use when executing commands.
+     -->
+<metainfo>
+	<schemaVersion>2.0</schemaVersion>
+	<services>
+		<service>
+			<name>PXF</name>
+			<displayName>PXF</displayName>
+			<comment>Pivotal Extension Framework</comment>
+			<version>2.3.0</version>
+
+			<components>
+				<component>
+					<name>PXF</name>
+					<displayName>PXF</displayName>
+					<category>SLAVE</category>
+					<cardinality>1+</cardinality>
+					<commandScript>
+						<script>scripts/slave.py</script>
+						<scriptType>PYTHON</scriptType>
+						<timeout>600</timeout>
+					</commandScript>
+				</component>
+
+			</components>
+
+            <osSpecifics>
+                <osSpecific>
+                    <osFamily>any</osFamily>
+                       <packages>
+                          <package>
+                              <name>pxf-service</name>
+                          </package>
+                          <package>
+                              <name>pxf-hdfs</name>
+                          </package>
+                       </packages>
+                    </osSpecific>
+            </osSpecifics>
+
+            <requiredServices>
+                <service>HDFS</service>
+                <service>HAWQ</service>
+            </requiredServices>
+
+		</service>
+	</services>
+</metainfo>
