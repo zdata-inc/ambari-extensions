@@ -37,6 +37,9 @@
                           <package>
                               <name>pxf-hdfs</name>
                           </package>
+                          <package>
+                              <name>curl</name>
+                          </package>
                        </packages>
                     </osSpecific>
             </osSpecifics>
