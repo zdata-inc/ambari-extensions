@@ -1,5 +1,3 @@
-import utilities
-
 def is_running(pidFile):
   try:
     with open(pidFile, 'r') as filehandle:
