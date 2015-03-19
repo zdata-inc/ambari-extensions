@@ -2,19 +2,21 @@ from os import path
 import urllib
 from resource_management import *
 from pprint import pprint
+import sys
 import utilities
 import greenplum_installer
 
 def install(env):
     import params
 
-    try:
-        # ON_UPGRADE: Switch to using with keyword with greenplum_tar
-        greenplum_tar = greenplum_installer.get_tar(params.installer_location)
-        greenplum_tar.extractall(path.join(params.installation_path))
-    finally:
-        if greenplum_tar != None:
-            greenplum_tar.close()
+    distributedArchive = greenplum_installer.GreenplumDistributed(params.installer_location, params.tmp_dir)
+    greenplumInstaller = distributedArchive.get_installer()
+
+    absolute_installation_path = path.join(params.installation_path, 'greenplum-db')
+    version_installation_path = path.join(params.installation_path, 'greenplum-db-%s' % greenplum_installer.get_version())
+    greenplum_installer.install_to(version_installation_path)
+
+    Execute('ln -s "%s" "%s"' % (version_installation_path, absolute_installation_path))
 
     # GPSeginstall && gpinitsystem
 

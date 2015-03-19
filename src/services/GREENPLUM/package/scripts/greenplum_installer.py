@@ -6,114 +6,91 @@ import zipfile, tarfile
 from StringIO import StringIO
 import urllib
 
-def get_tar(installation_source):
-    """
-    Get a tarfile resource from the installation script inside a distributed greenplum installation zip.
-    """
-    greenplum_installer_archive_path = _get_greenplum_installer_path(installation_source)
-    greenplum_installer_script = _get_installer_stream_from_archive(greenplum_installer_archive_path)
+class GreenplumDistributed(object):
+    def __init__(self, path, tmp_dir):
+        self.__materialized_path = self.__materialize_archive(path, tmp_dir)
+        self.__archive = None
 
-    return _get_tar_stream_from_installer_script(greenplum_installer_script)
+    def get_installer(self):
+        installer_file = GreenplumInstaller.find_installer_name(self.__get_archive().infolist())
 
-def get_version(installation_source):
-    """
-    Get the version of a distributed greenplum installation zip.
-    """
-    greenplum_installer_archive_path = _get_greenplum_installer_path(installation_source)
+        if len(installer_file) != 1:
+            raise StandardError('Incorrect number of .bin files found in referenced greenplum installation archive.  Found %s, expected 1.' % len(installer_file))
 
-    return _get_version_from_archive(greenplum_installer_archive_path)
+        installer_file = installer_file[0]
 
-def _get_version_from_archive(installer_archive):
-    """
-    Retrieve the version from a distributed greenplum installation zip.
-    This is done by find the installer script in the zip archive, and extracting the
-    version from its filename.
-    """
-    greenplum_installer_archive_path = _get_greenplum_installer_path(installation_source)
-    installer_name = _get_greenplum_installer_name(greenplum_installer_archive_path).filename
+        return GreenplumInstaller(installer_file, self.__get_archive().read(installer_file))        
 
-    return _get_version_from_filename(installer_name)
+    def close(self):
+        if self.__archive != None:
+            self.__archive.close()
 
-def _get_greenplum_installer_path(installer_path):
-    """
-    Given an installer path or URI, verify it exists and provide a path to.
-    If the installer_path is a path, verify it exists and return the path.
-    If the installer_path is a URI, materialize it into a temporary directory, correctly name it, and return the path.
-    """
-    import params
+    def __del__(self):
+        self.close()
 
-    if path.exists(installer_path):
-        if not path.isfile(installer_path):
-            raise LookupError('Could not find greenplum installer at %s' % installer_path)
-        return installer_path
+    def __get_archive(self):
+        if self.__archive == None:
+            self.__archive = zipfile.ZipFile(self.__materialized_path, 'r')
 
-    tmpPath = path.join(params.tmp_dir, 'greenplum-db.zip')
-    urllib.urlretrieve(installer_path, tmpPath)
+        return self.__archive
 
-    version = _get_version_from_archive(tmpPath)
-    tmpPathWithVersion = path.join(params.tmp_dir, 'greenplum-db-%s.zip' % version)
-    os.rename(tmpPath, tmpPathWithVersion)
+    def __materialize_archive(self, source, tmp_dir):
+        if path.exists(source):
+            if not path.isfile(source):
+                raise LookupError('Could not find greenplum installer at %s' % source)
+            return source
 
-    return tmpPathWithVersion
+        tmp_path = path.join(tmp_dir, 'greenplum-db.zip')
+        urllib.urlretrieve(source, tmp_path)
 
-def _get_installer_stream_from_archive(installer_archive):
-    """
-    Retrieve the contents of the installer file from the distributed greenplum installation zip.
-    """
-    try:
-        archive, should_close = _maybe_open_zip(installer_archive)
-        return archive.read(_get_greenplum_installer_name(archive))
-    finally:
-        if should_close and archive != None:
-            archive.close()
+        version = _get_version_from_archive(tmp_path)
+        tmp_path_with_version = path.join(tmp_dir, 'greenplum-db-%s.zip' % version)
+        os.rename(tmp_path, tmp_path_with_version)
 
-def _get_greenplum_installer_name(installer_archive):
-    """
-    Retrieve the name of the installer file from the distributed greenplum installation zip.
-    """
-    try:
-        installer_archive, should_close = _maybe_open_zip(installer_archive)
-        installer_archive_path = filter(lambda f: f.filename.endswith('.bin'), installer_archive.infolist())
+class GreenplumInstaller(object):
+    @staticmethod
+    def find_installer_name(filelist):
+        """
+        Given a list of ZipFileInfo objects, return the ones which would install greenplum.
+        """
+        return filter(lambda f: f.filename.endswith('.bin'), filelist)
 
-        if len(installer_archive_path) != 1:
-            raise StandardError('Incorrect number of .bin files found in referenced greenplum installation archive.  Found %s, expected 1.' % len(installer_archive_path))
+    def __init__(self, filename, fileContents):
+        self.__filename = filename
+        self.__fileContents = fileContents
+        self.__version = self.__parse_version(filename)
 
-        return installer_archive_path[0]
-    finally:
-        if should_close and installer_archive != None:
-            installer_archive.close()
+    def install_to(self, destination):
+        archive = self.__get_archive()
+        archive.extractall(destination)
+        archive.close()
 
-def _get_tar_stream_from_installer_script(installer_script):
-    """
-    Given a string containing the greenplum installation script, parse out
-    the appended tar file and return it as a TarFile instance.
-    """
-    installer_script_stream = StringIO(installer_script)
+    def get_name(self):
+        return self.__filename
 
-    # Seek to the line before the archive's binary data starts.
-    seekedToLine = False
-    for line in iter(installer_script_stream.readline, b''):
-        if line == "__END_HEADER__\n":
-            seekedToLine = True
-            break
+    def get_version(self):
+        return self.__version
 
-    if not seekedToLine:
-        raise StandardError('Could not find archive contents, archive extraction failed.')
+    def __get_archive(self):
+        installer_script_stream = StringIO(self.__fileContents)
 
-    # Return a TarFile of the remaining lines in the installer script.
-    return tarfile.open(fileobj = installer_script_stream, mode = "r:gz")
+        # Seek to the line before the archive's binary data starts.
+        seekedToLine = False
+        for line in iter(installer_script_stream.readline, b''):
+            if line == "__END_HEADER__\n":
+                seekedToLine = True
+                break
 
-def _get_version_from_filename(filename):
-    """
-    Given the .bin filename for greenplum, extract its version
-    from the filename.
-    """
-    matches = re.search(r"greenplum-db-([0-9\.]+)[^/]+\.bin", filename)
+        if not seekedToLine:
+            raise StandardError('Could not find archive contents, archive extraction failed.')
 
-    return matches.group(1)
+        # Return a TarFile of the remaining lines in the installer script.
+        return tarfile.open(fileobj = installer_script_stream, mode = "r:gz")
 
-def _maybe_open_zip(stream_or_path):
-    if isinstance(stream_or_path, basestring) and path.isfile(stream_or_path):
-        return zipfile.ZipFile(stream_or_path, 'r'), True
+    def __parse_version(self, filename):
+        try:
+            matches = re.search(r"greenplum-db-([0-9\.]+)[^/]+\.bin", filename)
 
-    return stream_or_path, False
+            return matches.group(1)
+        except StandardError:
+            raise StandardError('Could not parse greenplum version from given filename %s' % filename)
