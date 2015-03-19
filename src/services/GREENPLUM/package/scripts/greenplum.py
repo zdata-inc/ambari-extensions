@@ -3,9 +3,20 @@ import urllib
 from resource_management import *
 from pprint import pprint
 import utilities
+import greenplum_installer
 
 def install(env):
-    pass
+    import params
+
+    try:
+        # ON_UPGRADE: Switch to using with keyword with greenplum_tar
+        greenplum_tar = greenplum_installer.get_tar(params.installer_location)
+        greenplum_tar.extractall(path.join(params.installation_path))
+    finally:
+        if greenplum_tar != None:
+            greenplum_tar.close()
+
+    # GPSeginstall && gpinitsystem
 
 def initialize(env):
     pass
@@ -55,15 +66,3 @@ def preinstallation_configure(env):
 
 def postinstallation_configure(env):
     pass
-
-
-def _fetchGreenplumInstaller(env):
-    import params
-
-    if params.installer_location.exists(params.installer_location):
-        return params.installer_location
-
-    tmpPath = path.join(params.tmp_dir, 'greenplum-db.zip')
-    urllib.urlretrieve(params.installer_location, tmpPath)
-
-    return tmpPath
