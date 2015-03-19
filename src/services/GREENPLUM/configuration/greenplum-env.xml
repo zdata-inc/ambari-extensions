@@ -14,8 +14,8 @@
     </property>
     <property>
         <name>installation_path</name>
-        <value>/usr/local/greenplum</value>
-        <description>The installation directory path.</description>
+        <value>/usr/local</value>
+        <description>The directory to install into, the directory 'greenplum-db' will be created and used for the installation.</description>
     </property>
     <property>
         <name>admin_user</name>
