@@ -12,7 +12,11 @@ class Slave(Script):
     TemplateConfig(
       params.pxf_env_script,
     )
-    
+   
+    TemplateConfig(
+      params.pxf_public_classpath,
+    )
+
     Execute("service pxf-service init")
 
   def stop(self, env):
@@ -23,8 +27,8 @@ class Slave(Script):
 
   def status(self, env):
     import params
-
-    if not pxf.is_running(params.pxf_pid_file):
+  
+    if not check_process_status(params.pxf_pid_file):
       raise ComponentIsNotRunning()
 
   def configure(self, env):
