@@ -21,6 +21,8 @@ def preinstallation_configure(env):
         owner=params.admin_user, mode=0755
     )
 
+    utilities.set_kernel_parameters(utilities.get_configuration_file('system-variables'));
+
 def install(env):
     import params
 
