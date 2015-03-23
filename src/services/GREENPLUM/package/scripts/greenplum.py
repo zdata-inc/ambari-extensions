@@ -15,30 +15,10 @@ def preinstallation_configure(env):
         action="create", shell="/bin/bash"
     )
 
-    Directory(
-        path.dirname(params.greenplum_initsystem_config_file),
-        action="create",
-        recursive=True,
-        owner=params.admin_user
-    )
-
-    Directory(
-        params.master_data_directory,
-        action="create",
-        recursive=True,
-        owner=params.admin_user
-    )
-
     # Create data directories, mirror directories
     utilities.recursively_create_directory(
         params.data_directories + params.mirror_data_directories,
         owner=params.admin_user, mode=0755
-    )
-
-    # Create gpinit_config file
-    TemplateConfig(
-        params.greenplum_initsystem_config_file,
-        owner=params.admin_user, mode=0644
     )
 
 def install(env):
@@ -63,6 +43,12 @@ def install(env):
         creates=absolute_installation_path
     )
 
+    # Create segment file
+    TemplateConfig(
+        params.greenplum_segments_file,
+        owner=params.admin_user, mode=0644
+    )
+
     utilities.search_replace(r'GPHOME=.*\n', 'GPHOME=%s\n' % version_installation_path, path.join(version_installation_path, 'greenplum_path.sh'))
 
     source_path_command = 'source %s;' % path.join(version_installation_path, 'greenplum_path.sh')
@@ -74,10 +60,4 @@ def install(env):
     Execute(
         format(source_path_command + 'gpinitsystem -a -c {params.greenplum_initsystem_config_file}'),
         user=params.admin_user
-    )
-
-    # Create segment file
-    TemplateConfig(
-        params.greenplum_segments_file,
-        owner=params.admin_user, mode=0644
     )

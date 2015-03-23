@@ -13,12 +13,30 @@ class Master(Script):
 
         env.set_params(params)
 
+        Directory(
+            os.path.dirname(params.greenplum_initsystem_config_file),
+            action="create",
+            recursive=True,
+            owner=params.admin_user
+        )
+
+        Directory(
+            params.master_data_directory,
+            action="create",
+            recursive=True,
+            owner=params.admin_user
+        )
+
+        # Create gpinit_config file
+        TemplateConfig(
+            params.greenplum_initsystem_config_file,
+            owner=params.admin_user, mode=0644
+        )
+
         greenplum.preinstallation_configure(env)
 
         self.install_packages(env)
         greenplum.install(env)
-
-        print 'Install the Greenplum Master'
  
     def stop(self, env):
         print 'Stop the Greenplum Master'
