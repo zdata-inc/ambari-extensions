@@ -23,6 +23,12 @@ def preinstallation_configure(env):
 
     utilities.set_kernel_parameters(utilities.get_configuration_file('system-variables'));
 
+    TemplateConfig(
+        params.security_conf_file,
+        template_tag="limits",
+        owner=params.admin_user, mode=0644
+    )
+
 def install(env):
     import params
 

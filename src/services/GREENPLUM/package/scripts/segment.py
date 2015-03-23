@@ -7,6 +7,8 @@ class Segment(Script):
 
     def install(self, env):
         import params
+
+        env.set_params(params)
         print 'Install the Greenplum Segment'
         greenplum.preinstallation_configure(env)
  

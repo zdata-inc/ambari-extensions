@@ -42,6 +42,7 @@ portbase_mirror_replication = default('/configurations/greenplum-mirroring/mirro
 # Import file paths
 greenplum_segments_file = path.join(installation_path, 'greenplum-db', 'greenplum_segments')
 greenplum_initsystem_config_file = path.join('/home', admin_user, 'gpconfigs', 'gpinitsystem_config')
+security_conf_file = "/etc/security/limits.d/greenplum.conf"
 
 # Hosts
 hostname = config['hostname']
