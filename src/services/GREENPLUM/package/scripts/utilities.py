@@ -51,17 +51,16 @@ def recursively_create_directory(directory, owner='root', mode=0755):
         return
 
     directory_path_parts = deque(directory.strip().lstrip('/').split('/'))
-    directory_iterator = ('/' if directory.startswith('/') else '') + directory_path_parts.popleft()
+    directory_iterator = '/' if directory.startswith('/') else './'
 
     while len(directory_path_parts) > 0:
-        print "Creating '%s'." % (directory_iterator)
+        directory_iterator = os.path.join(directory_iterator, directory_path_parts.popleft())
+
         Directory(
             directory_iterator,
             action="create",
             owner=owner, mode=mode
         )
-
-        directory_iterator = os.path.join(directory_iterator, directory_path_parts.popleft())
 
 def call(*argv, **kwargs):
     def call_fn(fn):
