@@ -28,7 +28,7 @@ class Slave(Script):
   def status(self, env):
     import params
   
-    if not check_process_status(params.pxf_pid_file):
+    if check_process_status(params.pxf_pid_file):
       raise ComponentIsNotRunning()
 
   def configure(self, env):
