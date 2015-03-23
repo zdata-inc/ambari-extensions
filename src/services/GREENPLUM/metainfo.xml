@@ -38,6 +38,17 @@
                 </component>
             </components>
 
+            <osSpecifics>
+                <osSpecific>
+                    <osFamily>any</osFamily>
+                       <packages>
+                          <package>
+                              <name>ed</name>
+                          </package>
+                       </packages>
+                    </osSpecific>
+            </osSpecifics>
+
             <configuration-dependencies>
                 <config-type>greenplum-env</config-type>
                 <config-type>greenplum-mirroring</config-type>
