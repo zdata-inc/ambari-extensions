@@ -56,7 +56,7 @@ is_segmentnode = hostname in segment_nodes
 def data_directories():
     directories = []
     for segment_number in range(segments_per_node):
-        directories.append(InlineTemplate(data_directory_template, segment_number=(segment_number + 1)).get_content())
+        directories.append(InlineTemplate(data_directory_template, segment_number=(segment_number + 1)).get_content().strip())
 
     return directories
 
@@ -67,6 +67,6 @@ def mirror_data_directories():
 
     directories = []
     for segment_number in range(segments_per_node):
-        directories.append(InlineTemplate(mirror_data_directory_template, segment_number=(segment_number + 1)).get_content())
+        directories.append(InlineTemplate(mirror_data_directory_template, segment_number=(segment_number + 1)).get_content().strip())
 
     return directories
