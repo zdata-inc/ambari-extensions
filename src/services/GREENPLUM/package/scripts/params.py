@@ -14,6 +14,8 @@ installer_location = default('/configurations/greenplum-env/installer_location',
 
 installation_path = default('/configurations/greenplum-env/installation_path', None)
 admin_user = default('/configurations/greenplum-env/admin_user', None)
+admin_password = default('/configurations/greenplum-env/admin_password', None)
+hashed_admin_password = utilities.crypt_password(admin_password)
 
 cluster_name = default('/configurations/greenplum-env/cluster_name', None)
 database_name = default('/configurations/greenplum-env/database_name', None)
@@ -38,7 +40,7 @@ portbase_mirror = default('/configurations/greenplum-mirroring/mirror_port_base'
 portbase_mirror_replication = default('/configurations/greenplum-mirroring/mirror_replication_port_base', False)
 
 # Import file paths
-greenplum_segments_file = path.join(installation_path, 'greenplum_segments')
+greenplum_segments_file = path.join(installation_path, 'greenplum-db', 'greenplum_segments')
 greenplum_initsystem_config_file = path.join('/home', admin_user, 'gpconfigs', 'gpinitsystem_config')
 
 # Hosts

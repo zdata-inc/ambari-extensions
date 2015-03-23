@@ -7,8 +7,20 @@ from StringIO import StringIO
 import urllib
 
 class GreenplumDistributed(object):
-    def __init__(self, path, tmp_dir):
-        self.__materialized_path = self.__materialize_archive(path, tmp_dir)
+    @staticmethod
+    def fromSource (installer_path, tmp_dir):
+        if path.exists(installer_path):
+            return GreenplumDistributed(installer_path)
+
+        tmp_path = installer_path.join(tmp_dir, 'greenplum-db.zip')
+        urllib.urlretrieve(installer_path, tmp_path)
+
+        return GreenplumDistributed(tmp_path)
+
+        raise LookupError('Could not find greenplum installer at %s' % installer_path)
+
+    def __init__(self, path):
+        self.__path = path
         self.__archive = None
 
     def get_installer(self):
@@ -19,7 +31,7 @@ class GreenplumDistributed(object):
 
         installer_file = installer_file[0]
 
-        return GreenplumInstaller(installer_file, self.__get_archive().read(installer_file))        
+        return GreenplumInstaller(installer_file.filename, self.__get_archive().read(installer_file))        
 
     def close(self):
         if self.__archive != None:
@@ -30,22 +42,9 @@ class GreenplumDistributed(object):
 
     def __get_archive(self):
         if self.__archive == None:
-            self.__archive = zipfile.ZipFile(self.__materialized_path, 'r')
+            self.__archive = zipfile.ZipFile(self.__path, 'r')
 
         return self.__archive
-
-    def __materialize_archive(self, source, tmp_dir):
-        if path.exists(source):
-            if not path.isfile(source):
-                raise LookupError('Could not find greenplum installer at %s' % source)
-            return source
-
-        tmp_path = path.join(tmp_dir, 'greenplum-db.zip')
-        urllib.urlretrieve(source, tmp_path)
-
-        version = _get_version_from_archive(tmp_path)
-        tmp_path_with_version = path.join(tmp_dir, 'greenplum-db-%s.zip' % version)
-        os.rename(tmp_path, tmp_path_with_version)
 
 class GreenplumInstaller(object):
     @staticmethod
@@ -55,7 +54,7 @@ class GreenplumInstaller(object):
         """
         return filter(lambda f: f.filename.endswith('.bin'), filelist)
 
-    def __init__(self, filename, fileContents):
+    def __init__(self, filename, fileContents = None):
         self.__filename = filename
         self.__fileContents = fileContents
         self.__version = self.__parse_version(filename)
@@ -71,8 +70,15 @@ class GreenplumInstaller(object):
     def get_version(self):
         return self.__version
 
+    def get_file_contents(self):
+        if self.__fileContents == None:
+            with open(self.__filename, 'r') as filehandle:
+                self.__fileContents = filehandle.read()
+
+        return self.__fileContents
+
     def __get_archive(self):
-        installer_script_stream = StringIO(self.__fileContents)
+        installer_script_stream = StringIO(self.get_file_contents())
 
         # Seek to the line before the archive's binary data starts.
         seekedToLine = False

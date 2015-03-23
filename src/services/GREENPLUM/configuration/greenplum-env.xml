@@ -23,6 +23,11 @@
         <description>The Greenplum system user used to administer the cluster.</description>
     </property>
     <property>
+        <name>admin_password</name>
+        <value></value>
+        <description>Password for the Greenplum system user.</description>
+    </property>
+    <property>
         <name>cluster_name</name>
         <value>zData Greenplum Cluster</value>
         <description>Name of this Greenplum cluster.</description>

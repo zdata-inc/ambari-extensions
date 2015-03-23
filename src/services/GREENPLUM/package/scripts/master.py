@@ -17,12 +17,8 @@ class Master(Script):
 
         self.install_packages(env)
         greenplum.install(env)
-        greenplum.initialize(env)
-
-        greenplum.postinstallation_configure(env)
 
         print 'Install the Greenplum Master'
-        sys.exit(1)
  
     def stop(self, env):
         print 'Stop the Greenplum Master'
