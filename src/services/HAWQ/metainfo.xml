@@ -35,7 +35,19 @@
 						<scriptType>PYTHON</scriptType>
 						<timeout>600</timeout>
 					</commandScript>
-				</component>
+                </component>
+                <component>
+                    <name>HAWQ_CLIENT</name>
+                    <displayName>Hawq Client</displayName>
+                    <category>CLIENT</category>
+                    <cardinality>1+</cardinality>
+                    <commandScript>
+                        <script>scripts/client.py</script>
+                        <scriptType>PYTHON</scriptType>
+                        <timeout>600</timeout>
+                    </commandScript>
+                </component>
+
 			</components>
 
             <osSpecifics>
