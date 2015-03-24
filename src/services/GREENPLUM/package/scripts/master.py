@@ -1,6 +1,7 @@
 import sys
 import os
 import greenplum
+import utilities
 from resource_management import *
 
 class Master(Script):
@@ -38,11 +39,11 @@ class Master(Script):
         self.install_packages(env)
         greenplum.install(env)
 
-        utilities.appendBashProfile(params.admin_user, "source %s;" % os.path.join(params.absolute_installation_path, 'greenplum_path.sh'))
-        utilities.appendBashProfile(params.admin_user, 'export MASTER_DATA_DIRECTORY="%s";' % os.path.join(params.master_data_directory, 'gpseg-1'))
+        utilities.append_bash_profile(params.admin_user, "source %s;" % os.path.join(params.absolute_installation_path, 'greenplum_path.sh'))
+        utilities.append_bash_profile(params.admin_user, 'export MASTER_DATA_DIRECTORY="%s";' % os.path.join(params.master_data_directory, 'gpseg-1'))
 
         # Ambari requires service end installation in a stopped state
-        stop()
+        self.stop()
 
     def start(self, env):
         import params
