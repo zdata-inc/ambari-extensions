@@ -42,8 +42,8 @@ class Master(Script):
         utilities.append_bash_profile(params.admin_user, "source %s;" % os.path.join(params.absolute_installation_path, 'greenplum_path.sh'))
         utilities.append_bash_profile(params.admin_user, 'export MASTER_DATA_DIRECTORY="%s";' % os.path.join(params.master_data_directory, 'gpseg-1'))
 
-        # Ambari requires service end installation in a stopped state
-        self.stop()
+        # Ambari requires service to be in a stopped state after installation
+        self.stop(env)
 
     def start(self, env):
         import params
@@ -56,7 +56,7 @@ class Master(Script):
             user=params.admin_user
         )
 
-    def stop():
+    def stop(self, env):
         import params
 
         Execute(
