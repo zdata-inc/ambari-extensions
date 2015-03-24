@@ -10,7 +10,7 @@
 			<name>HAWQ</name>
 			<displayName>Hawq</displayName>
 			<comment>Pivotal Hawq</comment>
-			<version>0.1</version>
+			<version>1.2.1</version>
 
 			<components>
 				<component>
@@ -35,7 +35,18 @@
 						<scriptType>PYTHON</scriptType>
 						<timeout>600</timeout>
 					</commandScript>
-				</component>
+                </component>
+                <component>
+                    <name>HAWQ_CLIENT</name>
+                    <displayName>Hawq Client</displayName>
+                    <category>CLIENT</category>
+                    <cardinality>1+</cardinality>
+                    <commandScript>
+                        <script>scripts/client.py</script>
+                        <scriptType>PYTHON</scriptType>
+                        <timeout>600</timeout>
+                    </commandScript>
+                </component>
 
 			</components>
 
@@ -47,14 +58,15 @@
                               <name>hawq</name>
                           </package>
                           <package>
-                              <name>pxf-service</name>
+                              <name>ed</name>
                           </package>
                        </packages>
                     </osSpecific>
             </osSpecifics>
 
             <requiredServices>
-                <service>HDFS</service>
+              <service>HDFS</service>
+              <service>PXF</service>
             </requiredServices>
 
             <configuration-dependencies>

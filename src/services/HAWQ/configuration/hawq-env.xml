@@ -81,7 +81,7 @@
       </property>
      <property>
         <name>DFS_URL</name>
-        <value>master.ambaricluster.local:8020</value>
+        <value>master.ambaricluster.local:8020/hawq_data</value>
         <description></description>
      </property>
       <property>
