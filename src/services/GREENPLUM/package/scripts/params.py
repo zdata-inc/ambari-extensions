@@ -13,6 +13,7 @@ license_accepted = default('/configurations/greenplum-env/accept_license_agreeme
 installer_location = default('/configurations/greenplum-env/installer_location', None)
 
 installation_path = default('/configurations/greenplum-env/installation_path', None)
+absolute_installation_path = path.join(installation_path, 'greenplum-db')
 admin_user = default('/configurations/greenplum-env/admin_user', None)
 admin_password = default('/configurations/greenplum-env/admin_password', None)
 hashed_admin_password = utilities.crypt_password(admin_password)

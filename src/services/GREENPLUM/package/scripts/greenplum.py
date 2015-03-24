@@ -35,7 +35,6 @@ def install(env):
     distributedArchive = greenplum_installer.GreenplumDistributed.fromSource(params.installer_location, params.tmp_dir)
     greenplumInstaller = distributedArchive.get_installer()
 
-    absolute_installation_path = path.join(params.installation_path, 'greenplum-db')
     version_installation_path = path.join(params.installation_path, 'greenplum-db-%s' % greenplumInstaller.get_version())
     
     Directory(
@@ -47,8 +46,8 @@ def install(env):
     greenplumInstaller.install_to(version_installation_path)
 
     Execute(
-        'ln -s "%s" "%s"' % (version_installation_path, absolute_installation_path),
-        creates=absolute_installation_path
+        'ln -s "%s" "%s"' % (version_installation_path, params.absolute_installation_path),
+        creates=params.absolute_installation_path
     )
 
     # Create segment file
