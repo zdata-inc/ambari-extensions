@@ -37,17 +37,39 @@ class Master(Script):
 
         self.install_packages(env)
         greenplum.install(env)
- 
-    def stop(self, env):
-        print 'Stop the Greenplum Master'
+
+        utilities.appendBashProfile(params.admin_user, "source %s;" % os.path.join(params.absolute_installation_path, 'greenplum_path.sh'))
+        utilities.appendBashProfile(params.admin_user, 'export MASTER_DATA_DIRECTORY="%s";' % os.path.join(params.master_data_directory, 'gpseg-1'))
 
     def start(self, env):
+        import params
+        env.set_params(params)
+
         self.configure(env)
-        print 'Start the Greenplum Master'
+
+        Execute(
+            format("gpstart -a -v"),
+            user=params.admin_user
+        )
+
+    def stop():
+        import params
+
+        Execute(
+            format("gpstop -a -M smart -v"),
+            user=params.admin_user
+        )
+
+    def force_stop():
+        import params
+
+        Execute(
+            format("gpstop -a -M fast -v"),
+            user=params.admin_user
+        )
 
     def configure(self, env):
         greenplum.preinstallation_configure(env)
-        greenplum.postinstallation_configure(env)
          
     def status(self, env):
         print 'Status of the Greenplum Master'
