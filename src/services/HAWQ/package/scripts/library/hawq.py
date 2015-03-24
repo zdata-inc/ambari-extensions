@@ -1,3 +1,4 @@
+import sys
 import os
 from library import utilities
 from resource_management import *
@@ -20,7 +21,13 @@ def create_user():
 def add_psql_environment_variables(user=None):
     import params
 
-    user = params.hawq_user if user == None else user
+    print user
+
+    if user == None:
+        user = params.hawq_user
+    print user
+    sys.exit(1)
+    #user = params.hawq_user if user == None else user
 
     utilities.appendBashProfile(user, "export PGPORT=%s" % params.MASTER_PORT)
     utilities.appendBashProfile(user, "export PGUSER=%s" % params.hawq_user)
