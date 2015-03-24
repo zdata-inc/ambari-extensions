@@ -1,3 +1,4 @@
+import os
 import sys
 from resource_management import *
 from library import hawq_master, hawq
