@@ -8,11 +8,14 @@ Ambari is a tool which makes provisioning, managing, and monitoring of Apache Ha
 Getting started with Vagrant
 ----------------------------
 
-1. Requires the following plugins: vagrant-hostmanager
+1. Requires the following plugins: vagrant-hostmanager, vagrant-reload, vagrant-triggers
 
     ```
     vagrant plugin install vagrant-hostmanager
     vagrant plugin install vagrant-reload
+    vagrant plugin install vagrant-triggers
+
+    vagrant plugin install vagrant-aws # To provision on AWS
     ```
 
 2. Create boxes
@@ -21,6 +24,12 @@ Getting started with Vagrant
     AMBARI_SLAVES=5 vagrant up # Bring up master, slave1, slave2, ..., slave5
     AMBARI_SLAVES=1 vagrant up # Bring up master and slave1
     AMBARI_SLAVES=0 vagrant up # Bring up just master
+    ```
+
+    Or on Amazon's AWS
+    ```
+    AMBARI_SLAVES=5 vagrant up --provider=aws --no-parallel
+    vagrant hostmanager
     ```
 
 3. Connect, vms created: master, slave0, slave1
@@ -36,6 +45,15 @@ Getting started with Vagrant
     ```
 
 More information about getting started with Ambari using vagrant [is available here](http://zdata-inc.github.io/ambari-stack/getting-setup/with-vagrant.html).
+
+What Serviced Do Not Do
+-----------------------
+### Greenplum
+
+ - Does not automatically create or setup XFS filesystem.
+ - Does not specifiy an IO scheduler of deadline.
+ - Does not configure read-ahead.
+ - Does not disable transparent hugepage.
 
 Retrieve Artifacts
 ------------------
