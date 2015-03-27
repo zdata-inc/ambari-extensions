@@ -54,6 +54,9 @@ all_nodes = set(master_nodes + segment_nodes)
 is_masternode = hostname in master_nodes
 is_segmentnode = hostname in segment_nodes
 
+# If there are more nodes than segments mirror spreading can be enabled, if mirroring is enabled
+enable_mirror_spreading = segment_nodes > segments_per_node
+
 @utilities.call()
 def data_directories():
     directories = []
