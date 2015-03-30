@@ -57,6 +57,7 @@ is_segmentnode = hostname in segment_nodes
 # If there are more nodes than segments mirror spreading can be enabled, if mirroring is enabled
 enable_mirror_spreading = segment_nodes > segments_per_node
 
+# Generate list of data and mirror directory paths from their templates
 @utilities.call()
 def data_directories():
     directories = []
@@ -75,3 +76,7 @@ def mirror_data_directories():
         directories.append(InlineTemplate(mirror_data_directory_template, segment_number=(segment_number + 1)).get_content().strip())
 
     return directories
+
+# Pid files
+master_pid_path = path.join(master_data_directory, segment_prefix + '-1/postmaster.pid')
+segment_pid_globs = map(lambda pid_path: path.join(pid_path, segment_prefix + '[0-9]', 'postmaster.pid'), data_directories)

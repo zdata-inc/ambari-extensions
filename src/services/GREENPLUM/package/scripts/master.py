@@ -76,7 +76,9 @@ class Master(Script):
         greenplum.preinstallation_configure(env)
          
     def status(self, env):
-        print 'Status of the Greenplum Master'
+        import params
+        if not greenplum.is_running(params.master_pid_path):
+            raise ComponentIsNotRunning()
 
 if __name__ == "__main__":
     Master().execute()

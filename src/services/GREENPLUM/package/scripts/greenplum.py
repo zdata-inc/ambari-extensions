@@ -98,6 +98,15 @@ def install(env):
             print "No consensus.  Installation considered successful."
             print ">>>>> The log file located at %s should be reviewed so any reported warnings can be fixed!" % logfile
 
+def is_running(pidFile):
+    try:
+        with open(pidFile, 'r') as filehandle:
+            pid = int(filehandle.readlines()[0])
+            return utilities.is_process_running(pidFile, pid)
+
+    except IOError:
+        return False
+
 
 def scan_installation_logs(logFile, minimum_error_level='info'):
     """

@@ -1,5 +1,5 @@
 import sys
-import os
+from os import path
 import greenplum
 from resource_management import *
 
@@ -24,7 +24,14 @@ class Segment(Script):
         print 'configure the Greenplum instance'
 
     def status(self, env):
-        print 'Status of the Greenplum Segment'
+        import params
+        from glob import glob
+
+        # Given an array of globs, loop through each pid file which matches any of the globs and
+        # verify the pid it references is running.
+        for pid_path in [pid_path for pid_glob in params.segment_pid_globs for pid_path in glob(path.dirname(pid_glob))]:
+            if not greenplum.is_running(path.join(pid_path, path.basename(pid_glob))):
+                raise ComponentIsNotRunning()
 
 if __name__ == "__main__":
     Segment().execute()
