@@ -66,11 +66,11 @@ def install(env):
 
     try:
         gpinitsystemCommand = ['gpinitsystem', '-a', '-c "%s"' % params.greenplum_initsystem_config_file]
-        if params.enable_mirror_spreading:
+        if params.mirroring_enabled and params.enable_mirror_spreading:
             gpinitsystemCommand.append('-S')
 
         Execute(
-            " ".join(gpinitsystemCommand),
+            source_path_command + " ".join(gpinitsystemCommand),
             user=params.admin_user
         )
     except Fail as exception:
