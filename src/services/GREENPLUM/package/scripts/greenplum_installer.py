@@ -9,14 +9,20 @@ import urllib
 class GreenplumDistributed(object):
     @staticmethod
     def fromSource (installer_path, tmp_dir):
+        # Attempt to locate locallay
         if path.exists(installer_path):
             return GreenplumDistributed(installer_path)
 
-        tmp_path = installer_path.join(tmp_dir, 'greenplum-db.zip')
-        urllib.urlretrieve(installer_path, tmp_path)
+        # Attempt to download URL
+        try:
+            tmp_path = path.join(tmp_dir, 'greenplum-db.zip')
+            urllib.urlretrieve(installer_path, tmp_path)
 
-        return GreenplumDistributed(tmp_path)
+            return GreenplumDistributed(tmp_path)
+        except IOError:
+            pass
 
+        # Default to erroring if none of the above retrieval methods were successful.
         raise LookupError('Could not find greenplum installer at %s' % installer_path)
 
     def __init__(self, path):
