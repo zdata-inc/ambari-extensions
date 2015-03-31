@@ -26,7 +26,7 @@ Getting started with Vagrant
     AMBARI_SLAVES=0 vagrant up # Bring up just master
     ```
 
-    Or on Amazon's AWS
+    Or on Amazon Web Services
     ```
     AMBARI_SLAVES=5 vagrant up --provider=aws --no-parallel
     vagrant hostmanager
