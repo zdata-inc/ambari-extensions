@@ -15,12 +15,6 @@ def preinstallation_configure(env):
         action="create", shell="/bin/bash"
     )
 
-    # Create data directories, mirror directories
-    utilities.recursively_create_directory(
-        params.data_directories + params.mirror_data_directories,
-        owner=params.admin_user, mode=0755
-    )
-
     utilities.set_kernel_parameters(utilities.get_configuration_file('system-variables'));
 
     TemplateConfig(

@@ -1,6 +1,6 @@
 import sys
 from os import path
-import greenplum
+import greenplum, utilities
 from resource_management import *
 
 class Segment(Script):
@@ -12,6 +12,12 @@ class Segment(Script):
         self.install_packages(env)
 
         greenplum.preinstallation_configure(env)
+
+        # Create data directories, mirror directories
+        utilities.recursively_create_directory(
+            params.data_directories + params.mirror_data_directories,
+            owner=params.admin_user, mode=0755
+        )
  
     def stop(self, env):
         print 'Stop the Greenplum Segment'
