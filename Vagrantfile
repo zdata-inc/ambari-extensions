@@ -50,12 +50,16 @@ Vagrant.configure(2) do |config|
     config.hostmanager.ip_resolver = proc do |vm, resolving_vm|
         return if vm.id.nil?
 
-        buffer = '';
-        vm.communicate.execute("/sbin/ifconfig | grep -Po 'inet\s+.+?:.+?\s+' | grep -v '127.0.0.1'") do |type, data|
-            buffer += data if type == :stdout
-        end
+        begin
+            buffer = '';
+            vm.communicate.execute("/sbin/ifconfig | grep -Po 'inet\s+.+?:.+?\s+' | grep -v '127.0.0.1'") do |type, data|
+                buffer += data if type == :stdout
+            end
 
-        buffer.scan(/(\d+\.\d+\.\d+\.\d+)/).to_a.last[0]
+            buffer.scan(/(\d+\.\d+\.\d+\.\d+)/).to_a.last[0]
+        rescue StandardError
+            nil
+        end
     end
 
 
@@ -106,6 +110,11 @@ Vagrant.configure(2) do |config|
     end
 
 
+    config.vm.provider 'virtualbox' do |v|
+        v.memory = 6144
+    end
+
+
     # ================================================================================
     # Machines
     # ================================================================================
@@ -120,11 +129,10 @@ Vagrant.configure(2) do |config|
             node.vm.hostname = "master#{displayedI}.ambaricluster.local"
 
             node.vm.provider 'virtualbox' do |v|
-                v.memory = 3072
+                v.memory = 2048
             end
 
             node.vm.provider 'aws' do |aws, override|
-                aws.instance_type = 'm3.medium'
                 aws.tags = {
                     'Name' => "Ambari Testing - Master #{i}"
                 }
@@ -149,16 +157,16 @@ Vagrant.configure(2) do |config|
 
     params['slave_count'].times.each do |i|
         i += 1
+
         config.vm.define "slave#{i}" do |node|
             node.vm.network 'private_network', type: :dhcp
             node.vm.hostname = "slave#{i}.ambaricluster.local"
 
             node.vm.provider 'virtualbox' do |v|
-                v.memory = 3072
+                v.memory = 8192
             end
 
             node.vm.provider 'aws' do |aws, override|
-                aws.instance_type = 'm3.medium'
                 aws.tags = {
                     'Name' => "Ambari Testing - Slave #{i}"
                 }
