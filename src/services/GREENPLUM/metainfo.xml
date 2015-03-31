@@ -23,6 +23,13 @@
                         <scriptType>PYTHON</scriptType>
                         <timeout>4800</timeout>
                     </commandScript>
+                    <configFiles>
+                        <configFile>
+                            <type>xml</type>
+                            <fileName>greenplum-mirroring.xml</fileName>
+                            <dictionaryName>greenplum-mirroring</dictionaryName>
+                        </configFile>
+                    </configFiles>
                 </component>
 
                 <component>
