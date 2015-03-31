@@ -23,7 +23,7 @@ def preinstallation_configure(env):
         owner=params.admin_user, mode=0644
     )
 
-def install(env):
+def master_install(env):
     import params
 
     distributedArchive = greenplum_installer.GreenplumDistributed.fromSource(params.installer_location, params.tmp_dir)
