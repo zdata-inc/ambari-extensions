@@ -4,8 +4,6 @@ from resource_management.core.source import InlineTemplate
 import utilities
 from os import path
 
-import status_params
-
 config = Script.get_config()
 tmp_dir = Script.get_tmp_dir()
 
@@ -35,7 +33,7 @@ portbase_replication = int(default('/configurations/greenplum-env/replication_po
 
 segment_prefix = default('/configurations/greenplum-env/segment_prefix', None)
 
-mirroring_enabled = default('/configurations/greenplum-mirroring/enable_mirroring', False) == "true"
+mirroring_enabled = default('/configurations/greenplum-mirroring/enable_mirroring', False)
 mirror_data_directory_template = default('/configurations/greenplum-mirroring/mirror_data_directory', False)
 portbase_mirror = default('/configurations/greenplum-mirroring/mirror_port_base', False)
 portbase_mirror_replication = default('/configurations/greenplum-mirroring/mirror_replication_port_base', False)
@@ -47,7 +45,7 @@ security_conf_file = "/etc/security/limits.d/greenplum.conf"
 
 # Hosts
 hostname = config['hostname']
-master_nodes = default("/clusterHostInfo/greenplum_master_hosts",[])
+master_nodes = default("/clusterHostInfo/greenplum_master_hosts", [])
 segment_nodes = default("/clusterHostInfo/greenplum_slave_hosts", [])
 all_nodes = set(master_nodes + segment_nodes)
 
@@ -55,7 +53,7 @@ is_masternode = hostname in master_nodes
 is_segmentnode = hostname in segment_nodes
 
 # If there are more nodes than segments mirror spreading can be enabled, if mirroring is enabled
-enable_mirror_spreading = segment_nodes > segments_per_node
+enable_mirror_spreading = len(segment_nodes) > segments_per_node
 
 # Generate list of data and mirror directory paths from their templates
 @utilities.call()
@@ -68,6 +66,7 @@ def data_directories():
 
 @utilities.call()
 def mirror_data_directories():
+    global mirroring_enabled
     if not mirroring_enabled:
         return []
 
