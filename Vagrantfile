@@ -51,11 +51,11 @@ Vagrant.configure(2) do |config|
         return if vm.id.nil?
 
         buffer = '';
-        vm.communicate.execute("/sbin/ifconfig | grep 'inet' | grep -v '127.0.0.1'") do |type, data|
+        vm.communicate.execute("/sbin/ifconfig | grep -Po 'inet\s+.+?:.+?\s+' | grep -v '127.0.0.1'") do |type, data|
             buffer += data if type == :stdout
         end
 
-        buffer.match(/(\d+\.\d+\.\d+\.\d+)/).to_a.last
+        buffer.scan(/(\d+\.\d+\.\d+\.\d+)/).to_a.last[0]
     end
 
 
