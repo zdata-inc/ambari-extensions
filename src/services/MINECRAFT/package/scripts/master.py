@@ -65,20 +65,16 @@ class Master(Script):
 
         self.configure(env)
 
-        Execute(
-            "service minecraft start"
-            #format("cd {params.installation_path}; java -Xms{params.minimum_ram} -Xmx{params.maximum_ram} -jar spigot.jar -o true"),
-        )
+        Execute("service minecraft start")
 
     def stop(self, env):
         import params
 
-        Execute(
-            "",
-            user=params.minecraft_user
-        )
+        Execute("service minecraft restart")
 
     def configure(self, env):
+        import params
+
         TemplateConfig(
             path.join(params.installation_path, 'eula.txt'),
             owner=params.minecraft_user, mode=0644

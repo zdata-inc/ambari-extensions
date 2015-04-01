@@ -8,7 +8,7 @@ tmp_dir = Script.get_tmp_dir()
 
 eula_accepted = default('/configurations/minecraft-env/accept_eula', 'false')
 minecraft_user = default('/configurations/minecraft-env/minecraft_user', 'minecraft')
-installation_path = default('/configurations/minecraft-env/installation_path', '/srv/minecraft')
+installation_path = default('/configurations/minecraft-env/installation_path', '/srv/minecraft').rstrip('/\\')
 installation_source = default('/configurations/minecraft-env/installation_source', None)
 minimum_ram = default('/configurations/minecraft-env/minimum_ram', '1024M')
 maximum_ram = default('/configurations/minecraft-env/maximum_ram', '2048M')
