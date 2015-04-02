@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+
+<metainfo>
+    <schemaVersion>2.0</schemaVersion>
+
+    <services>
+        <service>
+
+            <name>GREENPLUM</name>
+            <displayName>Greenplum</displayName>
+            <comment>Pivotal Greenplum</comment>
+            <version>0.0.1</version>
+
+            <components>
+                <component>
+                    <name>GREENPLUM_MASTER</name>
+                    <displayName>Greenplum Master</displayName>
+                    <category>MASTER</category>
+                    <cardinality>1-2</cardinality>
+
+                    <commandScript>
+                        <script>scripts/master.py</script>
+                        <scriptType>PYTHON</scriptType>
+                        <timeout>4800</timeout>
+                    </commandScript>
+                    <configFiles>
+                        <configFile>
+                            <type>xml</type>
+                            <fileName>greenplum-mirroring.xml</fileName>
+                            <dictionaryName>greenplum-mirroring</dictionaryName>
+                        </configFile>
+                    </configFiles>
+                </component>
+
+                <component>
+                    <name>GREENPLUM_SLAVE</name>
+                    <displayName>Greenplum Segment</displayName>
+                    <category>SLAVE</category>
+                    <cardinality>1+</cardinality>
+                    <commandScript>
+                        <script>scripts/segment.py</script>
+                        <scriptType>PYTHON</scriptType>
+                        <timeout>600</timeout>
+                    </commandScript>
+                </component>
+            </components>
+
+            <osSpecifics>
+                <osSpecific>
+                    <osFamily>any</osFamily>
+                       <packages>
+                          <package>
+                              <name>ed</name>
+                          </package>
+                       </packages>
+                    </osSpecific>
+            </osSpecifics>
+
+            <configuration-dependencies>
+                <config-type>greenplum-env</config-type>
+                <config-type>greenplum-mirroring</config-type>
+            </configuration-dependencies>
+        </service>
+    </services>
+</metainfo>
