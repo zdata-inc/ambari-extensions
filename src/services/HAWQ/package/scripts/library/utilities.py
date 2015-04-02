@@ -3,6 +3,8 @@ from resource_management.core.exceptions import Fail
 import os
 import json
 import logging
+import string
+import random
 
 def _lines_contain(haystack, needle):
     for line in haystack:
@@ -59,6 +61,17 @@ def setKernelParameter(name, value, logoutput=True):
     finally:
         if logoutput:
             print logLine
+
+def create_salt():
+    output = ""
+    for _ in range(16):
+        output += random.choice(string.letters + string.digits)
+    return output
+
+def crypt_password(plaintext):
+    import crypt
+    salt = '$6$' + create_salt() + '$'
+    return crypt.crypt(plaintext, salt)
 
 def is_process_running(pid_file, pid=None):
     """
