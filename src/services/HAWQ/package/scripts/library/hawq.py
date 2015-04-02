@@ -10,12 +10,16 @@ def create_user():
     import params
 
     # Add Hawq User
-    User(params.hawq_user, action="create", shell="/bin/bash")
-    Execute('usermod -a -G hdfs %s' % params.hawq_user)
-    Execute('echo %s | passwd --stdin %s' % (params.hawq_password, params.hawq_user))
+    User(
+        params.hawq_user,
+        groups=["hdfs"],
+        password=params.hashed_hawq_password,
+        action="create",
+        shell="/bin/bash"
+    )
 
     # Source hawq functions for hawq admin, save to bash profile
-    utilities.appendBashProfile(params.hawq_user, "source %s;" % params.hawq_environment_path, run=True)
+    utilities.appendBashProfile(params.hawq_user, "source %s;" % params.hawq_environment_path)
     utilities.appendBashProfile(params.hawq_user, "export HADOOP_HOME=%s" % params.hadoop_home)
 
 def add_psql_environment_variables(user=None):
