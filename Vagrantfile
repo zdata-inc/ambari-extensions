@@ -111,7 +111,7 @@ Vagrant.configure(2) do |config|
 
 
     config.vm.provider 'virtualbox' do |v|
-        v.memory = 6144
+        v.memory = 4096
     end
 
 
@@ -127,10 +127,6 @@ Vagrant.configure(2) do |config|
             node.vm.network 'private_network', type: :dhcp
 
             node.vm.hostname = "master#{displayedI}.ambaricluster.local"
-
-            node.vm.provider 'virtualbox' do |v|
-                v.memory = 2048
-            end
 
             node.vm.provider 'aws' do |aws, override|
                 aws.tags = {
