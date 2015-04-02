@@ -112,7 +112,7 @@ def is_hawq_initialized():
     import params
 
     try:
-        Execute('hadoop fs -ls "/gpseg*"', user=params.hawq_user)
+        Execute('hadoop fs -ls "/hawq_data"', user=params.hawq_user)
         return True
     except Fail as e:
         return False
