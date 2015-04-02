@@ -46,9 +46,7 @@
 
             <requiredServices>
                 <service>HDFS</service>
-                <service>HAWQ</service>
             </requiredServices>
-
 		</service>
 	</services>
 </metainfo>

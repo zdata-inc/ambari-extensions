@@ -2,5 +2,5 @@
 
 from stack_advisor import DefaultStackAdvisor
 
-class HDP100ZDataStackAdvisor(DefaultStackAdvisor):
+class HDP999ZDataStackAdvisor(DefaultStackAdvisor):
     pass
