@@ -1,19 +1,21 @@
 package=zData
-version=$(shell git describe --abbrev=0 --tags 2>/dev/null || echo 'old-vagrant')
+version=$(shell git describe --abbrev=0 --tags 2>/dev/null | echo '9.9.9')
 distdir=$(version).$(package)
 
+tmp_dir:=$(shell mktemp -d)
+
+ambari_path="/var/lib/ambari-server/resources/stacks"
+ambari_stack="HDP"
+
+export pwd ?= $(shell pwd)
+
 src=$(shell find . -type f \
-	-not -name '$(distdir).tar.gz' \
 	-not -name '.hash' \
 	-not -name 'archive.zip' \
 	-not -path '*/.git/*' \
+	-not -path '*/.*' \
 	-not -path '*/.vagrant/*' \
 )
-
-ambari_path=/var/lib/ambari-server/resources/stacks
-ambari_stack=HDP
-
-tmp_dir:=$(shell mktemp -d)
 
 dist: $(distdir).tar.gz
 
@@ -30,14 +32,14 @@ clean:
 $(distdir).tar.gz: $(distdir)
 	cd "$(tmp_dir)" ;\
 		tar cof - $(distdir) |\
-			gzip -9 -c > $(shell pwd)/../$(distdir).tar.gz
+			gzip -9 -c > $(pwd)/$(distdir).tar.gz
 
 $(distdir): $(src)
-	mkdir $(tmp_dir)/$(distdir)
+	mkdir -p $(tmp_dir)/$(distdir)
 	cp --parents $? $(tmp_dir)/$(distdir)
 
 	# Development to production text replacements
 	cd "$(tmp_dir)/$(distdir)"; \
-		sed -i "" "s/9\\.9\\.9/$(version)/" Makefile
+		sed -i"" "s/9\\.9\\.9/$(version)/" Makefile
 
-.PHONY: $(distdir) dist install uninstall clean
+.PHONY: dist install uninstall clean
