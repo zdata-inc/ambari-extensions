@@ -20,7 +20,7 @@ def append_bash_profile(user, to_be_appended, run=False, allow_duplicates=False)
 
     with open(bashrc, 'a+') as filehandle:
         if not _lines_contain(filehandle.readlines(), command) or allow_duplicates:
-            print "Appending " + command
+            Logger.info("Appending " + command)
             filehandle.write(format("{to_be_appended}\n"))
 
     if run:
