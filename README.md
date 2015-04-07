@@ -60,3 +60,12 @@ Retrieve Artifacts
 
 To install HAWQ you will need some files from Pivotal.
 You can find these files at https://network.pivotal.io/products/pivotal-hd.  Create an account if you don't have one already, and download `Pivotal HD 2.1.0` and `PHD 2.1.0: Pivotal HAWQ 1.2.1.0`.  Place the downloaded files in the artifacts folder located in the project root.
+
+Roadmap
+-------
+
+ - Look into moving kernel parameteres to configurations
+ - High availability: standby master and segmenet mirroring.
+ - gpsegrecovery when starting a single node.
+ - pre-benchmark during install - fios*, iperf instead of gpcheckperf, or both.  Make it a custom command?
+ - Kerberos/LDAP integration
