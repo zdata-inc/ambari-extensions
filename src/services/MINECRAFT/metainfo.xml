@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+
+<metainfo>
+    <schemaVersion>2.0</schemaVersion>
+
+    <services>
+        <service>
+
+            <name>MINECRAFT</name>
+            <displayName>Minecraft</displayName>
+            <comment>Notch's Minecraft</comment>
+            <version>0.0.1</version>
+
+            <components>
+                <component>
+                    <name>MINECRAFT_MASTER</name>
+                    <displayName>Minecraft Master</displayName>
+                    <category>MASTER</category>
+                    <cardinality>1</cardinality>
+
+                    <commandScript>
+                        <script>scripts/master.py</script>
+                        <scriptType>PYTHON</scriptType>
+                        <timeout>4800</timeout>
+                    </commandScript>
+                    <configFiles>
+                        <configFile>
+                            <type>xml</type>
+                            <fileName>minecraft-permissions.xml</fileName>
+                            <dictionaryName>minecraft-permissions</dictionaryName>
+                        </configFile>
+                    </configFiles>
+                </component>
+            </components>
+
+            <osSpecifics>
+                <osSpecific>
+                    <osFamily>any</osFamily>
+                       <packages>
+                          <package>
+                              <name>git</name>
+                          </package>
+                          <package>
+                              <name>tar</name>
+                          </package>
+                          <package>
+                              <name>java-1.8.0-openjdk</name>
+                          </package>
+                       </packages>
+                    </osSpecific>
+            </osSpecifics>
+
+            <configuration-dependencies>
+                <config-type>minecraft-env</config-type>
+                <config-type>minecraft-permissions</config-type>
+            </configuration-dependencies>
+        </service>
+    </services>
+</metainfo>
