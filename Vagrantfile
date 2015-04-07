@@ -84,12 +84,10 @@ Vagrant.configure(2) do |config|
     # ================================================================================
 
     config.vm.provider :aws do |aws, override|
-        aws.keypair_name = 'vagrant'
         aws.ami = 'ami-d47c57bc'
 
         override.vm.box = 'dummy'
         override.ssh.username = 'root'
-        override.ssh.private_key_path = '~/.ssh/zdata-aws-vagrant'
 
         # Use AWS specific service to retrieve public IP for the machine.
         override.hostmanager.ip_resolver = proc do |vm, resolving_vm|
