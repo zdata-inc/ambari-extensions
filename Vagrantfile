@@ -156,10 +156,6 @@ Vagrant.configure(2) do |config|
             node.vm.network 'private_network', type: :dhcp
             node.vm.hostname = "slave#{i}.ambaricluster.local"
 
-            node.vm.provider 'virtualbox' do |v|
-                v.memory = 8192
-            end
-
             node.vm.provider 'aws' do |aws, override|
                 aws.tags = {
                     'Name' => "Ambari Testing - Slave #{i}"
@@ -181,3 +177,4 @@ Vagrant.configure(2) do |config|
         end
     end
 end
+
