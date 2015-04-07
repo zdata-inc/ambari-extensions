@@ -45,7 +45,7 @@ def set_kernel_parameter(name, value, logoutput=True):
     log_line = [format("{name} = {value}")]
 
     try:
-        Execute('sysctl -w %s=%s' % (name, value), logoutput=False)
+        Execute('sysctl -w %s="%s"' % (name, value), logoutput=False)
         log_line.append("added")
 
         with open('/etc/sysctl.conf', 'a+') as filehandle:
