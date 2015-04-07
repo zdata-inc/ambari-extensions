@@ -134,7 +134,7 @@ Vagrant.configure(2) do |config|
                 # Force set hostname on ec2 instances
                 override.vm.provision :shell, inline: <<-EOF
                     echo '#{node.vm.hostname}' > /etc/hostname;
-                    sed -i 's/^127\\.0\\.0\\.1.*$/\\0 #{node.vm.hostname}/' /etc/hosts
+                    sed -i 's/^127\\.0\\.0\\.1.*$/127.0.0.1 localhost/' /etc/hosts
                     sed -i 's/^HOSTNAME=.*$/HOSTNAME=#{node.vm.hostname}/' /etc/sysconfig/network
                     hostname `cat /etc/hostname`
                 EOF
@@ -168,7 +168,7 @@ Vagrant.configure(2) do |config|
                 # Force set hostname on ec2 instances
                 override.vm.provision :shell, inline: <<-EOF
                     echo '#{node.vm.hostname}' > /etc/hostname;
-                    sed -i 's/^127\\.0\\.0\\.1.*$/\\0 #{node.vm.hostname}/' /etc/hosts
+                    sed -i 's/^127\\.0\\.0\\.1.*$/127.0.0.1 localhost/' /etc/hosts
                     sed -i 's/^HOSTNAME=.*$/HOSTNAME=#{node.vm.hostname}/' /etc/sysconfig/network
                     hostname `cat /etc/hostname`
                 EOF
