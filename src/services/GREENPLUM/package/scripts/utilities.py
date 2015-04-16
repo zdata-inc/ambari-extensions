@@ -1,3 +1,4 @@
+from __future__ import with_statement
 import os
 import re
 import json
@@ -6,6 +7,7 @@ import random
 from collections import deque
 from resource_management import *
 from resource_management.core.logger import Logger
+from textwrap import dedent
 
 def _lines_contain(haystack, needle):
     for line in haystack:

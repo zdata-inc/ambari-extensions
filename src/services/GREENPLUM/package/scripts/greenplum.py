@@ -44,9 +44,15 @@ def master_install(env):
         creates=params.absolute_installation_path
     )
 
-    # Create segment file
+    # Create segment hosts file
     TemplateConfig(
-        params.greenplum_segments_file,
+        params.greenplum_segment_hosts_file,
+        owner=params.admin_user, mode=0644
+    )
+
+    # Create all hosts file
+    TemplateConfig(
+        params.greenplum_all_hosts_file,
         owner=params.admin_user, mode=0644
     )
 
@@ -54,12 +60,21 @@ def master_install(env):
 
     source_path_command = 'source %s;' % path.join(version_installation_path, 'greenplum_path.sh')
 
+    # Exchange keys on all hosts
+    # Execute(
+    #     format(source_path_command + 'gpseginstall -f "{params.greenplum_all_hosts_file}" -u "{params.admin_user}" -p "{params.admin_password}" -c e')
+    # )
+
     Execute(
-        format(source_path_command + 'gpseginstall -u {params.admin_user} -p {params.admin_password} -f {params.greenplum_segments_file}')
+        format(source_path_command + 'gpseginstall -f "{params.greenplum_all_hosts_file}" -u "{params.admin_user}" -p "{params.admin_password}"')
     )
 
     try:
         gpinitsystemCommand = ['gpinitsystem', '-a', '-c "%s"' % params.greenplum_initsystem_config_file]
+
+        if params.master_standby_node != None:
+            gpinitsystemCommand.append('-s "' + params.master_standby_node + '"')
+
         if params.mirroring_enabled and params.enable_mirror_spreading:
             gpinitsystemCommand.append('-S')
 

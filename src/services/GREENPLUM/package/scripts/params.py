@@ -39,17 +39,29 @@ portbase_mirror = default('/configurations/greenplum-mirroring/mirror_port_base'
 portbase_mirror_replication = default('/configurations/greenplum-mirroring/mirror_replication_port_base', False)
 
 # Import file paths
-greenplum_segments_file = path.join(installation_path, 'greenplum-db', 'greenplum_segments')
+greenplum_segment_hosts_file = path.join(installation_path, 'greenplum-db', 'greenplum_segments')
+greenplum_all_hosts_file = path.join(installation_path, 'greenplum-db', 'greenplum_hosts')
 greenplum_initsystem_config_file = path.join('/home', admin_user, 'gpconfigs', 'gpinitsystem_config')
 security_conf_file = "/etc/security/limits.d/greenplum.conf"
 
 # Hosts
 hostname = config['hostname']
-master_nodes = default("/clusterHostInfo/greenplum_master_hosts", [])
-segment_nodes = default("/clusterHostInfo/greenplum_slave_hosts", [])
-all_nodes = set(master_nodes + segment_nodes)
+master_node = default("/clusterHostInfo/greenplum_master_hosts", [None])[0]
+master_standby_node = default("/clusterHostInfo/greenplum_standby_master_hosts", [None])[0]
+segment_nodes = set(default("/clusterHostInfo/greenplum_slave_hosts", []))
 
-is_masternode = hostname in master_nodes
+# If a node is both a master and standby, don't consider it a standby.
+if master_standby_node == master_node:
+    master_standby_node = None
+
+all_nodes = segment_nodes.copy()
+if master_node != None:
+    all_nodes.add(master_node)
+if master_standby_node != None:
+    all_nodes.add(master_standby_node)
+
+is_standby_masternode = hostname == master_standby_node
+is_masternode = hostname == master_node
 is_segmentnode = hostname in segment_nodes
 
 # If there are more nodes than segments mirror spreading can be enabled, if mirroring is enabled
