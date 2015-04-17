@@ -1,13 +1,15 @@
 from resource_management import *
 import os
 import subprocess
+import utilities
 
 config = Script.get_config()
 tmp_dir = Script.get_tmp_dir()
 
-# FIXME Find a better way to learn java_home
-#java_home = subprocess.call("find / -name java -path *bin* 2> /dev/null | head -1 | sed 's/\/bin\/java//g'", shell=True)
-java_home = "/usr/jdk64/jdk1.7.0_67/jre"
+java_home = detect_java_home()
+if not java_home:
+  print "Cannot automatically find JAVA_HOME"
+  raise StandardError
 
 # Important directories
 pxf_root_path = "/usr/lib/gphd/pxf"
