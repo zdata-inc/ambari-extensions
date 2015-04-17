@@ -56,6 +56,18 @@
                         <timeout>600</timeout>
                     </commandScript>
                 </component>
+
+                <component>
+                    <name>GREENPLUM_CLIENT</name>
+                    <displayName>Greenplum Client</displayName>
+                    <category>CLIENT</category>
+                    <cardinality>1+</cardinality>
+                    <commandScript>
+                        <script>scripts/client.py</script>
+                        <scriptType>PYTHON</scriptType>
+                        <timeout>600</timeout>
+                    </commandScript>
+                </component>
             </components>
 
             <osSpecifics>
