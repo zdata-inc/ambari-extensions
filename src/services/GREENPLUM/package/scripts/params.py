@@ -39,6 +39,7 @@ portbase_mirror = default('/configurations/greenplum-mirroring/mirror_port_base'
 portbase_mirror_replication = default('/configurations/greenplum-mirroring/mirror_replication_port_base', False)
 
 # Import file paths
+master_data_segment_directory = path.join(master_data_directory, segment_prefix + '-1')
 greenplum_segment_hosts_file = path.join(installation_path, 'greenplum-db', 'greenplum_segments')
 greenplum_all_hosts_file = path.join(installation_path, 'greenplum-db', 'greenplum_hosts')
 greenplum_initsystem_config_file = path.join('/home', admin_user, 'gpconfigs', 'gpinitsystem_config')
@@ -89,5 +90,5 @@ def mirror_data_directories():
     return directories
 
 # Pid files
-master_pid_path = path.join(master_data_directory, segment_prefix + '-1/postmaster.pid')
+master_pid_path = path.join(master_data_segment_directory, 'postmaster.pid')
 segment_pid_globs = map(lambda pid_path: path.join(pid_path, segment_prefix + '[0-9]', 'postmaster.pid'), data_directories)
