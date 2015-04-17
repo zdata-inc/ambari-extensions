@@ -15,6 +15,7 @@ class StandbyMaster(Script):
         env.set_params(params)
 
         greenplum.preinstallation_configure(env)
+        utilities.append_bash_profile(params.admin_user, 'export MASTER_DATA_DIRECTORY="%s";' % params.master_data_segment_directory)
 
         Directory(
             os.path.dirname(params.greenplum_initsystem_config_file),
@@ -45,7 +46,10 @@ class StandbyMaster(Script):
         pass
 
     def configure(self, env):
-        pass
+        greenplum.create_host_files()
+        greenplum.preinstallation_configure(env)
+
+        utilities.append_bash_profile(params.admin_user, 'export MASTER_DATA_DIRECTORY="%s";' % params.master_data_segment_directory)
          
     def status(self, env):
         pass
