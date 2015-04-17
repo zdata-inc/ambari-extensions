@@ -27,7 +27,6 @@ def preinstallation_configure(env):
         owner=params.admin_user, mode=0644
     )
 
-
 def master_install(env):
     import params
 
@@ -95,7 +94,7 @@ def master_install(env):
         logfile = logfile.group(1)
         Logger.info("Scanning log file: %s" % logfile)
 
-        log_file_errors = scan_installation_logs(logfile)
+        log_file_errors = _scan_installation_logs(logfile)
         if len(log_file_errors) > 0:
             Logger.error("Errors detected in logfile:")
 
@@ -124,6 +123,34 @@ def create_host_files():
         owner=params.admin_user, mode=0644
     )
 
+def create_master_data_directory():
+    import params
+
+    Directory(
+        params.master_data_directory,
+        action="create",
+        recursive=True,
+        owner=params.admin_user
+    )
+
+    utilities.append_bash_profile(params.admin_user, 'export MASTER_DATA_DIRECTORY="%s";' % params.master_data_segment_directory)
+
+def create_gpinitsystem_config():
+    import params
+
+    Directory(
+        path.dirname(params.greenplum_initsystem_config_file),
+        action="create",
+        recursive=True,
+        owner=params.admin_user
+    )
+
+    TemplateConfig(
+        params.greenplum_initsystem_config_file,
+        owner=params.admin_user, mode=0644
+    )
+
+
 def is_running(pidFile):
     try:
         with open(pidFile, 'r') as filehandle:
@@ -134,7 +161,7 @@ def is_running(pidFile):
         return False
 
 
-def scan_installation_logs(logFile, minimum_error_level='info'):
+def _scan_installation_logs(logFile, minimum_error_level='info'):
     """
     Given a log file, return if there are any log lines with an error level above minimum_error_level.
     """
@@ -154,11 +181,11 @@ def scan_installation_logs(logFile, minimum_error_level='info'):
                 error_lines.append(line)
 
     # Don't care about the lines that say errors were found in logs, remove them
-    error_lines = remove_lines_between_dots_logs(error_lines)
+    error_lines = _remove_lines_between_dots_logs(error_lines)
 
     return error_lines
 
-def remove_lines_between_dots_logs(lines):
+def _remove_lines_between_dots_logs(lines):
     """
     Given a set of lines from a log file, remove all lines in between lines of asterisks.
     """
