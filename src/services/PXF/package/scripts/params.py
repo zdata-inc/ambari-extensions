@@ -6,7 +6,7 @@ import utilities
 config = Script.get_config()
 tmp_dir = Script.get_tmp_dir()
 
-java_home = detect_java_home()
+java_home = utilities.detect_java_home()
 if not java_home:
   print "Cannot automatically find JAVA_HOME"
   raise StandardError
