@@ -1,3 +1,4 @@
+from __future__ import with_statement
 import os
 import re
 import json
@@ -6,6 +7,7 @@ import random
 from collections import deque
 from resource_management import *
 from resource_management.core.logger import Logger
+from textwrap import dedent
 
 def _lines_contain(haystack, needle):
     for line in haystack:
@@ -45,7 +47,7 @@ def set_kernel_parameter(name, value, logoutput=True):
     log_line = [format("{name} = {value}")]
 
     try:
-        Execute('sysctl -w %s=%s' % (name, value), logoutput=False)
+        Execute('sysctl -w %s="%s"' % (name, value), logoutput=False)
         log_line.append("added")
 
         with open('/etc/sysctl.conf', 'a+') as filehandle:

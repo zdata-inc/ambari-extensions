@@ -5,7 +5,6 @@
 
     <services>
         <service>
-
             <name>GREENPLUM</name>
             <displayName>Greenplum</displayName>
             <comment>Pivotal Greenplum</comment>
@@ -16,13 +15,14 @@
                     <name>GREENPLUM_MASTER</name>
                     <displayName>Greenplum Master</displayName>
                     <category>MASTER</category>
-                    <cardinality>1-2</cardinality>
+                    <cardinality>1</cardinality>
 
                     <commandScript>
                         <script>scripts/master.py</script>
                         <scriptType>PYTHON</scriptType>
                         <timeout>4800</timeout>
                     </commandScript>
+
                     <configFiles>
                         <configFile>
                             <type>xml</type>
@@ -33,12 +33,37 @@
                 </component>
 
                 <component>
+                    <name>GREENPLUM_STANDBY_MASTER</name>
+                    <displayName>Greenplum Standby</displayName>
+                    <category>MASTER</category>
+                    <cardinality>0-1</cardinality>
+
+                    <commandScript>
+                        <script>scripts/standby_master.py</script>
+                        <scriptType>PYTHON</scriptType>
+                        <timeout>4000</timeout>
+                    </commandScript>
+                </component>
+
+                <component>
                     <name>GREENPLUM_SLAVE</name>
                     <displayName>Greenplum Segment</displayName>
                     <category>SLAVE</category>
                     <cardinality>1+</cardinality>
                     <commandScript>
                         <script>scripts/segment.py</script>
+                        <scriptType>PYTHON</scriptType>
+                        <timeout>600</timeout>
+                    </commandScript>
+                </component>
+
+                <component>
+                    <name>GREENPLUM_CLIENT</name>
+                    <displayName>Greenplum Client</displayName>
+                    <category>CLIENT</category>
+                    <cardinality>1+</cardinality>
+                    <commandScript>
+                        <script>scripts/client.py</script>
                         <scriptType>PYTHON</scriptType>
                         <timeout>600</timeout>
                     </commandScript>

@@ -5,14 +5,14 @@ PORT_BASE={{ portbase }}
 REPLICATION_PORT_BASE={{ portbase_replication }}
 declare -a DATA_DIRECTORY=({{ data_directories|join(' ') }})
 
-MASTER_HOSTNAME={{ master_nodes[0] }}
+MASTER_HOSTNAME={{ master_node }}
 MASTER_DIRECTORY={{ master_data_directory }}
 MASTER_PORT={{ master_port }}
 TRUSTED_SHELL=ssh
 CHECK_POINT_SEGMENTS={{ check_point_segments }}
 ENCODING={{ encoding }}
 DATABASE_NAME={{ database_name }}
-MACHINE_LIST_FILE={{ greenplum_segments_file }}
+MACHINE_LIST_FILE={{ greenplum_segment_hosts_file }}
 
 {% if mirroring_enabled %}
 MIRROR_PORT_BASE={{ portbase_mirror }}

@@ -12,38 +12,24 @@ class Master(Script):
         if not params.license_accepted:
             sys.exit("Installation failed, license agreement not accepted.")
 
-        env.set_params(params)
-
-        greenplum.preinstallation_configure(env)
-
-        Directory(
-            os.path.dirname(params.greenplum_initsystem_config_file),
-            action="create",
-            recursive=True,
-            owner=params.admin_user
-        )
-
-        Directory(
-            params.master_data_directory,
-            action="create",
-            recursive=True,
-            owner=params.admin_user
-        )
-
-        # Create gpinit_config file
-        TemplateConfig(
-            params.greenplum_initsystem_config_file,
-            owner=params.admin_user, mode=0644
-        )
+        if os.path.exists(params.master_data_segment_directory):
+            Logger.info("Found master data directory.  Assuming Greenplum already installed.")
+            return
 
         self.install_packages(env)
+
+        greenplum.preinstallation_configure(env)
+        greenplum.create_master_data_directory()
+        greenplum.create_gpinitsystem_config()
+
         greenplum.master_install(env)
 
-        utilities.append_bash_profile(params.admin_user, "source %s;" % os.path.join(params.absolute_installation_path, 'greenplum_path.sh'))
-        utilities.append_bash_profile(params.admin_user, 'export MASTER_DATA_DIRECTORY="%s";' % os.path.join(params.master_data_directory, 'gpseg-1'))
-
         # Ambari requires service to be in a stopped state after installation
-        self.stop(env)
+        try:
+            self.status(env)
+            self.stop(env)
+        except ComponentIsNotRunning:
+            pass
 
     def start(self, env):
         import params
@@ -64,7 +50,7 @@ class Master(Script):
             user=params.admin_user
         )
 
-    def force_stop():
+    def forcestop(self, env):
         import params
 
         Execute(
@@ -72,8 +58,15 @@ class Master(Script):
             user=params.admin_user
         )
 
+    def recover_master():
+        print "Noop: Recovering master"
+
     def configure(self, env):
+        import params
+
+        greenplum.create_host_files()
         greenplum.preinstallation_configure(env)
+
          
     def status(self, env):
         import params
