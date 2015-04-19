@@ -84,15 +84,25 @@ def gpsshify(command, host=None, hostfile=None, args=None):
         EOF
     """.rstrip()))
 
-def create_salt():
+def random_string(length, character_set=None):
+    """Generate a random string.
+
+    length -- Length of string to generate.
+    character_set -- Characters as a list to use during generation.  Defaults to letters and digits.
+    """
     output = ""
-    for i in range(16):
-        output += random.choice(string.letters + string.digits)
+
+    if character_set == None:
+        character_set = string.letters + string.digits
+
+    for i in range(length):
+        output += random.choice(character_set)
+
     return output
 
 def crypt_password(plaintext):
     import crypt
-    salt = '$6$' + create_salt() + '$'
+    salt = '$6$' + random_string(16) + '$'
     return crypt.crypt(plaintext, salt)
 
 def is_process_running(pid_file, pid_parser=None):
