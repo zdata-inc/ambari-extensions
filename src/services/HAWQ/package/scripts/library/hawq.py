@@ -113,13 +113,7 @@ def configure_mount_options():
     pass
 
 def is_running(pidFile):
-    try:
-        with open(pidFile, 'r') as filehandle:
-            pid = int(filehandle.readlines()[0])
-            return utilities.is_process_running(pidFile, pid)
-
-    except IOError:
-        return False
+    return utilities.is_process_running(pidFile, lambda filehandle: int(filehandle.readlines()[0]))
 
 def scan_installation_logs(logFile, minimum_error_level='info'):
     """
