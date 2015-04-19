@@ -95,28 +95,26 @@ def crypt_password(plaintext):
     salt = '$6$' + create_salt() + '$'
     return crypt.crypt(plaintext, salt)
 
-def is_process_running(pid_file, pid=None):
+def is_process_running(pid_file, pid_parser=None):
+    """Checks whether a process is running given a pid_file.
+    Process is considered running if the given pid file exists, and
+    the pid is running.
+
+    pid_file -- Pidfile to check.
+    pid_parser -- Lambda to parse pid from pidfile given the pidfile's filehandle, optional.
     """
-    Function checks whether process is running.
-    Process is considered running, if pid file exists, and process with
-    a pid, mentioned in pid file is running
-    @param pid_file: path to service pid file
-    @param pid: The pid in the pid file, useful if pidfile is of nonstandard format
-    @return: Whether or not the process is running
-    """
+
+    if pid_parser == None:
+        pid_parser = lambda filehandle: int(filehandle.read().strip())
 
     if not pid_file or not os.path.isfile(pid_file):
         return False
 
-    if pid == None:
-        try:
-            with open(pid_file, 'r') as filehandle:
-                try:
-                    pid = int(filehandle.read())
-                except:
-                    return False
-        except IOError:
-            return False
+    try:
+        with open(pid_file, 'r') as filehandle:
+            pid = pid_parser(filehandle)
+    except IOError:
+        return False
 
     try:
         # Kill will not actually kill the process
