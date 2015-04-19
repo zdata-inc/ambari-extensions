@@ -7,6 +7,14 @@ from resource_management import *
 from textwrap import dedent
 
 def append_bash_profile(user, to_be_appended, run=False, allow_duplicates=False):
+    """Append a given line to a user's bashrc file.
+
+    user -- The user whose bashrc file will have the given line appended to it.
+    to_be_appended -- Line to append to the bashrc file.
+    run -- Should the line also be executed?
+    allow_duplicates -- If the line already exists in the file, should it be appended anyways?  Whitespace is ignored.
+    """
+
     bashrc = "/home/%s/.bashrc" % user
 
     with open(bashrc, 'a+') as filehandle:
@@ -18,6 +26,14 @@ def append_bash_profile(user, to_be_appended, run=False, allow_duplicates=False)
         Execute(to_be_appended, user=user)
 
 def get_configuration_file(variable_file):
+    """Retrieves a simple config file and formats it into a dictionary.
+
+    Given the path to a configuration file of key/value pairs, each pair on its own line, and each
+    key/value separated by an equals sign, return a dictionary of the keys to their respective values.
+    Comments can be added by starting a line with a hash sign.  Comments cannot be appended to
+    the end of lines.
+    """
+
     variables = {}
     for line in StaticFile(variable_file).get_content().split('\n'):
         if len(line) == 0 or line.startswith('#'):
@@ -29,10 +45,19 @@ def get_configuration_file(variable_file):
     return variables
 
 def set_kernel_parameters(parameters, logoutput=True):
+    """Given a dictionary of parameters, set each one."""
+
     for key, value in parameters.iteritems():
         set_kernel_parameter(key, value, logoutput=logoutput)
 
 def set_kernel_parameter(name, value, logoutput=True):
+    """Set a kernel paramater vis sysctl, also append to sysctl.conf.
+
+    name -- Name of parameter to set.
+    value -- Value of parameter.
+    logoutput -- Logoutput of command?
+    """
+
     name = name.strip()
     log_line = [format("{name} = {value} - ")]
 
@@ -56,15 +81,15 @@ def set_kernel_parameter(name, value, logoutput=True):
         if logoutput:
             Logger.info(" ".join(log_line))
 
-def search_replace(search, replace, subject):
-    with open(subject, 'r+') as filehandle:
-        file_contents = filehandle.read()
-        file_contents = re.sub(search, replace, file_contents)
-        filehandle.seek(0)
-        filehandle.write(file_contents)
-        filehandle.truncate()
-
 def gpsshify(command, host=None, hostfile=None, args=None):
+    """Return a gpssh command which will run the given command on the specified remote machines in the cluster.
+
+    command -- Command or commands which will be run on remote machines in the cluster.
+    host -- A remote host to run the command on.
+    hostfile -- The path to a file containing a list of hosts to run the command on.
+    args -- Additional arguments to append to the gpssh command.
+    """
+
     if host == None and hostfile == None:
         raise ValueError('Either host or hostfile must be given')
 
@@ -101,6 +126,8 @@ def random_string(length, character_set=None):
     return output
 
 def crypt_password(plaintext):
+    """Generate a SHA512 hash correctly formatted for the shadow file."""
+
     import crypt
     salt = '$6$' + random_string(16) + '$'
     return crypt.crypt(plaintext, salt)
