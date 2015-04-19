@@ -46,13 +46,13 @@ def master_install(env):
     source_path_command = 'source %s;' % path.join(params.absolute_installation_path, 'greenplum_path.sh')
     greenplum_path_file = path.join(version_installation_path, 'greenplum_path.sh')
 
-    preinstallcommands = format(dedent("""
+    post_copy_commands = format(dedent("""
         ln -s '{version_installation_path}' '{params.absolute_installation_path}';
         sed -i 's@^GPHOME=.*@GPHOME={version_installation_path}@' '{greenplum_path_file}';
-    """.rstrip()))
+    """.strip()))
 
-    # Run locally to allow gpseginstall to function correctly.
-    Execute(preinstallcommands)
+    # Run on master to allow gpseginstall to function correctly.
+    Execute(post_copy_commands)
 
     create_host_files()
 
@@ -60,8 +60,8 @@ def master_install(env):
         format(source_path_command + 'gpseginstall -f "{params.greenplum_all_hosts_file}" -u "{params.admin_user}" -p "{params.admin_password}"')
     )
 
-    # Perform preinstallcommands on rest of machines in cluster.
-    Execute(utilities.gpsshify(preinstallcommands, file=params.greenplum_all_hosts_file))
+    # Perform post_copy_commands on rest of machines in cluster.
+    Execute(source_path_command + utilities.gpsshify(post_copy_commands, hostfile=params.greenplum_all_hosts_file))
 
     Client().install(env)
 
