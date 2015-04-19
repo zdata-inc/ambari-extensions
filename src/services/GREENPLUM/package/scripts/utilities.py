@@ -1,10 +1,8 @@
 from __future__ import with_statement
 import os
-import re
-import json
-import string
 import random
-from collections import deque
+import re, json, string
+
 from resource_management import *
 from resource_management.core.logger import Logger
 from textwrap import dedent
@@ -102,24 +100,6 @@ def crypt_password(plaintext):
     import crypt
     salt = '$6$' + create_salt() + '$'
     return crypt.crypt(plaintext, salt)
-
-def recursively_create_directory(directory, owner='root', mode=0755):
-    if not isinstance(directory, basestring):
-        for dir in directory:
-            recursively_create_directory(dir, owner=owner, mode=mode)
-        return
-
-    directory_path_parts = deque(directory.strip().lstrip('/').split('/'))
-    directory_iterator = '/' if directory.startswith('/') else './'
-
-    while len(directory_path_parts) > 0:
-        directory_iterator = os.path.join(directory_iterator, directory_path_parts.popleft())
-
-        Directory(
-            directory_iterator,
-            action="create",
-            owner=owner, mode=mode
-        )
 
 def is_process_running(pid_file, pid=None):
     """
