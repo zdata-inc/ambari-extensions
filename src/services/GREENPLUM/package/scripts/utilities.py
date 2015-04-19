@@ -7,20 +7,12 @@ from resource_management import *
 from resource_management.core.logger import Logger
 from textwrap import dedent
 
-def _lines_contain(haystack, needle):
-    for line in haystack:
-        if line.strip() == needle.strip():
-            return True
-
-    return False
-
 def append_bash_profile(user, to_be_appended, run=False, allow_duplicates=False):
     bashrc = "/home/%s/.bashrc" % user
-    command = json.dumps(to_be_appended)[1:-1]
 
     with open(bashrc, 'a+') as filehandle:
-        if not _lines_contain(filehandle.readlines(), command) or allow_duplicates:
-            Logger.info("Appending " + command)
+        if to_be_appended.strip() not in map(lambda line: line.strip(), filehandle.readlines()) or allow_duplicates:
+            Logger.info(format("Appending {command} to {bashrc}"))
             filehandle.write(format("{to_be_appended}\n"))
 
     if run:
@@ -42,22 +34,24 @@ def set_kernel_parameters(parameters, logoutput=True):
         set_kernel_parameter(key, value, logoutput=logoutput)
 
 def set_kernel_parameter(name, value, logoutput=True):
-    log_line = [format("{name} = {value}")]
+    name = name.strip()
+    log_line = [format("{name} = {value} - ")]
 
     try:
-        Execute('sysctl -w %s="%s"' % (name, value), logoutput=False)
-        log_line.append("added")
-
         with open('/etc/sysctl.conf', 'a+') as filehandle:
-            line = format("{name} = {value}\n")
-            if not _lines_contain(filehandle.readlines(), line):
+            if name not in map(lambda line: line.split('=')[0].strip(), filehandle.readlines()):
+                # Add via sysctl so value will be updated immediately.
+                Execute(format('sysctl -w {name}="{value}"'), logoutput=False)
+                log_line.append("added")
+
+                # Add to sysctl conf file so value will be updated on subsequent reboots.
+                filehandle.write(format("{name} = {value}\n"))
                 log_line.append("saved")
-                filehandle.write(line)
             else:
                 log_line.append("already saved")
 
     except Fail as exception:
-        log_line.append("bad")
+        log_line.append("sysctl failed to modify parameter, considered bad.")
     finally:
         if logoutput:
             Logger.info(" ".join(log_line))
