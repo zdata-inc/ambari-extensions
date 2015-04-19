@@ -4,7 +4,6 @@ import random
 import re, json, string
 
 from resource_management import *
-from resource_management.core.logger import Logger
 from textwrap import dedent
 
 def append_bash_profile(user, to_be_appended, run=False, allow_duplicates=False):
@@ -12,11 +11,11 @@ def append_bash_profile(user, to_be_appended, run=False, allow_duplicates=False)
 
     with open(bashrc, 'a+') as filehandle:
         if to_be_appended.strip() not in map(lambda line: line.strip(), filehandle.readlines()) or allow_duplicates:
-            Logger.info(format("Appending {command} to {bashrc}"))
+            Logger.info(format("Appending {to_be_appended} to {bashrc}"))
             filehandle.write(format("{to_be_appended}\n"))
 
     if run:
-        Execute(to_be_appended)
+        Execute(to_be_appended, user=user)
 
 def get_configuration_file(variable_file):
     variables = {}
@@ -39,6 +38,7 @@ def set_kernel_parameter(name, value, logoutput=True):
 
     try:
         with open('/etc/sysctl.conf', 'a+') as filehandle:
+
             if name not in map(lambda line: line.split('=')[0].strip(), filehandle.readlines()):
                 # Add via sysctl so value will be updated immediately.
                 Execute(format('sysctl -w {name}="{value}"'), logoutput=False)
@@ -107,6 +107,7 @@ def crypt_password(plaintext):
 
 def is_process_running(pid_file, pid_parser=None):
     """Checks whether a process is running given a pid_file.
+
     Process is considered running if the given pid file exists, and
     the pid is running.
 
