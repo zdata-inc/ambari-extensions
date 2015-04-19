@@ -61,12 +61,7 @@ def master_install(env):
     )
 
     # Perform preinstallcommands on rest of machines in cluster.
-    Execute(format(dedent("""
-        {source_path_command}
-        cat <<EOF | gpssh -f '{params.greenplum_all_hosts_file}' -e
-            {preinstallcommands}
-        EOF
-    """.rstrip())))
+    Execute(utilities.gpsshify(preinstallcommands, file=params.greenplum_all_hosts_file))
 
     Client().install(env)
 

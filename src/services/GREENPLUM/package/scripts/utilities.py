@@ -72,6 +72,26 @@ def search_replace(search, replace, subject):
         filehandle.write(file_contents)
         filehandle.truncate()
 
+def gpsshify(command, host=None, hostfile=None, args=None):
+    if host == None and hostfile == None:
+        raise ValueError('Either host or hostfile must be given')
+
+    arguments = []
+    if host != None:
+        arguments.append('-h "%s"' % host)
+    if hostfile != None:
+        arguments.append('-f "%s"' % hostfile)
+    if args != None:
+        arguments.append(args)
+
+    arguments = " ".join(arguments)
+
+    return format(dedent("""
+        cat <<EOF | gpssh {arguments}
+            {command}
+        EOF
+    """.rstrip()))
+
 def create_salt():
     output = ""
     for i in range(16):
