@@ -12,7 +12,13 @@ def install(env):
     hawq.configure_security_limits()
     # hawq.configure_mount_options()
 
-    hawq.create_data_dirs(params.DATA_DIRECTORY.split())
+    Directory(
+        params.DATA_DIRECTORY.split(),
+        action="create",
+        mode=0755,
+        owner=params.hawq_user,
+        recursive=True
+    )
 
 def configure():
     pass

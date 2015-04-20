@@ -23,27 +23,12 @@ def create_user():
     utilities.appendBashProfile(params.hawq_user, "source %s;" % params.hawq_environment_path)
     utilities.appendBashProfile(params.hawq_user, "export HADOOP_HOME=%s" % params.hadoop_home)
 
-def add_psql_environment_variables(user=None):
-    import params
-
-
-    if user == None:
-        user = params.hawq_user
+def add_psql_environment_variables(user):
+    """Add relevant psql variables to the given user's bash profile."""
 
     utilities.appendBashProfile(user, "export PGPORT=%s" % params.MASTER_PORT)
     utilities.appendBashProfile(user, "export PGUSER=%s" % params.hawq_user)
     utilities.appendBashProfile(user, "export PGDATABASE=%s" % params.DATABASE_NAME)
-
-def create_data_dirs(data_directories):
-    import params
-
-    Directory(
-        data_directories,
-        action="create",
-        mode=0755,
-        owner=params.hawq_user,
-        recursive=True
-    )
 
 def configure_kernel_parameters():
     if System.get_instance().os_family == "redhat" and int(OSCheck.get_os_major_version()) >= 6:
@@ -117,13 +102,15 @@ def is_running(pidFile):
     return utilities.is_process_running(pidFile, lambda filehandle: int(filehandle.readlines()[0]))
 
 def scan_installation_logs(logFile, minimum_error_level='info'):
-    """
-    Given a log file, return if there are any log lines with an error level above minimum_error_level.
-    """
-    logLevels = {'debug': 1, 'info': 2, 'warn': 3, 'error': 4, 'fatal': 5}
+    """Given a log file, return if there are any log lines with an error level above minimum_error_level."""
 
-    minimum_error_level = logLevels[minimum_error_level.lower()]
+    log_levels = {'debug': 1, 'info': 2, 'warn': 3, 'error': 4, 'fatal': 5}
+
+    if minimum_error_level.lower() not in log_levels:
+        raise ValueError('Invalid minimum_error_level value "%s".' % minimum_error_level.lower())
+
     error_lines = []
+    minimum_error_level = log_levels[minimum_error_level.lower()]
 
     with open(logFile, 'r') as filehandle:
         for line in filehandle.readlines():
@@ -131,32 +118,29 @@ def scan_installation_logs(logFile, minimum_error_level='info'):
             if len(matches) == 0:
                 continue
 
-            loglevel = logLevels[matches[0].lower()]
-            if loglevel > minimum_error_level:
+            line_log_level = matchs[0].lower()
+
+            if line_log_level not in log_levels or log_levels[line_log_level] > minimum_error_level:
                 error_lines.append(line)
 
-    # Don't care about the lines that say errors were found in logs, remove them
+    # Don't care about lines between sets of asterisks, are metadata and therefore don't need to be included.
     error_lines = remove_lines_between_dots_logs(error_lines)
 
     return error_lines
 
-def remove_lines_between_dots_logs(lines):
-    """
-    Given a set of lines from a log file, remove all lines in between lines of asterisks.
-    """
-    inDots = False
-    linesToDelete = []
-    for i in range(len(lines)):
-        lineIsDots = False
-        if re.match(r".*:-\*+$", lines[i]) != None:
-            inDots = not inDots
-            lineIsDots = True
+def remove_lines_between_delimiter(lines, delimiter=r".*:-\*+$"):
+    """Given a list of lines, remove all lines in between lines which match the given delimiter pattern, including the asterisks."""
 
-        if inDots or lineIsDots:
-            linesToDelete.append(i)
+    inside_delimiter = False
+    lines_outside_delimiter = []
 
-    linesToDelete.reverse()
-    for lineNumber in linesToDelete:
-        del lines[lineNumber]
+    for line in lines:
+        line_is_delimiter = re.match(delimiter, line) != None
 
-    return lines
+        if line_is_delimiter:
+            inside_delimiter = not inside_delimiter
+
+        if not inside_delimiter and not line_is_delimiter:
+            lines_outside_delimiter.append(line)
+
+    return lines_outside_delimiter

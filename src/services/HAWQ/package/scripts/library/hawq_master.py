@@ -53,7 +53,13 @@ def initialize():
     import params
 
     # Create master directory
-    hawq.create_data_dirs(params.MASTER_DIRECTORY)
+    Directory(
+        params.MASTER_DIRECTORY,
+        action="create",
+        mode=0755,
+        owner=params.hawq_user,
+        recursive=True
+    )
 
     # Create gpinitsystem_config file
     Directory(

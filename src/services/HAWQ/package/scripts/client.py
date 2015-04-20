@@ -6,7 +6,7 @@ from library import hawq_master, hawq
 class Client(Script):
     def install(self, env):
         import params
-        hawq.add_psql_environment_variables()
+        hawq.add_psql_environment_variables(params.hawq_user)
 
         # Create hadoop log directory for hawq user
         # This allows hdfs commands to be run as hawq user without errors
