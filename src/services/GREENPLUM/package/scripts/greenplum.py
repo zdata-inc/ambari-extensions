@@ -93,7 +93,7 @@ def master_install(env):
         logfile = logfile.group(1)
         Logger.info("Scanning log file: %s" % logfile)
 
-        log_file_errors = _scan_installation_logs(logfile)
+        log_file_errors = scan_installation_logs(logfile)
         if len(log_file_errors) > 0:
             Logger.error("Errors detected in logfile:")
 
@@ -173,13 +173,13 @@ def scan_installation_logs(logFile, minimum_error_level='info'):
             if len(matches) == 0:
                 continue
 
-            line_log_level = matchs[0].lower()
+            line_log_level = matches[0].lower()
 
             if line_log_level not in log_levels or log_levels[line_log_level] > minimum_error_level:
                 error_lines.append(line)
 
     # Don't care about lines between sets of asterisks, are metadata and therefore don't need to be included.
-    error_lines = remove_lines_between_dots_logs(error_lines)
+    error_lines = remove_lines_between_delimiter(error_lines)
 
     return error_lines
 
