@@ -5,6 +5,7 @@ from resource_management import *
 from resource_management.core.exceptions import ComponentIsNotRunning
 from ambari_commons import OSCheck
 import re
+import utilities
 
 def create_user():
     import params
