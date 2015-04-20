@@ -1,8 +1,6 @@
 ---
 layout: default
 title: Getting Setup With Vagrant
-
-blips: /moving-images/getting-setup-with-vagrant/blips.js
 ---
 
 ### Note Regarding Windows:
@@ -49,7 +47,7 @@ Now you need to define a cluster in Ambari, and install the needed components on
 
 4. First you'll need to name your cluster and select its stack.  The name can be anything, but for the stack we recommend 1.0.0.zData, as it's currently the only stack which can install HAWQ.
 
-    Next you will need to toggle down the 'Advanced Repository Options', and uncheck suse11.  You will also want to change the `Local-PHD-Repo` to the local repository containing Pivotal's PHD and PADS rpms.  For vagrant installations the creation of this repository is automatically done during provisioning by the [setup-repo.sh script](TODO LINK) so the Ambari server's domain can be used here (which is `http://master.ambaricluster.local` by default).
+    Next you will need to toggle down the 'Advanced Repository Options', and uncheck suse11.  You will also want to change the `Local-PHD-Repo` to the local repository containing Pivotal's PHD and PADS rpms.  For vagrant installations the creation of this repository is automatically done during provisioning by the [setup-repo.sh script](https://github.com/zdata-inc/ambari-stack/blob/master/build/setup-repo.sh) so the Ambari server's domain can be used here (which is `http://master.ambaricluster.local` by default).
 
 5. Next you'll need to input each of the machines to provision, as well as a private key which will allow you to login as root on each machine.  If you used vagrant to setup these machines their hostnames should be `slave1.ambaricluster.local`, `slave2.ambaricluster.local`, etc., and the private key will be located in the project's root as a file named private_key.
 
