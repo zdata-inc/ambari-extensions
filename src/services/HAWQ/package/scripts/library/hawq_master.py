@@ -74,7 +74,7 @@ def initialize():
 
     Execute(
         "hdfs dfs -mkdir hdfs://%s; hdfs dfs -chown %s:%s hdfs://%s;" % (params.DFS_URL, params.hawq_user, params.hawq_user, params.DFS_URL),
-        user="hdfs" # FIXME do not hardcode user!
+        user=params.DFS_NAME
     )
         
 
