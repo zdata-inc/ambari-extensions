@@ -1,13 +1,15 @@
-from os import path
-import urllib
-from resource_management import *
-from textwrap import dedent
 import sys
-import utilities
+import urllib
+from os import path
+from textwrap import dedent
+from resource_management import *
 import greenplum_installer
+import utilities
 from client import Client
 
 def preinstallation_configure(env):
+    """Should be run before installation on all hosts."""
+
     import params
 
     env.set_params(params)
@@ -28,6 +30,8 @@ def preinstallation_configure(env):
     )
 
 def master_install(env):
+    """Perform installation for master node."""
+
     import params
 
     distributedArchive = greenplum_installer.GreenplumDistributed.fromSource(params.installer_location, params.tmp_dir)
@@ -104,6 +108,8 @@ def master_install(env):
             Logger.warning(">>>>> The log file located at %s should be reviewed so any reported warnings can be fixed!" % logfile)
 
 def create_host_files():
+    """Create segment and all host files in greenplum absolute installation path."""
+
     import params
 
     # Create segment hosts file
@@ -119,6 +125,8 @@ def create_host_files():
     )
 
 def create_master_data_directory():
+    """Create the master data directory, append relevant environment variable to admin user."""
+
     import params
 
     Directory(
@@ -130,34 +138,34 @@ def create_master_data_directory():
 
     utilities.append_bash_profile(params.admin_user, 'export MASTER_DATA_DIRECTORY="%s";' % params.master_data_segment_directory)
 
-def create_gpinitsystem_config():
-    import params
+def create_gpinitsystem_config(user, destination):
+    """Create gpinitsystem_config file."""
 
     Directory(
-        path.dirname(params.greenplum_initsystem_config_file),
+        path.dirname(destination),
         action="create",
         recursive=True,
-        owner=params.admin_user
+        owner=user
     )
 
     TemplateConfig(
-        params.greenplum_initsystem_config_file,
-        owner=params.admin_user, mode=0644
+        destination,
+        owner=user, mode=0644
     )
-
 
 def is_running(pidFile):
     return utilities.is_process_running(pidFile, lambda filehandle: int(filehandle.readlines()[0]))
 
+def scan_installation_logs(logFile, minimum_error_level='info'):
+    """Given a log file, return if there are any log lines with an error level above minimum_error_level."""
 
-def _scan_installation_logs(logFile, minimum_error_level='info'):
-    """
-    Given a log file, return if there are any log lines with an error level above minimum_error_level.
-    """
-    logLevels = {'debug': 1, 'info': 2, 'warn': 3, 'error': 4, 'fatal': 5}
+    log_levels = {'debug': 1, 'info': 2, 'warn': 3, 'error': 4, 'fatal': 5}
 
-    minimum_error_level = logLevels[minimum_error_level.lower()]
+    if minimum_error_level.lower() not in log_levels:
+        raise ValueError('Invalid minimum_error_level value "%s".' % minimum_error_level.lower())
+
     error_lines = []
+    minimum_error_level = log_levels[minimum_error_level.lower()]
 
     with open(logFile, 'r') as filehandle:
         for line in filehandle.readlines():
@@ -165,32 +173,29 @@ def _scan_installation_logs(logFile, minimum_error_level='info'):
             if len(matches) == 0:
                 continue
 
-            loglevel = logLevels[matches[0].lower()]
-            if loglevel > minimum_error_level:
+            line_log_level = matchs[0].lower()
+
+            if line_log_level not in log_levels or log_levels[line_log_level] > minimum_error_level:
                 error_lines.append(line)
 
-    # Don't care about the lines that say errors were found in logs, remove them
-    error_lines = _remove_lines_between_dots_logs(error_lines)
+    # Don't care about lines between sets of asterisks, are metadata and therefore don't need to be included.
+    error_lines = remove_lines_between_dots_logs(error_lines)
 
     return error_lines
 
-def _remove_lines_between_dots_logs(lines):
-    """
-    Given a set of lines from a log file, remove all lines in between lines of asterisks.
-    """
-    inDots = False
-    linesToDelete = []
-    for i in range(len(lines)):
-        lineIsDots = False
-        if re.match(r".*:-\*+$", lines[i]) != None:
-            inDots = not inDots
-            lineIsDots = True
+def remove_lines_between_delimiter(lines, delimiter=r".*:-\*+$"):
+    """Given a list of lines, remove all lines in between lines which match the given delimiter pattern, including the asterisks."""
 
-        if inDots or lineIsDots:
-            linesToDelete.append(i)
+    inside_delimiter = False
+    lines_outside_delimiter = []
 
-    linesToDelete.reverse()
-    for lineNumber in linesToDelete:
-        del lines[lineNumber]
+    for line in lines:
+        line_is_delimiter = re.match(delimiter, line) != None
 
-    return lines
+        if line_is_delimiter:
+            inside_delimiter = not inside_delimiter
+
+        if not inside_delimiter and not line_is_delimiter:
+            lines_outside_delimiter.append(line)
+
+    return lines_outside_delimiter
