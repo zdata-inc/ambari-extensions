@@ -21,14 +21,14 @@ class Segment(Script):
         )
 
     def stop(self, env):
-        print 'Stop the Greenplum Segment'
+        print 'Cannot stop single segment host.  Can only stop the cluster via master.'
 
     def start(self, env):
         self.configure(env)
-        print 'Start the Greenplum Segment'
+        print 'Cannot start single segment host.  Can only start the cluster via master.'
 
     def configure(self, env):
-        print 'configure the Greenplum instance'
+        pass
 
     def status(self, env):
         import params

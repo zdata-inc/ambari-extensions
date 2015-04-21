@@ -20,10 +20,10 @@ class StandbyMaster(Script):
         self.install_packages(env)
 
     def start(self, env):
-        pass
+        print 'Cannot start only standby master.'
 
     def stop(self, env):
-        pass
+        print 'Cannot stop only standby master.'
 
     def configure(self, env):
         greenplum.create_host_files()
