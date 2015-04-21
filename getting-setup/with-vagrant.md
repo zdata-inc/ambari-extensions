@@ -77,4 +77,4 @@ Now you need to define a cluster in Ambari, and install the needed components on
 
 9. Now we're installing!  If everything goes to plan you'll have a fully provisioned cluster in just a few minutes!
 
-If you've made it this far you're ready to give your HAWQ cluster a test run!
+If you've made it this far you're ready to give your cluster a test run!
