@@ -20,15 +20,15 @@ def create_user():
     )
 
     # Source hawq functions for hawq admin, save to bash profile
-    utilities.appendBashProfile(params.hawq_user, "source %s;" % params.hawq_environment_path)
-    utilities.appendBashProfile(params.hawq_user, "export HADOOP_HOME=%s" % params.hadoop_home)
+    utilities.append_bash_profile(params.hawq_user, "source %s;" % params.hawq_environment_path)
+    utilities.append_bash_profile(params.hawq_user, "export HADOOP_HOME=%s" % params.hadoop_home)
 
 def add_psql_environment_variables(user):
     """Add relevant psql variables to the given user's bash profile."""
 
-    utilities.appendBashProfile(user, "export PGPORT=%s" % params.MASTER_PORT)
-    utilities.appendBashProfile(user, "export PGUSER=%s" % params.hawq_user)
-    utilities.appendBashProfile(user, "export PGDATABASE=%s" % params.DATABASE_NAME)
+    utilities.append_bash_profile(user, "export PGPORT=%s" % params.MASTER_PORT)
+    utilities.append_bash_profile(user, "export PGUSER=%s" % params.hawq_user)
+    utilities.append_bash_profile(user, "export PGDATABASE=%s" % params.DATABASE_NAME)
 
 def configure_kernel_parameters():
     if System.get_instance().os_family == "redhat" and int(OSCheck.get_os_major_version()) >= 6:

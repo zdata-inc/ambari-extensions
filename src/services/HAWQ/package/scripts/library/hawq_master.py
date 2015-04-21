@@ -14,7 +14,7 @@ def create_user():
     hawq.create_user()
 
     # Export master data directory environment variable
-    utilities.appendBashProfile(
+    utilities.append_bash_profile(
         params.hawq_user,
         "export MASTER_DATA_DIRECTORY=%s/gpseg-1" % params.MASTER_DIRECTORY,
         run=True
