@@ -46,7 +46,7 @@ class GreenplumDistributed(object):
         # Open and cache installer archive handler.
         return self.get_installer()
 
-    def __exit__(self):
+    def __exit__(self, type, value, trace):
         self.close()
 
     def __del__(self):
@@ -89,7 +89,7 @@ class GreenplumInstaller(object):
     def __enter__(self):
         return self.__get_archive()
 
-    def __exit__(self):
+    def __exit__(self, type, value, trace):
         self.close()
 
     def install_to(self, destination):
