@@ -1,3 +1,4 @@
+from __future__ import with_statement
 import sys
 import urllib
 from os import path
@@ -34,18 +35,18 @@ def master_install(env):
 
     import params
 
-    distributed_archive = greenplum_installer.GreenplumDistributed.from_source(params.installer_location, params.tmp_dir)
-    greenplum = distributed_archive.get_installer()
+    with greenplum_installer.GreenplumDistributed.from_source(params.installer_location, params.tmp_dir) as distributed_archive:
+        with distributed_archive.get_installer() as gp_install_script:
+            version_installation_path = path.join(params.installation_path, 'greenplum-db-%s' % gp_install_script.get_version())
 
-    version_installation_path = path.join(params.installation_path, 'greenplum-db-%s' % greenplum.get_version())
-    
-    Directory(
-        version_installation_path,
-        action="create",
-        owner=params.admin_user, mode=0755
-    )
+            Directory(
+                version_installation_path,
+                action="create",
+                owner=params.admin_user, mode=0755
+            )
 
-    greenplum.install_to(version_installation_path)
+            gp_install_script.install_to(version_installation_path)
+
 
     source_path_command = 'source %s;' % path.join(params.absolute_installation_path, 'greenplum_path.sh')
     greenplum_path_file = path.join(version_installation_path, 'greenplum_path.sh')
@@ -53,7 +54,7 @@ def master_install(env):
     post_copy_commands = format(dedent("""
         ln -s '{version_installation_path}' '{params.absolute_installation_path}';
         sed -i 's@^GPHOME=.*@GPHOME={version_installation_path}@' '{greenplum_path_file}';
-    """.strip()))
+    """).strip())
 
     # Run on master to allow gpseginstall to function correctly.
     Execute(post_copy_commands)
