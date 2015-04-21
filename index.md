@@ -20,6 +20,6 @@ The first option is to setup the entire cluster with [Vagrant](https://www.vagra
 [More instructions about how to install using Vagrant are available here.]({{ site.baseurl }}/getting-setup/with-vagrant.html)
 
 #### With Your Own Ambari Cluster
-The second option is to deploy the zData Ambari stack onto an existing Ambari installation your own hardware.  There are limitations with this option though: the cluster should be running CentOS 6, and while there can be other services running outside Ambari it is not recommended, or supported.
+The second option is to deploy the zData Ambari stack onto an existing Ambari installation using your own hardware.  There are limitations with this option though: the cluster should be running CentOS 6, and while there can be other services running outside Ambari, it is not recommended or supported.
 
 [More instructions about how to install on your own Ambari cluster are available here.]({{ site.baseurl }}/getting-setup/on-your-own-hardware.html)
