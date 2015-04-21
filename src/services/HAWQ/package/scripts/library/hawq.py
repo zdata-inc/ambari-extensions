@@ -33,7 +33,7 @@ def add_psql_environment_variables(user):
 
 def configure_kernel_parameters():
     if System.get_instance().os_family == "redhat" and int(OSCheck.get_os_major_version()) >= 6:
-        utilities.setKernelParameters({
+        utilities.set_kernel_parameters({
             'kernel.shmmax': '500000000',
             'kernel.shmmni': '4096',
             'kernel.shmall': '4000000000',
@@ -59,7 +59,7 @@ def configure_kernel_parameters():
             'net.core.wmem_max': '2097152'
         })
     else:
-        utilities.setKernelParameters({
+        utilities.set_kernel_parameters({
             'sysctl.kernel.shmmax': '500000000',
             'sysctl.kernel.shmmni': '4096',
             'sysctl.kernel.shmall': '4000000000',
