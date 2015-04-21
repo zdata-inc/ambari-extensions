@@ -16,6 +16,7 @@ class StandbyMaster(Script):
 
         greenplum.preinstallation_configure(env)
         greenplum.create_master_data_directory()
+        greenplum.add_psql_variables()
 
         self.install_packages(env)
 

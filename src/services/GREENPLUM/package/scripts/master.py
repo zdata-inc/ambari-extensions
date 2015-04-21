@@ -21,6 +21,7 @@ class Master(Script):
         greenplum.preinstallation_configure(env)
         greenplum.create_master_data_directory()
         greenplum.create_gpinitsystem_config(params.admin_user, params.greenplum_initsystem_config_file)
+        greenplum.add_psql_variables()
 
         greenplum.master_install(env)
 

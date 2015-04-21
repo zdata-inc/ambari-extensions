@@ -6,7 +6,6 @@ from textwrap import dedent
 from resource_management import *
 import greenplum_installer
 import utilities
-from client import Client
 
 def preinstallation_configure(env):
     """Should be run before installation on all hosts."""
@@ -67,8 +66,6 @@ def master_install(env):
 
     # Perform post_copy_commands on rest of machines in cluster.
     Execute(source_path_command + utilities.gpsshify(post_copy_commands, hostfile=params.greenplum_all_hosts_file))
-
-    Client().install(env)
 
     try:
         gpinitsystemCommand = ['gpinitsystem', '-a', '-c "%s"' % params.greenplum_initsystem_config_file]
@@ -153,6 +150,16 @@ def create_gpinitsystem_config(user, destination):
         destination,
         owner=user, mode=0644
     )
+
+def add_psql_variables(user=None):
+    import params
+
+    if user == None:
+        user = params.admin_user
+
+    utilities.append_bash_profile(user, "source %s;" % path.join(params.absolute_installation_path, 'greenplum_path.sh'))
+    utilities.append_bash_profile(user, 'export PGPORT="%s";' % params.master_port)
+    utilities.append_bash_profile(user, 'export PGDATABASE="%s";' % params.database_name)
 
 def is_running(pid_file):
     return utilities.is_process_running(pid_file, lambda filehandle: int(filehandle.readlines()[0]))
