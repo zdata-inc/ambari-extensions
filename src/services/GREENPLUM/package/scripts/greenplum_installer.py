@@ -29,6 +29,16 @@ class GreenplumDistributed(object):
         self.__path = path
         self.__archive = None
 
+    def __enter__(self):
+        # Open and cache installer archive handler.
+        return self.get_installer()
+
+    def __exit__(self):
+        self.close()
+
+    def __del__(self):
+        self.close()
+
     def get_installer(self):
         installer_file = GreenplumInstaller.find_installer_name(self.__get_archive().infolist())
 
@@ -42,9 +52,6 @@ class GreenplumDistributed(object):
     def close(self):
         if self.__archive != None:
             self.__archive.close()
-
-    def __del__(self):
-        self.close()
 
     def __get_archive(self):
         if self.__archive == None:
@@ -65,6 +72,12 @@ class GreenplumInstaller(object):
         self.__fileContents = fileContents
         self.__version = self.__parse_version(filename)
 
+    def __enter__(self):
+        return self.__get_archive()
+
+    def __exit__(self):
+        self.close()
+
     def install_to(self, destination):
         archive = self.__get_archive()
         archive.extractall(destination)
@@ -76,12 +89,9 @@ class GreenplumInstaller(object):
     def get_version(self):
         return self.__version
 
-    def get_file_contents(self):
-        if self.__fileContents == None:
-            with open(self.__filename, 'r') as filehandle:
-                self.__fileContents = filehandle.read()
-
-        return self.__fileContents
+    def close(self):
+        if self.__archive != None:
+            self.__archive.close()
 
     def __get_archive(self):
         installer_script_stream = StringIO(self.get_file_contents())
