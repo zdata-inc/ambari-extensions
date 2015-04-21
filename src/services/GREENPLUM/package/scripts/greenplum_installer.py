@@ -44,7 +44,7 @@ class GreenplumDistributed(object):
 
     def __enter__(self):
         # Open and cache installer archive handler.
-        return self.get_installer()
+        return self
 
     def __exit__(self, type, value, trace):
         self.close()
@@ -85,9 +85,10 @@ class GreenplumInstaller(object):
         self.__filename = filename
         self.__fileContents = file_contents
         self.__version = self.__parse_version(filename)
+        self.__archive = None
 
     def __enter__(self):
-        return self.__get_archive()
+        return self
 
     def __exit__(self, type, value, trace):
         self.close()
@@ -107,7 +108,12 @@ class GreenplumInstaller(object):
         if self.__archive != None:
             self.__archive.close()
 
+        self.__archive = None
+
     def __get_archive(self):
+        if self.__archive != None:
+            return self.__archive
+
         installer_script_stream = StringIO(self.__get_installer_as_string())
 
         # Seek to the line before the archive's binary data starts.
@@ -121,7 +127,9 @@ class GreenplumInstaller(object):
             raise StandardError('Could not find archive contents, archive extraction failed.')
 
         # Return a TarFile of the remaining lines in the installer script.
-        return tarfile.open(fileobj = installer_script_stream, mode = "r:gz")
+        self.__archive = tarfile.open(fileobj = installer_script_stream, mode = "r:gz")
+
+        return self.__archive
 
     def __get_installer_as_string(self):
         if self.__fileContents == None:
