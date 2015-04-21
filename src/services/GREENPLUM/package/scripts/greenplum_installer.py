@@ -8,7 +8,19 @@ import urllib
 
 class GreenplumDistributed(object):
     @staticmethod
-    def fromSource (installer_path, tmp_dir):
+    def from_source(installer_path, tmp_dir=None):
+        """Create a GreenplumDistributed from a source path.
+
+        installer_path -- Path to the distributed zip archive.
+        tmp_dir -- Temporary directory to store the archive if it needs to be downloaded from a URL.  Optional.
+
+        The installer_path can be either a local filepath or URL (one which can be downloaded by urllib).
+        """
+
+        if tmp_dir == None:
+            import tempfile
+            tmp_dir = tempfile.mkdtemp()
+
         # Attempt to locate locallay
         if path.exists(installer_path):
             return GreenplumDistributed(installer_path)

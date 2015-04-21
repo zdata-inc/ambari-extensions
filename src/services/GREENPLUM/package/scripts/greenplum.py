@@ -34,10 +34,10 @@ def master_install(env):
 
     import params
 
-    distributedArchive = greenplum_installer.GreenplumDistributed.fromSource(params.installer_location, params.tmp_dir)
-    greenplumInstaller = distributedArchive.get_installer()
+    distributed_archive = greenplum_installer.GreenplumDistributed.from_source(params.installer_location, params.tmp_dir)
+    greenplum = distributed_archive.get_installer()
 
-    version_installation_path = path.join(params.installation_path, 'greenplum-db-%s' % greenplumInstaller.get_version())
+    version_installation_path = path.join(params.installation_path, 'greenplum-db-%s' % greenplum.get_version())
     
     Directory(
         version_installation_path,
@@ -45,7 +45,7 @@ def master_install(env):
         owner=params.admin_user, mode=0755
     )
 
-    greenplumInstaller.install_to(version_installation_path)
+    greenplum.install_to(version_installation_path)
 
     source_path_command = 'source %s;' % path.join(params.absolute_installation_path, 'greenplum_path.sh')
     greenplum_path_file = path.join(version_installation_path, 'greenplum_path.sh')
@@ -153,8 +153,8 @@ def create_gpinitsystem_config(user, destination):
         owner=user, mode=0644
     )
 
-def is_running(pidFile):
-    return utilities.is_process_running(pidFile, lambda filehandle: int(filehandle.readlines()[0]))
+def is_running(pid_file):
+    return utilities.is_process_running(pid_file, lambda filehandle: int(filehandle.readlines()[0]))
 
 def scan_installation_logs(logFile, minimum_error_level='info'):
     """Given a log file, return if there are any log lines with an error level above minimum_error_level."""
