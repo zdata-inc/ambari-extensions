@@ -1,0 +1,21 @@
+package = @PACKAGE_NAME@
+version = @PACKAGE_VERSION@
+tarname = @PACKAGE_TARNAME@
+distdir = $(tarname)-$(version)
+stackversion=zData.$(version)
+
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+bindir = @bindir@
+
+tmp_dir:=$(shell mktemp -d)
+
+AMBARI_PATH?=@AMBARI_PATH@
+AMBARI_STACK?=@AMBARI_STACK@
+
+install: $(distdir)
+	mkdir $(AMBARI_PATH)/$(AMBARI_STACK)/$(stackversion)
+	cp -r . $(AMBARI_PATH)/$(AMBARI_STACK)/$(stackversion)
+
+uninstall:
+	rm -rf $(AMBARI_PATH)/$(AMBARI_STACK)/$(stackversion);

@@ -1,0 +1,43 @@
+package=@PACKAGE_NAME@
+version=@PACKAGE_VERSION@
+tarname=@PACKAGE_TARNAME@
+distdir=$(tarname)-$(version)
+stackversion=zData.$(version)
+
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+bindir = @bindir@
+
+tmp_dir:=$(shell mktemp -d)
+
+ambari_path="/var/lib/ambari-server/resources/stacks"
+ambari_stack="HDP"
+
+src=$(shell find src -type f \
+	-not -name '.hash' \
+	-not -name 'archive.zip' \
+	-not -path '*/.git/*' \
+	-not -path '*/.*' \
+	-not -path '*/.vagrant/*' \
+)
+
+dist: $(distdir).tar.gz
+
+$(distdir).tar.gz: $(distdir)
+	cd "$(tmp_dir)" ;\
+		tar cof - $(distdir) |\
+			gzip -9 -c > $(shell pwd)/$(distdir).tar.gz
+
+$(distdir): $(src)
+	mkdir -p $(tmp_dir)/$(distdir)
+	cp --parents $? $(tmp_dir)/$(distdir)
+	mv $(tmp_dir)/$(distdir)/src/* $(tmp_dir)/$(distdir) && rm -r $(tmp_dir)/$(distdir)/src
+
+clean:
+	rm -rf $(tmp_dir)
+
+Makefile: Makefile.in config.status
+	./config.status Makefile
+
+config.status: configure
+	./config.status --recheck
