@@ -1,45 +1,52 @@
-from os import path
-import os
-import io
-import re
+from __future__ import with_statement
+import os, re
+import urllib
 import zipfile, tarfile
+import shutil
+import tempfile
 import functools
 from StringIO import StringIO
-import urllib
+from resource_management import *
 
 class GreenplumDistributed(object):
     @staticmethod
-    def from_source(installer_path, tmp_dir=None):
+    def make_tmpfile(tmp_dir=None):
+        filehandle, tmp_path = tempfile.mkstemp(dir=tmp_dir)
+        os.close(filehandle) # Don't need access to the file
+        return tmp_path
+
+    @classmethod
+    def from_source(cls, installer_path, tmp_dir=None):
         """Create a GreenplumDistributed from a source path.
 
         installer_path -- Path to the distributed zip archive.
-        tmp_dir -- Temporary directory to store the archive if it needs to be downloaded from a URL.  Optional.
+        tmp_dir -- Where to store temporary files.  Uses system temporary directory by default.
 
         The installer_path can be either a local filepath or URL (one which can be downloaded by urllib).
         """
-
-        if tmp_dir == None:
-            import tempfile
-            tmp_dir = tempfile.mkdtemp()
+        tmp_path = cls.make_tmpfile(tmp_dir)
 
         # Attempt to locate locallay
-        if path.exists(installer_path):
+        if os.path.exists(installer_path):
             return GreenplumDistributed(installer_path)
 
         # Attempt to download URL
         try:
-            tmp_path = path.join(tmp_dir, 'greenplum-db.zip')
+            Logger.info('Downloading Greenplum from %s to %s.' % (installer_path, tmp_path))
             urllib.urlretrieve(installer_path, tmp_path)
 
-            return GreenplumDistributed(tmp_path)
+            return GreenplumDistributed(tmp_path, True)
         except IOError:
             pass
 
         # Default to erroring if none of the above retrieval methods were successful.
-        raise LookupError('Could not find greenplum installer at %s' % installer_path)
+        raise ValueError('Could not find greenplum installer at %s' % installer_path)
 
-    def __init__(self, path):
-        self.__path = path
+    def __init__(self, file_path, is_temporary=False):
+        # If the archive is temporary or not.  If it is it'll be removed during cleanup.
+        self.__delete_archive_on_close = is_temporary
+
+        self.__file_path = file_path
         self.__archive = None
 
     def __enter__(self):
@@ -52,6 +59,10 @@ class GreenplumDistributed(object):
     def __del__(self):
         self.close()
 
+        if self.__delete_archive_on_close and os.path.exists(self.__file_path):
+            Logger.info('Removing temporary Greenplum file %s.' % self.__file_path)
+            os.remove(self.__file_path)
+
     def get_installer(self):
         installer_file = GreenplumInstaller.find_installer_name(map(lambda fileinfo: fileinfo.filename, self.__get_archive().infolist()))
 
@@ -59,8 +70,15 @@ class GreenplumDistributed(object):
             raise StandardError('Incorrect number of installer scripts found in referenced greenplum installation archive.  Found %s, expected 1.  Scripts found: ' % (len(installer_file), ", ".join(installer_file)))
 
         installer_file = installer_file[0]
+        installer_tmp_file = self.make_tmpfile()
 
-        return GreenplumInstaller(installer_file, self.__get_archive().read(installer_file))
+        # Extract installer file to a temporary file.
+        # Can't use extract as it attempts to keep the compressed file's name.
+        with file(installer_tmp_file, 'wb') as target:
+            source = self.__get_archive().open(installer_file)
+            shutil.copyfileobj(source, target)
+
+        return GreenplumInstaller(installer_file, installer_tmp_file, True)
 
     def close(self):
         if self.__archive != None:
@@ -68,7 +86,7 @@ class GreenplumDistributed(object):
 
     def __get_archive(self):
         if self.__archive == None:
-            self.__archive = zipfile.ZipFile(self.__path, 'r')
+            self.__archive = zipfile.ZipFile(self.__file_path, 'r')
 
         return self.__archive
 
@@ -81,10 +99,11 @@ class GreenplumInstaller(object):
 
         return filter(functools.partial(lambda cls, filename: cls.INSTALLER_SCRIPT_FILE_REGEX.search(filename) != None, cls), filelist)
 
-    def __init__(self, filename, file_contents = None):
+    def __init__(self, filename, file_path = None, is_temporary=False):
         self.__filename = filename
-        self.__fileContents = file_contents
+        self.__file_path = file_path
         self.__version = self.__parse_version(filename)
+        self.__delete_archive_on_close = is_temporary
         self.__archive = None
 
     def __enter__(self):
@@ -93,10 +112,16 @@ class GreenplumInstaller(object):
     def __exit__(self, type, value, trace):
         self.close()
 
+    def __del__(self):
+        self.close()
+
+        if self.__delete_archive_on_close and os.path.exists(self.__file_path):
+            Logger.info('Removing temporary Greenplum file %s.' % self.__file_path)
+            os.remove(self.__file_path)
+
     def install_to(self, destination):
         archive = self.__get_archive()
         archive.extractall(destination)
-        archive.close()
 
     def get_name(self):
         return self.__filename
@@ -114,7 +139,7 @@ class GreenplumInstaller(object):
         if self.__archive != None:
             return self.__archive
 
-        installer_script_stream = StringIO(self.__get_installer_as_string())
+        installer_script_stream = self.__get_installer_stream()
 
         # Seek to the line before the archive's binary data starts.
         seekedToLine = False
@@ -131,12 +156,8 @@ class GreenplumInstaller(object):
 
         return self.__archive
 
-    def __get_installer_as_string(self):
-        if self.__fileContents == None:
-            with open(self.__filename, 'r') as filehandle:
-                self.__fileContents = filehandle.read()
-
-        return self.__fileContents
+    def __get_installer_stream(self):
+        return open(self.__file_path, 'r')
 
     def __parse_version(self, filename):
         try:
