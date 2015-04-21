@@ -59,7 +59,7 @@ Now you need to define a cluster in Ambari, and install the needed components on
 
     Next you will need to toggle down the 'Advanced Repository Options', and uncheck suse11.  You will also want to change the `Local-PHD-Repo` to the local repository containing Pivotal's PHD and PADS rpms.  For vagrant installations the creation of this repository is automatically done during provisioning by the [setup-repo.sh script](https://github.com/zdata-inc/ambari-stack/blob/master/build/setup-repo.sh) so the Ambari server's domain can be used here (which is `http://master.ambaricluster.local` by default).
 
-5. Next you'll need to input each of the machines to provision, as well as a private key which will allow you to login as root on each machine.  If you used vagrant to setup these machines their hostnames should be `master.ambaricluster.local`, `slave1.ambaricluster.local`, `slave2.ambaricluster.local`, etc., and the private key will be located in `keys/private_key` relative to the project root.
+5. Next you'll need to input each of the machines to provision, as well as a private key which will allow you to login as root on each machine.  Vagrant configures the hostnames automatically to be `master.ambaricluster.local`, `slave1.ambaricluster.local`, `slave2.ambaricluster.local`, etc., and the private key will be located in `keys/private_key` relative to the project root.
 
     Normally you would provision the same server you have Ambari installed on, but because of the limited number of virtual machines that can be run at a time we'll use the master host as well as the slaves for the cluster.  After you click Next, you'll see progress indicators showing the registration of the machines, and the installation of the Ambari agents.
 
@@ -71,9 +71,9 @@ Now you need to define a cluster in Ambari, and install the needed components on
 
     For Nagios, you must input information to create an admin account, as well as an email for alerts to be sent to.
 
-    For HAWQ, you must input at least the password for the HAWQ administration user and the url for the hdfs namenode.  If you're using vagrant that url will be: `hdfs://master.ambaricluster.local:8020`.
+    For HAWQ, you must input at least the password for the HAWQ administration user and the url for the hdfs namenode.  With Vagrant that url will be: `hdfs://master.ambaricluster.local:8020`.
 
-    For Greenplum, you must accept the license agreement, input a admin user password, and give a path to the location of the Greenplum installation zip archive (can be downloaded from Pivotal.
+    For Greenplum, you must accept the license agreement, input a admin user password, and give a path to the location of the Greenplum installation zip archive (the one downloaded in installation's step 2).  The archive's path should be `/vagrant/artifacts/{GreenplumArchiveName}.zip` for the master node.
 
 9. Now we're installing!  If everything goes to plan you'll have a fully provisioned cluster in just a few minutes!
 
