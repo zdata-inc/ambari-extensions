@@ -21,7 +21,7 @@ def preinstallation_configure(env):
         action="create", shell="/bin/bash"
     )
 
-    utilities.set_kernel_parameters(utilities.get_configuration_file('system-variables'));
+    utilities.set_kernel_parameters(utilities.get_configuration_file('system-variables'))
 
     TemplateConfig(
         params.security_conf_file,

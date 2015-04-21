@@ -3,6 +3,7 @@ import os
 import io
 import re
 import zipfile, tarfile
+import functools
 from StringIO import StringIO
 import urllib
 
@@ -52,14 +53,14 @@ class GreenplumDistributed(object):
         self.close()
 
     def get_installer(self):
-        installer_file = GreenplumInstaller.find_installer_name(self.__get_archive().infolist())
+        installer_file = GreenplumInstaller.find_installer_name(map(lambda fileinfo: fileinfo.filename, self.__get_archive().infolist()))
 
         if len(installer_file) != 1:
-            raise StandardError('Incorrect number of .bin files found in referenced greenplum installation archive.  Found %s, expected 1.' % len(installer_file))
+            raise StandardError('Incorrect number of installer scripts found in referenced greenplum installation archive.  Found %s, expected 1.  Scripts found: ' % (len(installer_file), ", ".join(installer_file)))
 
         installer_file = installer_file[0]
 
-        return GreenplumInstaller(installer_file.filename, self.__get_archive().read(installer_file))        
+        return GreenplumInstaller(installer_file, self.__get_archive().read(installer_file))
 
     def close(self):
         if self.__archive != None:
@@ -72,16 +73,17 @@ class GreenplumDistributed(object):
         return self.__archive
 
 class GreenplumInstaller(object):
-    @staticmethod
-    def find_installer_name(filelist):
-        """
-        Given a list of ZipFileInfo objects, return the ones which would install greenplum.
-        """
-        return filter(lambda f: f.filename.endswith('.bin'), filelist)
+    INSTALLER_SCRIPT_FILE_REGEX = re.compile(r"greenplum-db-(?P<version>[0-9\.]+)[^/]+\.bin$")
 
-    def __init__(self, filename, fileContents = None):
+    @classmethod
+    def find_installer_name(cls, filelist):
+        """Given a list of filenames, return the ones which would install greenplum."""
+
+        return filter(functools.partial(lambda cls, filename: cls.INSTALLER_SCRIPT_FILE_REGEX.search(filename) != None, cls), filelist)
+
+    def __init__(self, filename, file_contents = None):
         self.__filename = filename
-        self.__fileContents = fileContents
+        self.__fileContents = file_contents
         self.__version = self.__parse_version(filename)
 
     def __enter__(self):
@@ -106,7 +108,7 @@ class GreenplumInstaller(object):
             self.__archive.close()
 
     def __get_archive(self):
-        installer_script_stream = StringIO(self.get_file_contents())
+        installer_script_stream = StringIO(self.__get_installer_as_string())
 
         # Seek to the line before the archive's binary data starts.
         seekedToLine = False
@@ -121,10 +123,17 @@ class GreenplumInstaller(object):
         # Return a TarFile of the remaining lines in the installer script.
         return tarfile.open(fileobj = installer_script_stream, mode = "r:gz")
 
+    def __get_installer_as_string(self):
+        if self.__fileContents == None:
+            with open(self.__filename, 'r') as filehandle:
+                self.__fileContents = filehandle.read()
+
+        return self.__fileContents
+
     def __parse_version(self, filename):
         try:
-            matches = re.search(r"greenplum-db-([0-9\.]+)[^/]+\.bin", filename)
+            matches = self.INSTALLER_SCRIPT_FILE_REGEX.search(filename)
 
-            return matches.group(1)
+            return matches.group('version')
         except StandardError:
             raise StandardError('Could not parse greenplum version from given filename %s' % filename)
