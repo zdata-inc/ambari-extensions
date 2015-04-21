@@ -16,14 +16,17 @@ class Slave(Script):
     TemplateConfig(
       params.pxf_public_classpath,
     )
-
+            
     Execute("service pxf-service init")
 
   def stop(self, env):
     Execute("service pxf-service stop")
 
   def start(self, env):
-    Execute("service pxf-service start")
+    try: 
+        self.status(env)
+    except ComponentIsNotRunning:
+        Execute("service pxf-service start")
 
   def status(self, env):
     import params
