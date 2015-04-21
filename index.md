@@ -6,13 +6,13 @@ title: zData Ambari Stack
 What is the zData Ambari Stack?
 -------------------------------
 
-Ambari is an Apache sponsored project whose goal is to make provisioning, managing, and monitoring of Apache Hadoop deployments easy.  The zData stack builds atop Ambari and provides easy deployment of Greenplum and HAWQ.
+Ambari is an Apache sponsored project whose goal is to make provisioning, managing, and monitoring of Apache Hadoop and other distributed deployments easy.  The zData stack builds on top of Ambari and provides easy deployment of Pivotal Greenplum, Pivotal HAWQ, and OpenChorus.
 
 
 Getting Setup
 -------------
 
-Currently there are two different wasy to get started with the zData Ambari stack.
+Currently there are two different ways to get started with the zData Ambari stack.
 
 #### With Vagrant
 The first option is to setup the entire cluster with [Vagrant](https://www.vagrantup.com/) either locally or remotely (using one of Vagrant's cloud plugins such as [Vagrant AWS](https://github.com/mitchellh/vagrant-aws).
