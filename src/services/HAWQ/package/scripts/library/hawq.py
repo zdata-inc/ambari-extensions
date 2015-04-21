@@ -26,6 +26,7 @@ def create_user():
 def add_psql_environment_variables(user):
     """Add relevant psql variables to the given user's bash profile."""
 
+    import params
     utilities.append_bash_profile(user, "export PGPORT=%s" % params.MASTER_PORT)
     utilities.append_bash_profile(user, "export PGUSER=%s" % params.hawq_user)
     utilities.append_bash_profile(user, "export PGDATABASE=%s" % params.DATABASE_NAME)
