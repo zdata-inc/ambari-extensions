@@ -53,20 +53,20 @@
             <osSpecifics>
                 <osSpecific>
                     <osFamily>any</osFamily>
-                       <packages>
-                          <package>
-                              <name>hawq</name>
-                          </package>
-                          <package>
-                              <name>ed</name>
-                          </package>
-                       </packages>
-                    </osSpecific>
+                    <packages>
+                        <package>
+                            <name>hawq</name>
+                        </package>
+                        <package>
+                            <name>ed</name>
+                        </package>
+                    </packages>
+                </osSpecific>
             </osSpecifics>
 
             <requiredServices>
-              <service>HDFS</service>
-              <service>PXF</service>
+                <service>HDFS</service>
+                <service>PXF</service>
             </requiredServices>
 
             <configuration-dependencies>
