@@ -94,11 +94,6 @@ def configure_security_limits():
         owner=params.hawq_user, mode=0644
     )
 
-def configure_mount_options():
-    # TODO Not implemented
-    raise StandardError('Not implemented.')
-    pass
-
 def is_running(pidFile):
     return utilities.is_process_running(pidFile, lambda filehandle: int(filehandle.readlines()[0]))
 
