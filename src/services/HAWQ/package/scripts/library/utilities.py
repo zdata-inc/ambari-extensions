@@ -59,6 +59,34 @@ def set_kernel_parameter(name, value, logoutput=True):
         if logoutput:
             Logger.info(" ".join(log_line))
 
+def gpsshify(command, host=None, hostfile=None, args=None):
+    """Return a gpssh command which will run the given command on the specified remote machines in the cluster.
+
+    command -- Command or commands which will be run on remote machines in the cluster.
+    host -- A remote host to run the command on.
+    hostfile -- The path to a file containing a list of hosts to run the command on.
+    args -- Additional arguments to append to the gpssh command.
+    """
+
+    if host == None and hostfile == None:
+        raise ValueError('Either host or hostfile must be given')
+
+    arguments = []
+    if host != None:
+        arguments.append('-h "%s"' % host)
+    if hostfile != None:
+        arguments.append('-f "%s"' % hostfile)
+    if args != None:
+        arguments.append(args)
+
+    arguments = " ".join(arguments)
+
+    return format(dedent("""
+        cat <<EOF | gpssh {arguments}
+            {command}
+        EOF
+    """.rstrip()))
+
 def random_string(length, character_set=None):
     """Generate a random string.
 
@@ -115,3 +143,8 @@ def is_process_running(pid_file, pid_parser=None):
         return False
 
     return True
+
+def call(*argv, **kwargs):
+    def call_fn(fn):
+        return fn(*argv, **kwargs)
+    return call_fn
