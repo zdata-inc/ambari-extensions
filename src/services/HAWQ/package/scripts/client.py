@@ -17,8 +17,11 @@ class Client(Script):
             owner=params.hawq_user
         )
 
-def configure(self, env):
-    pass
+    def configure(self, env):
+        pass
+
+    def status(self, env):
+        pass
 
 if __name__ == "__main__":
     Client().execute()
