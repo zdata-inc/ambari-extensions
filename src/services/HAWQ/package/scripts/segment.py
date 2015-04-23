@@ -27,7 +27,7 @@ class Slave(Script):
             raise ComponentIsNotRunning()
 
     def configure(self, env):
-        print 'Configure the Sample Srv Slave';
+        pass
 
 if __name__ == "__main__":
   Slave().execute()

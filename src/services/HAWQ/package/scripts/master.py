@@ -16,6 +16,8 @@ class Master(Script):
         env.set_params(params)
 
         hawq_master.create_user()
+        hawq.add_psql_environment_variables(params.hawq_user)
+
         hawq_master.create_host_files()
         hawq_master.exchange_keys()
 
@@ -40,7 +42,7 @@ class Master(Script):
             raise ComponentIsNotRunning()
 
     def configure(self, env):
-        print 'Configure the Hawq Master';
+        pass
 
 if __name__ == "__main__":
     Master().execute()
