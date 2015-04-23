@@ -21,11 +21,7 @@ def create_user():
     )
 
     # Set owner of hawq directory to hawq user
-    Execute(format("chown -R {params.hawq_user} {params.hawq_install_path}"))
-
-    # Source hawq functions for root as well
-    Execute("source %s" % params.hawq_environment_path)
-
+    Execute(('chown', '-R', params.hawq_user, params.hawq_install_path))
 
 def exchange_keys():
     import params
@@ -78,11 +74,11 @@ def initialize():
     # Fixes issue #5
     Execute("sed -i 's/GP_CHECK_HDFS=.*/GP_CHECK_HDFS=echo/' /usr/local/hawq/bin/lib/gp_bash_functions.sh")
 
-    Execute(
-        "hdfs dfs -mkdir hdfs://%s; hdfs dfs -chown %s:%s hdfs://%s;" % (params.DFS_URL, params.hawq_user, params.hawq_user, params.DFS_URL),
-        user=params.DFS_NAME
-    )
-        
+    Execute("""
+        hdfs dfs -mkdir hdfs://{params.DFS_URL};
+        hdfs dfs -chown {params.hawq_user}:{params.hawq_group} hdfs://{params.DFS_URL};""",
+        user=params.dfs_superuser
+    )   
 
     try:
         Execute(

@@ -13,7 +13,7 @@ def create_user():
     # Add Hawq User
     User(
         params.hawq_user,
-        groups=["hdfs"],
+        groups=[params.dfs_supergroup],
         password=params.hashed_hawq_password,
         action="create",
         shell="/bin/bash"

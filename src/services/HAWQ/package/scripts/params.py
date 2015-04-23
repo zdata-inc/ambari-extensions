@@ -10,6 +10,9 @@ hawq_user = config["configurations"]["hawq-env"]["hawq_user"]
 hawq_password = config["configurations"]["hawq-env"]["hawq_password"]
 hashed_hawq_password = utilities.crypt_password(hawq_password)
 
+dfs_superuser = config["configurations"]["hdfs-site"]["dfs.cluster.administrators"].strip()
+dfs_supergroup = config["configurations"]["hdfs-site"]["dfs.permissions.superusergroup"]
+
 # Important paths, directories, and files
 hawq_install_path = "/usr/local/hawq/"
 hawq_environment_path = path.join(hawq_install_path, "greenplum_path.sh")
@@ -19,9 +22,9 @@ sysctl_conf_file = "/etc/sysctl.conf"
 security_conf_file = "/etc/security/limits.d/hawq.conf"
 MASTER_DIRECTORY = config["configurations"]["hawq-env"]["MASTER_DIRECTORY"]
 DATA_DIRECTORY = config["configurations"]["hawq-env"]["DATA_DIRECTORY"]
-gpconfigs_path = "/home/"+hawq_user+"/gpconfigs/"
-gpinitsystem_config_path = gpconfigs_path+"gpinitsystem_config"
 hadoop_home = config["configurations"]["hawq-env"]["hadoop_home"]
+gpconfigs_path = path.join("/home", hawq_user, "gpconfigs")
+gpinitsystem_config_path = path.join(gpconfigs_path, "gpinitsystem_config")
 
 # Host info
 hawq_master_hosts = default("/clusterHostInfo/hawq_master_hosts",[])
@@ -44,10 +47,11 @@ TRUSTED_SHELL = config["configurations"]["hawq-env"]["TRUSTED_SHELL"]
 CHECK_POINT_SEGMENTS = config["configurations"]["hawq-env"]["CHECK_POINT_SEGMENTS"]
 ENCODING = config["configurations"]["hawq-env"]["ENCODING"]
 DATABASE_NAME = config["configurations"]["hawq-env"]["DATABASE_NAME"]
-DFS_NAME = config["configurations"]["hawq-env"]["DFS_NAME"]
-DFS_URL = config["configurations"]["hawq-env"]["DFS_URL"]
 KERBEROS_KEYFILE = config["configurations"]["hawq-env"]["KERBEROS_KEYFILE"]
 ENABLE_SECURE_FILESYSTEM = config["configurations"]["hawq-env"]["ENABLE_SECURE_FILESYSTEM"]
+
+DFS_NAME = config["configurations"]["hawq-env"]["DFS_NAME"]
+DFS_URL = config["configurations"]["core-site"]["fs.defaultFS"].replace("hdfs://", "")
 
 # Pids
 hawq_master_pid_path = path.join(MASTER_DIRECTORY, SEG_PREFIX + '-1/postmaster.pid')
