@@ -10,8 +10,6 @@ hawq_user = config["configurations"]["hawq-env"]["hawq_user"]
 hawq_password = config["configurations"]["hawq-env"]["hawq_password"]
 hashed_hawq_password = utilities.crypt_password(hawq_password)
 
-dfs_superuser = config["configurations"]["hdfs-site"]["dfs.cluster.administrators"].strip()
-dfs_supergroup = config["configurations"]["hdfs-site"]["dfs.permissions.superusergroup"]
 
 # Important paths, directories, and files
 hawq_install_path = "/usr/local/hawq/"
@@ -51,8 +49,14 @@ KERBEROS_KEYFILE = config["configurations"]["hawq-env"]["KERBEROS_KEYFILE"]
 ENABLE_SECURE_FILESYSTEM = config["configurations"]["hawq-env"]["ENABLE_SECURE_FILESYSTEM"]
 
 DFS_NAME = config["configurations"]["hawq-env"]["DFS_NAME"]
-DFS_URL = config["configurations"]["core-site"]["fs.defaultFS"].replace("hdfs://", "")
+DFS_DIRECTORY = 'hawq_data'
 
-# Pids
-hawq_master_pid_path = path.join(MASTER_DIRECTORY, SEG_PREFIX + '-1/postmaster.pid')
-hawq_slave_glob = "/data[0-9]/primary/gpseg[0-9]"
+if config["commandType"] == 'EXECUTION_COMMAND':
+    dfs_superuser = config["configurations"]["hdfs-site"]["dfs.cluster.administrators"].strip()
+    dfs_supergroup = config["configurations"]["hdfs-site"]["dfs.permissions.superusergroup"]
+    DFS_URL = config["configurations"]["core-site"]["fs.defaultFS"].replace("hdfs://", "")
+    DFS_URI = path.join(DFS_URL, DFS_DIRECTORY)
+
+# Pid files
+master_pid_path = path.join(MASTER_DIRECTORY, SEG_PREFIX + '-1', 'postmaster.pid')
+slave_pid_globs = map(lambda pid_path: path.join(pid_path, SEG_PREFIX + '[0-9]', 'postmaster.pid'), DATA_DIRECTORY.split(' '))

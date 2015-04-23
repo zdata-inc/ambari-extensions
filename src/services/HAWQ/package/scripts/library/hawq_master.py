@@ -74,9 +74,9 @@ def initialize():
     # Fixes issue #5
     Execute("sed -i 's/GP_CHECK_HDFS=.*/GP_CHECK_HDFS=echo/' /usr/local/hawq/bin/lib/gp_bash_functions.sh")
 
-    Execute("""
-        hdfs dfs -mkdir hdfs://{params.DFS_URL};
-        hdfs dfs -chown {params.hawq_user}:{params.hawq_group} hdfs://{params.DFS_URL};""",
+    Execute(format("""
+        hdfs dfs -mkdir hdfs://{params.DFS_URI};
+        hdfs dfs -chown {params.hawq_user} hdfs://{params.DFS_URI};"""),
         user=params.dfs_superuser
     )   
 
@@ -164,7 +164,7 @@ def force_stop():
 def is_running():
     import params
 
-    return hawq.is_running(params.hawq_master_pid_path)
+    return hawq.is_running(params.master_pid_path)
 
 def check_hawq_installed():
     import params
