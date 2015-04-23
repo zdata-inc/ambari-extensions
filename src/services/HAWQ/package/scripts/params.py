@@ -17,6 +17,7 @@ hawq_all_hosts = set(hawq_master_hosts + hawq_segment_hosts)
 standby_master_hostname = ""
 
 # User configurations
+set_kernel_parameters = config['configurations']['hawq-env']['set_kernel_parameters']
 ARRAY_NAME = config["configurations"]["hawq-env"]["ARRAY_NAME"]
 SEG_PREFIX = config["configurations"]["hawq-env"]["SEG_PREFIX"]
 PORT_BASE = config["configurations"]["hawq-env"]["PORT_BASE"]

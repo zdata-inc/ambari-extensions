@@ -22,6 +22,25 @@ def append_bash_profile(user, to_be_appended, run=False, allow_duplicates=False)
     if run:
         Execute(to_be_appended, user=user)
 
+def get_configuration_file(variable_file):
+    """Retrieves a simple config file and formats it into a dictionary.
+
+    Given the path to a configuration file of key/value pairs, each pair on its own line, and each
+    key/value separated by an equals sign, return a dictionary of the keys to their respective values.
+    Comments can be added by starting a line with a hash sign.  Comments cannot be appended to
+    the end of lines.
+    """
+
+    variables = {}
+    for line in StaticFile(variable_file).get_content().split('\n'):
+        if len(line) == 0 or line.startswith('#'):
+            continue
+
+        key, value = map(lambda item: item.strip(), line.split('='))
+        variables[key] = value
+
+    return variables
+
 def set_kernel_parameters(parameters, logoutput=True):
     """Given a dictionary of parameters, set each one."""
 
