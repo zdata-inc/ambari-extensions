@@ -19,7 +19,6 @@ hawq_hostfile_seg_path = path.join(hawq_install_path, "hostfile_segments")
 sysctl_conf_file = "/etc/sysctl.conf"
 security_conf_file = "/etc/security/limits.d/hawq.conf"
 MASTER_DIRECTORY = config["configurations"]["hawq-env"]["MASTER_DIRECTORY"]
-DATA_DIRECTORY = config["configurations"]["hawq-env"]["DATA_DIRECTORY"]
 hadoop_home = config["configurations"]["hawq-env"]["hadoop_home"]
 gpconfigs_path = path.join("/home", hawq_user, "gpconfigs")
 gpinitsystem_config_path = path.join(gpconfigs_path, "gpinitsystem_config")
@@ -34,6 +33,9 @@ standby_master_hostname = ""
 source_cmd = "source %s; " % hawq_environment_path
 exkeys_cmd = "gpssh-exkeys -f %s; " % hawq_hostfile_seg_path
 export_mdd_cmd = "export MASTER_DATA_DIRECTORY=%s/gpseg-1" % MASTER_DIRECTORY
+
+segments_per_node = config['configurations']['hawq-env']['segments_per_node']
+data_directory_template = config['configurations']['hawq-env']['data_directory']
 
 # User configurations
 ARRAY_NAME = config["configurations"]["hawq-env"]["ARRAY_NAME"]
@@ -57,6 +59,15 @@ if config["commandType"] == 'EXECUTION_COMMAND':
     DFS_URL = config["configurations"]["core-site"]["fs.defaultFS"].replace("hdfs://", "")
     DFS_URI = path.join(DFS_URL, DFS_DIRECTORY)
 
+# Generate list of data and mirror directory paths from their templates
+@utilities.call()
+def data_directories():
+    directories = []
+    for segment_number in range(segments_per_node):
+        directories.append(InlineTemplate(data_directory_template, segment_number=(segment_number + 1)).get_content().strip())
+
+    return directories
+
 # Pid files
 master_pid_path = path.join(MASTER_DIRECTORY, SEG_PREFIX + '-1', 'postmaster.pid')
-slave_pid_globs = map(lambda pid_path: path.join(pid_path, SEG_PREFIX + '[0-9]', 'postmaster.pid'), DATA_DIRECTORY.split(' '))
+slave_pid_globs = map(lambda pid_path: path.join(pid_path, SEG_PREFIX + '[0-9]', 'postmaster.pid'), data_directories)

@@ -14,7 +14,7 @@ def install(env):
     # hawq.configure_mount_options()
 
     Directory(
-        params.DATA_DIRECTORY.split(),
+        params.data_directories,
         action="create",
         mode=0755,
         owner=params.hawq_user,

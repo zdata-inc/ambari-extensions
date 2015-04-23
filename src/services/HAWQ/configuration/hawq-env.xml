@@ -35,14 +35,14 @@
         <description>Base number by which primary segment port numbers are calculated.</description>
     </property>
     <property>
-        <name>DATA_DIRECTORY</name>
-        <value>/data1/primary /data2/primary</value>
-        <description>File system location(s) where primary segment data directories
-            will be created. The number of locations in the list dictate
-            the number of primary segments that will get created per
-            physical host (if multiple addresses for a host are listed in
-            the hostfile, the number of segments will be spread evenly across
-            the specified interface addresses).</description>
+        <name>data_directory</name>
+        <value>/data{{segment_number}}/primary</value>
+        <description>The data directory for a given segment.  Available templating values: {{segment_number}}.</description>
+    </property>
+    <property>
+        <name>segments_per_node</name>
+        <value>2</value>
+        <description>Number of segments to create per node.</description>
     </property>
     <property>
         <name>MASTER_DIRECTORY</name>
