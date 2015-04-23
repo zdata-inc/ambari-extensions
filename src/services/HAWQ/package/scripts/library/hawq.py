@@ -89,7 +89,7 @@ def configure_security_limits():
     import params
 
     TemplateConfig(
-        params.security_conf_file,
+        os.path.join(params.security_conf_path, 'hawq.conf'),
         template_tag="limits",
         owner=params.hawq_user, mode=0644
     )

@@ -16,11 +16,6 @@ hawq_segment_hosts = default("/clusterHostInfo/hawq_slave_hosts", [])
 hawq_all_hosts = set(hawq_master_hosts + hawq_segment_hosts)
 standby_master_hostname = ""
 
-# Common commands
-source_cmd = "source %s; " % hawq_environment_path
-exkeys_cmd = "gpssh-exkeys -f %s; " % hawq_hostfile_seg_path
-export_mdd_cmd = "export MASTER_DATA_DIRECTORY=%s/gpseg-1" % MASTER_DIRECTORY
-
 # User configurations
 ARRAY_NAME = config["configurations"]["hawq-env"]["ARRAY_NAME"]
 SEG_PREFIX = config["configurations"]["hawq-env"]["SEG_PREFIX"]
@@ -38,14 +33,13 @@ DFS_NAME = config["configurations"]["hawq-env"]["DFS_NAME"]
 DFS_DIRECTORY = 'hawq_data'
 
 # Important paths
-sysctl_conf_file = "/etc/sysctl.conf"
-security_conf_file = "/etc/security/limits.d/hawq.conf"
+security_conf_path = "/etc/security/limits.d"
 hawq_install_path = "/usr/local/hawq/"
+MASTER_DIRECTORY = config["configurations"]["hawq-env"]["MASTER_DIRECTORY"]
+hadoop_home = config["configurations"]["hawq-env"]["hadoop_home"]
 hawq_environment_path = path.join(hawq_install_path, "greenplum_path.sh")
 hawq_hostfile_all_path = path.join(hawq_install_path, "hostfile_all")
 hawq_hostfile_seg_path = path.join(hawq_install_path, "hostfile_segments")
-MASTER_DIRECTORY = config["configurations"]["hawq-env"]["MASTER_DIRECTORY"]
-hadoop_home = config["configurations"]["hawq-env"]["hadoop_home"]
 gpconfigs_path = path.join("/home", hawq_user, "gpconfigs")
 gpinitsystem_config_path = path.join(gpconfigs_path, "gpinitsystem_config")
 
@@ -61,11 +55,17 @@ def data_directories():
 
     return directories
 
+# Pull in some configs from HDFS
 if config["commandType"] == 'EXECUTION_COMMAND':
     dfs_superuser = config["configurations"]["hdfs-site"]["dfs.cluster.administrators"].strip()
     dfs_supergroup = config["configurations"]["hdfs-site"]["dfs.permissions.superusergroup"]
     DFS_URL = config["configurations"]["core-site"]["fs.defaultFS"].replace("hdfs://", "")
     DFS_URI = path.join(DFS_URL, DFS_DIRECTORY)
+
+# Common commands
+source_cmd = "source %s; " % hawq_environment_path
+exkeys_cmd = "gpssh-exkeys -f %s; " % hawq_hostfile_seg_path
+export_mdd_cmd = "export MASTER_DATA_DIRECTORY=%s/gpseg-1" % MASTER_DIRECTORY
 
 # Pid files
 master_pid_path = path.join(MASTER_DIRECTORY, SEG_PREFIX + '-1', 'postmaster.pid')
