@@ -2,7 +2,7 @@ package=@PACKAGE_NAME@
 version=@PACKAGE_VERSION@
 tarname=@PACKAGE_TARNAME@
 distdir=$(tarname)-$(version)
-stackversion=zData.$(version)
+stackversion=@STACK_NAME@.$(version)
 
 prefix = @prefix@
 exec_prefix = @exec_prefix@
@@ -10,8 +10,8 @@ bindir = @bindir@
 
 tmp_dir:=$(shell mktemp -d)
 
-ambari_path="/var/lib/ambari-server/resources/stacks"
-ambari_stack="HDP"
+AMBARI_PATH?=@AMBARI_PATH@
+AMBARI_STACK?=@AMBARI_STACK@
 
 src=$(shell find src -type f \
 	-not -name '.hash' \
@@ -35,6 +35,7 @@ $(distdir): $(src)
 
 clean:
 	rm -rf $(tmp_dir)
+	find . -name "Makefile" -delete
 
 Makefile: Makefile.in config.status
 	./config.status Makefile
