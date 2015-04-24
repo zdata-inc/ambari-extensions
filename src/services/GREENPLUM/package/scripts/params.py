@@ -9,6 +9,7 @@ tmp_dir = Script.get_tmp_dir()
 
 license_accepted = default('/configurations/greenplum-env/accept_license_agreement', False) == "yes"
 installer_location = config['configurations']['greenplum-env']['installer_location']
+set_kernel_parameters = default('configurations/greenplum-env/set_kernel_parameters', True)
 
 installation_path = config['configurations']['greenplum-env']['installation_path']
 absolute_installation_path = path.join(installation_path, 'greenplum-db')

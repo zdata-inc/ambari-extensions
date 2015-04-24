@@ -21,13 +21,14 @@ def preinstallation_configure(env):
         action="create", shell="/bin/bash"
     )
 
-    utilities.set_kernel_parameters(utilities.get_configuration_file('system-variables'))
+    if params.set_kernel_parameters:
+        utilities.set_kernel_parameters(utilities.get_configuration_file('system-variables'))
 
-    TemplateConfig(
-        params.security_conf_file,
-        template_tag="limits",
-        owner=params.admin_user, mode=0644
-    )
+        TemplateConfig(
+            params.security_conf_file,
+            template_tag="limits",
+            owner=params.admin_user, mode=0644
+        )
 
 def master_install(env):
     """Perform installation for master node."""

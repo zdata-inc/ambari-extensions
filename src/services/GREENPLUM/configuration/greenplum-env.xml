@@ -82,4 +82,9 @@
         <value>gpseg</value>
         <description>Prefix for generated data directories.</description>
     </property>
+    <property>
+        <name>set_kernel_parameters</name>
+        <value>true</value>
+        <description>Whether to configure parameters in sysctl.conf and limits.conf to the recommended values.</description>
+    </property>
 </configuration>
