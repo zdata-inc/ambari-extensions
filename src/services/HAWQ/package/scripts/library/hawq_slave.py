@@ -1,9 +1,6 @@
-import os
 from os import path
-from library import utilities
-from resource_management.core.exceptions import ComponentIsNotRunning
-from resource_management import *
 from library import hawq
+from resource_management import *
 
 def install(env):
     import params
@@ -11,7 +8,6 @@ def install(env):
     hawq.create_user()
     hawq.configure_kernel_parameters()
     hawq.configure_security_limits()
-    # hawq.configure_mount_options()
 
     Directory(
         params.data_directories,

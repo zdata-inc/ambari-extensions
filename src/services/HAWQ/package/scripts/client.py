@@ -1,11 +1,11 @@
 import os
-import sys
+from library import hawq
 from resource_management import *
-from library import hawq_master, hawq
 
 class Client(Script):
     def install(self, env):
         import params
+
         hawq.add_psql_environment_variables(params.hawq_user)
 
         # Create hadoop log directory for hawq user

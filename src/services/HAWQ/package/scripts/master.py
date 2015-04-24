@@ -1,12 +1,9 @@
-import sys
 import os
-from resource_management import *
 from library import hawq_master, hawq
+from resource_management import *
 
 class Master(Script):
 
-    # This installation assumes that the /etc/hosts file includes the host names and all interface address names for every machine participating in your HAWQ system.
-    # In the future, we can check to make sure this is true.
     def install(self, env):
         import params
 

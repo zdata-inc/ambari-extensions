@@ -1,6 +1,5 @@
-from resource_management import *
 from library import hawq_slave
-import sys
+from resource_management import *
 
 class Slave(Script):
 
@@ -30,4 +29,4 @@ class Slave(Script):
         pass
 
 if __name__ == "__main__":
-  Slave().execute()
+    Slave().execute()

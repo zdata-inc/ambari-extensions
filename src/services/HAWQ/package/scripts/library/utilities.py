@@ -1,7 +1,6 @@
-from resource_management import *
 import os
-import string
-import random
+import random, string
+from resource_management import *
 
 def append_bash_profile(user, to_be_appended, run=False, allow_duplicates=False):
     """Append a given line to a user's bashrc file.
@@ -72,7 +71,7 @@ def set_kernel_parameter(name, value, logoutput=True):
             else:
                 log_line.append("already saved")
 
-    except Fail as exception:
+    except Fail:
         log_line.append("sysctl failed to modify parameter, considered bad.")
     finally:
         if logoutput:
@@ -117,7 +116,7 @@ def random_string(length, character_set=None):
     if character_set == None:
         character_set = string.letters + string.digits
 
-    for i in range(length):
+    for _ in range(length):
         output += random.choice(character_set)
 
     return output

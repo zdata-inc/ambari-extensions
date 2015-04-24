@@ -1,6 +1,6 @@
-from resource_management import *
-from library import utilities
 from os import path
+from library import utilities
+from resource_management import *
 
 config = Script.get_config()
 tmp_dir = Script.get_tmp_dir()

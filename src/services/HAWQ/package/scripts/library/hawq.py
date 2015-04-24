@@ -1,11 +1,9 @@
-import sys
-import os
+import sys, os
 from library import utilities
 from resource_management import *
-from resource_management.core.exceptions import ComponentIsNotRunning
 from ambari_commons import OSCheck
 import re
-import utilities
+from library import utilities
 
 def create_user():
     import params
@@ -60,7 +58,8 @@ def is_running(pidFile):
     return utilities.is_process_running(pidFile, lambda filehandle: int(filehandle.readlines()[0]))
 
 def scan_installation_logs(logFile, minimum_error_level='info'):
-    """Given a log file, return if there are any log lines with an error level above minimum_error_level."""
+    """Given a log file, return if there are any log lines with an error level
+    above minimum_error_level."""
 
     log_levels = {'debug': 1, 'info': 2, 'warn': 3, 'error': 4, 'fatal': 5}
 
@@ -81,13 +80,15 @@ def scan_installation_logs(logFile, minimum_error_level='info'):
             if line_log_level not in log_levels or log_levels[line_log_level] > minimum_error_level:
                 error_lines.append(line)
 
-    # Don't care about lines between sets of asterisks, are metadata and therefore don't need to be included.
+    # Don't care about lines between sets of asterisks,
+    # they are metadata and therefore don't need to be included.
     error_lines = remove_lines_between_delimiter(error_lines)
 
     return error_lines
 
 def remove_lines_between_delimiter(lines, delimiter=r".*:-\*+$"):
-    """Given a list of lines, remove all lines in between lines which match the given delimiter pattern, including the asterisks."""
+    """Given a list of lines, remove all lines in between lines which match
+    the given delimiter pattern, including the asterisks."""
 
     inside_delimiter = False
     lines_outside_delimiter = []
@@ -102,3 +103,4 @@ def remove_lines_between_delimiter(lines, delimiter=r".*:-\*+$"):
             lines_outside_delimiter.append(line)
 
     return lines_outside_delimiter
+

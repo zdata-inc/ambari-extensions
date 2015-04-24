@@ -1,12 +1,8 @@
-import os
-import utilities
-import time
 import re
-from glob import glob
-
-from resource_management.core.exceptions import ComponentIsNotRunning, Fail
-from resource_management import *
+from os import path
+from library import utilities
 from library import hawq
+from resource_management import *
 
 def create_user():
     import params
@@ -78,7 +74,7 @@ def initialize():
         hdfs dfs -mkdir hdfs://{params.DFS_URI};
         hdfs dfs -chown {params.hawq_user} hdfs://{params.DFS_URI};"""),
         user=params.dfs_superuser
-    )   
+    )
 
     try:
         Execute(
@@ -88,7 +84,11 @@ def initialize():
     except Fail as exception:
         print "gpinitsystem reported failure to install.  Scanning logs manually for consensus."
 
-        logfile = re.search(format(r'.*:-(/home/[^/]+/gpAdminLogs/gpinitsystem_[0-9]+\.log)'), str(exception))
+        logfile = re.search(
+            format(r'.*:-(/home/[^/]+/gpAdminLogs/gpinitsystem_[0-9]+\.log)'),
+            str(exception)
+        )
+
         if logfile == None:
             print "No log file could be found to be scanned.  Failing."
             raise exception
@@ -116,13 +116,11 @@ def is_hawq_initialized():
     try:
         Execute('hadoop fs -ls "/hawq_data"', user=params.hawq_user)
         return True
-    except Fail as e:
+    except Fail:
         return False
 
 def gpcheck():
-    """
-    Validates various platform-specific, HAWQ, and HDFS specific configuration settings. Stores results in home dir hawq user.
-    """
+    """Validates various platform-specific, HAWQ, and HDFS specific configuration settings. Stores results in home dir hawq user."""
     import params
 
     # TODO Make multirunnable
@@ -131,10 +129,9 @@ def gpcheck():
             "gpcheck -f %s --zipout" % params.hawq_hostfile_all_path,
             user=params.hawq_user
         )
-    except Fail as e:
+    except Fail as exception:
         print "Failed to run gpcheck! \n"
-        print e
-
+        print exception
 
 def configure():
     pass
@@ -169,4 +166,4 @@ def is_running():
 def check_hawq_installed():
     import params
 
-    return os.path.exists(params.MASTER_DIRECTORY)
+    return path.exists(params.MASTER_DIRECTORY)
