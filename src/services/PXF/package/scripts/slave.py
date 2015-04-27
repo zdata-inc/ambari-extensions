@@ -1,5 +1,4 @@
-import sys
-from library import * 
+from library import *
 from resource_management import *
 
 class Slave(Script):

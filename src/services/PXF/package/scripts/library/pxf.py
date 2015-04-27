@@ -1,4 +1,4 @@
-# Shared methods for PXF can go here... 
+from resource_management import *
 
 def initialize():
     Execute("service pxf-service init")
