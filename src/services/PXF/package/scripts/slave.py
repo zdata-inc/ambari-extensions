@@ -1,41 +1,33 @@
 import sys
-from resource_management import *
 from library import * 
+from resource_management import *
 
 class Slave(Script):
-  def install(self, env):
+    def install(self, env):
+        import params
 
-    import params
-    env.set_params(params)
-    self.install_packages(env)
-  
-    TemplateConfig(
-      params.pxf_env_script,
-    )
-   
-    TemplateConfig(
-      params.pxf_public_classpath,
-    )
-            
-    Execute("service pxf-service init")
+        env.set_params(params)
+        self.install_packages(env)
 
-  def stop(self, env):
-    Execute("service pxf-service stop")
+        pxf.initialize()
 
-  def start(self, env):
-    try: 
-        self.status(env)
-    except ComponentIsNotRunning:
-        Execute("service pxf-service start")
+    def stop(self, env):
+        pxf.stop()
 
-  def status(self, env):
-    import params
-  
-    if check_process_status(params.pxf_pid_file):
-      raise ComponentIsNotRunning()
+    def start(self, env):
+        if not pxf.is_running():
+            self.configure(env)
+            pxf.start()
 
-  def configure(self, env):
-    pass
+    def status(self, env):
+        import params
+    
+        if not pxf.is_running():
+            raise ComponentIsNotRunning()
+
+    def configure(self, env):
+        TemplateConfig(params.pxf_env_script)
+        TemplateConfig(params.pxf_public_classpath)
 
 if __name__ == "__main__":
-  Slave().execute()
+    Slave().execute()
