@@ -15,6 +15,8 @@ Before getting started a bit of prep work is required.  Each host that is going 
 If Ambari hasn't yet been setup, now is the time to do it.  Ambari doesn't require many resources, so the service can be installed on a smaller host.
 
 ```sh
+# As root
+
 # Add the Ambari 1.7.x repository
 wget http://public-repo-1.hortonworks.com/ambari/centos6/1.x/updates/1.7.0/ambari.repo -O /etc/yum.repos.d/ambari.repo
 # Add EPEL repository
@@ -51,6 +53,8 @@ Download the following to `/tmp/artifacts`:
 After those have been downloaded and moved to `/tmp/artifacts` on the Ambari server the local RPM repository can be created:
 
 ```sh
+# As root
+
 # Install the needed packages to create a local RPM repository
 yum install httpd createrepo
 
