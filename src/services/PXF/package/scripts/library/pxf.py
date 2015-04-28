@@ -11,4 +11,9 @@ def stop():
 
 def is_running():
     import params
-    return check_process_status(params.pxf_pid_file)
+
+    try:
+        check_process_status(params.pxf_pid_file)
+        return True
+    except ComponentIsNotRunning:
+        return False
