@@ -71,9 +71,9 @@ Now you need to define a cluster in Ambari, and install the needed components on
 
     For Nagios, you must input information to create an admin account, as well as an email for alerts to be sent to.
 
-    For HAWQ, you must input at least the password for the HAWQ administration user.  If the HAWQ master is on the same host as Ambari, you will want to change the port from `5432` to a non-standard port like `6543`, otherwise it'll collide with the Postgres server installed by Ambari.
+    For HAWQ, you must input the password for the HAWQ administration user and a database name.  The number of segments per host is also required, this value represents the number of Postgres processes to run per machine.  Two or three is fine, as many as six is possible, but may degrade performance.  If the HAWQ master is on the same host as Ambari, you will want to change the port from `5432` to a non-standard port like `6543`, otherwise it'll collide with the Postgres server installed by Ambari.
 
-    For Greenplum, you must accept the license agreement, input a admin user password, and give a path to the location of the Greenplum installation zip archive (the one downloaded in installation's step 2).  The archive's path should be `/vagrant/artifacts/{GreenplumArchiveName}.zip`.  If the Greenplum master is on the same host as Ambari, you will want to change the port from `5432` to a non-standard port like `6543`, otherwise it'll collide with the Postgres server installed by Ambari.
+    For Greenplum, you must accept the license agreement, input a admin user password, a database name, and give a path to the location of the Greenplum installation zip archive (the one downloaded in installation's step 2).  The archive's path should be `/vagrant/artifacts/{GreenplumArchiveName}.zip`.  The number of segments per host is also required, this value represents the number of Postgres processes to run per machine.  Two or three is fine, more if mirroring isn't enabled.  If the Greenplum master is on the same host as Ambari, you will want to change the port from `5432` to a non-standard port like `6543`, otherwise it'll collide with the Postgres server installed by Ambari.
 
 9. Now we're installing!  If everything goes to plan you'll have a fully provisioned cluster in just a few minutes!
 
