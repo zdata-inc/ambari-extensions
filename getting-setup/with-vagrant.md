@@ -24,11 +24,11 @@ The vagrant installation method is not tested on Windows, and most likely will n
 
 ### Installation
 
-1. First you will need to retrieve certain artifacts from Pivotal.  Visit https://network.pivotal.io/products/pivotal-hd, create an account if you don't have one already.
+1. First you will need to retrieve certain artifacts from Pivotal.  Visit [network.pivotal.io](https://network.pivotal.io), create an account if you don't have one already.
 
 2. Next download the following to the artifacts directory:
-    - [Pivotal HD 2.1.0](https://network.pivotal.io/products/pivotal-hd#/releases/2-1)
-    - [PHD 2.1.0: Pivotal HAWQ 1.2.1.0](https://network.pivotal.io/products/pivotal-hd#/releases/2-1)
+    - [Pivotal HD 2.1 -> Pivotal HD 2.1.0](https://network.pivotal.io/products/pivotal-hd#/releases/2-1)
+    - [Pivotal HD 2.1 -> PHD 2.1.0: Pivotal HAWQ 1.2.1.0](https://network.pivotal.io/products/pivotal-hd#/releases/2-1)
     - [4.3.5.0 Database Server -> Greenplum Database 4.3.5.0 for Red Hat Enterprise Linux 5 and 6](https://network.pivotal.io/products/pivotal-gpdb)
 
 3. Run `vagrant up` to create and provision the virtual machines.  This step will install Ambari automatically.  
@@ -49,7 +49,7 @@ Creating A Cluster
 You've got Ambari up, you have servers you want to provision, now what?  
 Now you need to define a cluster in Ambari, and install the needed components on the servers.  
 
-1. First you'll need to access the Ambari web application.  If you use the hostname scheme accompanied with the included vagrant scripts that url is <a href="http://master.ambaricluster.local:8080" target="_blank">http://master.ambaricluster.local:8080</a>.  
+1. First you'll need to access the Ambari web application.  With the included vagrant configuration, you can connect to Ambari by visiting <a href="http://master.ambaricluster.local:8080" target="_blank">http://master.ambaricluster.local:8080</a> in your web browser.
 
 2. Next you'll need to login to Ambari.  The default login is: admin / admin.  
 
@@ -57,23 +57,23 @@ Now you need to define a cluster in Ambari, and install the needed components on
 
 4. First you'll need to name your cluster and select its stack.  The name of the stack can be anything; for the stack we recommend 1.0.0.zData, as it's currently the only stack which can install Greenplum and HAWQ.
 
-    Next you will need to toggle down the 'Advanced Repository Options', and uncheck suse11.  You will also want to change the `Local-PHD-Repo` to the local repository containing Pivotal's PHD and PADS rpms.  For vagrant installations the creation of this repository is automatically done during provisioning by the [setup-repo.sh script](https://github.com/zdata-inc/ambari-stack/blob/master/build/setup-repo.sh) so the Ambari server's domain can be used here (which is `http://master.ambaricluster.local` by default).
+    Next you will need to toggle down the 'Advanced Repository Options', and uncheck suse11.  You will also want to update the `Local-PHD-Repo` to point towards a local RPM repository that contains the files downloaded from Pivotal and put in the artifacts directory.  When Vagrant provisions the master machine it automatically creates a local RPM repository (this is done by the [setup-repo.sh script](https://github.com/zdata-inc/ambari-stack/blob/master/build/setup-repo.sh)), so the Ambari server's domain can be used here (`http://master.ambaricluster.local` by default).
 
-5. Next you'll need to input each of the machines to provision, as well as a private key which will allow you to login as root on each machine.  Vagrant configures the hostnames automatically to be `master.ambaricluster.local`, `slave1.ambaricluster.local`, `slave2.ambaricluster.local`, etc., and the private key will be located in `keys/private_key` relative to the project root.
+5. Next you'll need to tell Ambari what machines are going to be in the cluster, as well as a private key that can be used to login to each machine as root.  Vagrant configures the hostnames automatically to be `master.ambaricluster.local`, `slave1.ambaricluster.local`, `slave2.ambaricluster.local`, etc., and a private key will be located in `keys/private_key` that is already authorized onto each of the provisioned machines.
 
-    Normally you would provision the same server you have Ambari installed on, but because of the limited number of virtual machines that can be run at a time we'll use the master host as well as the slaves for the cluster.  After you click Next, you'll see progress indicators showing the registration of the machines, and the installation of the Ambari agents.
+    Normally you would not add the Ambari server to the cluster, but because of the limited number of virtual machines that can be run at a time we'll use the master host as well as the slaves for the cluster.  After you click Next, you'll see progress indicators showing the registration of the machines, and the installation of the Ambari agents.
 
-6. After registration has completed you will be prompted to install services on each of the machines.  The smallest complete stack for HAWQ contains HDFS, Zookeeper, and HAWQ.  You can install Greenplum by choosing just the Greenplum package.  You should also install Nagios and Ganglia, or Ambari won't be able to function fully.  Proceed after selecting all the services you want on your cluster.
+6. After registration has completed you will be prompted to install services on each of the machines.  The smallest complete stack for HAWQ contains HDFS, Zookeeper, PXF, and HAWQ.  You can install Greenplum by choosing just the Greenplum package.  You should also install Nagios and Ganglia, or Ambari won't be able to function fully.  Proceed after selecting all the services you want on your cluster.
 
-7. You'll now be asked to decide where to install what components.  For small installations it is recommended to put the master components on the Ambari server, and use the slaves for datanodes and segments.  Larger deployments may distribute their components differently.
+7. You'll now be asked to decide where to install what components.  For small non-production installations it is recommended to put the master components on the Ambari server (`master.ambaricluster.local`), and use the slaves for datanodes and segments.  Larger production deployments should distribute their components differently.
 
-8. At this point you'll need to configure each of the components to be installed.  For our purposes of just deploy a small cluster to practice with the defaults are fine.  You'll need to input some information for Nagios, HAWQ, and/or Greenplum.
+8. At this point you'll need to configure each of the components to be installed.  For our purposes the defaults will be fine for the most part.  You'll need to input some information for Nagios, HAWQ, and/or Greenplum.
 
     For Nagios, you must input information to create an admin account, as well as an email for alerts to be sent to.
 
-    For HAWQ, you must input at least the password for the HAWQ administration user and the url for the hdfs namenode.  With Vagrant that url will be: `hdfs://master.ambaricluster.local:8020`.
+    For HAWQ, you must input at least the password for the HAWQ administration user.  If the HAWQ master is on the same host as Ambari, you will want to change the port from `5432` to a non-standard port like `6543`, otherwise it'll collide with the Postgres server installed by Ambari.
 
-    For Greenplum, you must accept the license agreement, input a admin user password, and give a path to the location of the Greenplum installation zip archive (the one downloaded in installation's step 2).  The archive's path should be `/vagrant/artifacts/{GreenplumArchiveName}.zip` for the master node.
+    For Greenplum, you must accept the license agreement, input a admin user password, and give a path to the location of the Greenplum installation zip archive (the one downloaded in installation's step 2).  The archive's path should be `/vagrant/artifacts/{GreenplumArchiveName}.zip`.  If the Greenplum master is on the same host as Ambari, you will want to change the port from `5432` to a non-standard port like `6543`, otherwise it'll collide with the Postgres server installed by Ambari.
 
 9. Now we're installing!  If everything goes to plan you'll have a fully provisioned cluster in just a few minutes!
 

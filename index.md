@@ -15,7 +15,7 @@ Getting Setup
 Currently there are two different ways to get started with the zData Ambari stack.
 
 #### With Vagrant
-The first option is to setup the entire cluster with [Vagrant](https://www.vagrantup.com/) either locally or remotely (using one of Vagrant's cloud plugins such as [Vagrant AWS](https://github.com/mitchellh/vagrant-aws).
+The first option is to setup the entire cluster with [Vagrant](https://www.vagrantup.com/) either locally or remotely (using one of Vagrant's cloud plugins such as [Vagrant AWS](https://github.com/mitchellh/vagrant-aws).  This method is used mostly for demonstrative and testing purposes, production environments should not use this method.
 
 [More instructions about how to install using Vagrant are available here.]({{ site.baseurl }}/getting-setup/with-vagrant.html)
 
