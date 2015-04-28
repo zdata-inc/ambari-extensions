@@ -39,10 +39,7 @@ su - <<'EOF'
 EOF
 
 # Add EPEL repository
-if [ ! -f epel-release-6-8.noarch.rpm ]; then
-    wget -q http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
-    rpm -Uvh epel-release-6*.rpm
-fi
+yum install -y epel-release
 
 # Add ambari repository
 if [ ! -f ambari.repo ]; then
