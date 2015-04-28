@@ -1,5 +1,7 @@
 #!/bin/bash
-[ $EUID == 0 ] || exec sudo bash "$0" "$@"
+# Run during provisioning of master machine, configures a local RPM repository used when installing services.
+
+[ $EUID == 0 ] || exec sudo bash "$0" "$@" # Run as root
 
 LOCAL_REPO_DIR=/var/www/html/phd/
 

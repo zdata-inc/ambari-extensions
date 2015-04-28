@@ -1,4 +1,6 @@
 #!/bin/bash
+## Provisioning script for all machines managed by Vagrant, run first.
+
 cd /tmp
 # AMBARI_REPO=http://public-repo-1.hortonworks.com/ambari/centos6/1.x/updates/1.7.0/ambari.repo
 AMBARI_REPO=http://s3.amazonaws.com/dev.hortonworks.com/ambari/centos6/1.x/updates/1.7.0.trunk/ambari.repo

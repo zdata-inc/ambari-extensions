@@ -1,4 +1,5 @@
 #!/bin/bash
+## Provisioning script for slave machines managed by Vagrant.
 cd /tmp
 
 if [ -d /vagrant/artifacts/rpms ]; then
