@@ -1,13 +1,13 @@
-from library import *
+from library import pxf
 from resource_management import *
 
 class Slave(Script):
     def install(self, env):
         import params
 
-        env.set_params(params)
         self.install_packages(env)
 
+        self.configure(env)
         pxf.initialize()
 
     def stop(self, env):
@@ -25,6 +25,10 @@ class Slave(Script):
             raise ComponentIsNotRunning()
 
     def configure(self, env):
+        import params
+
+        env.set_params(params)
+
         TemplateConfig(params.pxf_env_script)
         TemplateConfig(params.pxf_public_classpath)
 
