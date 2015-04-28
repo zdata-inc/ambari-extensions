@@ -15,10 +15,9 @@ AMBARI_STACK?=@AMBARI_STACK@
 
 src=$(shell find src -type f \
 	-not -name '.hash' \
+	-not -name 'Makefile.in' \
 	-not -name 'archive.zip' \
-	-not -path '*/.git/*' \
 	-not -path '*/.*' \
-	-not -path '*/.vagrant/*' \
 )
 
 dist: $(distdir).tar.gz
