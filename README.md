@@ -110,4 +110,8 @@ Retrieve Artifacts
 ------------------
 
 To install HAWQ you will need some files from Pivotal.
-You can find these files at https://network.pivotal.io/products/pivotal-hd.  Create an account if you don't have one already, and download `Pivotal HD 2.1.0` and `PHD 2.1.0: Pivotal HAWQ 1.2.1.0`.  Place the downloaded files in the artifacts folder located in the project root.
+You can find these files at https://network.pivotal.io/products/pivotal-hd.  Create an account if you don't have one already, and place the downloaded files in the artifacts folder located in the project root.
+
+ - [Pivotal HD 2.1 -> Pivotal HD 2.1.0](https://network.pivotal.io/products/pivotal-hd#/releases/2-1)
+ - [Pivotal HD 2.1 -> PHD 2.1.0: Pivotal HAWQ 1.2.1.0](https://network.pivotal.io/products/pivotal-hd#/releases/2-1)
+ - [4.3.5.0 Database Server -> Greenplum Database 4.3.5.0 for Red Hat Enterprise Linux 5 and 6](https://network.pivotal.io/products/pivotal-gpdb)
