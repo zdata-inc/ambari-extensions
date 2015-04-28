@@ -9,3 +9,7 @@ artifacts
 !artifacts/.gitkeep
 .hash
 archive.zip
+autom4te.cache/
+
+configure
+Makefile
