@@ -1,8 +1,8 @@
-# zData Ambari Stack with Hawq Service
+# zData Ambari Stack with HAWQ Service
 
 If you haven't heard about the [Apache Ambari project](http://ambari.apache.org/ "Apache Ambari Project") yet and you work with big data, you're missing out. Apache Ambari is a framework able to provision, manage, and monitor Apache Hadoop deployments. We will assume you have some familiarity with Ambari features and terminology. If you don't, don't sweat it! You can get caught up to speed from our [previous blog post](http://www.zdatainc.com/2014/11/apache-ambari-overview/).
 
-We will be going over a project that we've been working on for the past few weeks: zData's Ambari Stack. The zData Ambari Stack defines a custom Ambari stack version that provides [Pivotal Hawq](http://pivotal.io/big-data/pivotal-hawq) as a service. This means installing HAWQ has never been easier! You can quickly install HAWQ on a cluster to try out, benchmark, use, compare, or anything else. We'll be covering how we set up our stack definition, some design decisions we made, and finally how to download the zData stack and try it out yourself.
+We will be going over a project that we've been working on for the past few weeks: zData's Ambari Stack. The zData Ambari Stack defines a custom Ambari stack version that provides [Pivotal HAWQ](http://pivotal.io/big-data/pivotal-hawq) as a service. This means installing HAWQ has never been easier! You can quickly install HAWQ on a cluster to try out, benchmark, use, compare, or anything else. We'll be covering how we set up our stack definition, some design decisions we made, and finally how to download the zData stack and try it out yourself.
 
 ## What's a Stack Again?
 
@@ -24,7 +24,7 @@ One significant part of any service is making it configurable. Ambari simplifies
 
 
 ## Hawq + Ambari = Awesome
-Why is this so awesome? We believe this stack version will allow anyone to quickly provision a HAWQ cluster without having to learn or struggle through the installation settings. Ambari is extremely easy to install any service because of it's wizard-like steps. Anyone that's interested in trying out HAWQ on their own cluster can do so. No hardware? Set up an Ambari cluster in the cloud and then install HAWQ on it. Don't need good performance and just to learn Hawq? Just create a virtual cluster with Virtualbox and Vagrant.
+Why is this so awesome? We believe this stack version will allow anyone to quickly provision a HAWQ cluster without having to learn or struggle through the installation settings. Ambari is extremely easy to install any service because of it's wizard-like steps. Anyone that's interested in trying out HAWQ on their own cluster can do so. No hardware? Set up an Ambari cluster in the cloud and then install HAWQ on it. Don't need good performance and just to learn HAWQ? Just create a virtual cluster with Virtualbox and Vagrant.
 
 Ambari isn't just used to install HAWQ on a cluster, but manage and monitor it as well! It can keep track of any configuration changes and version them for easy rollback in case something breaks. Gone are the days of copying a config file with .old as a prefix or the date appended to it. Ambari also takes care of monitoring the cluster on your behalf with the Nagios and Ganglia services - two great open source projects for monitoring and metrics. When installing Nagios and Ganglia by default, they already have a lot of service checks and alerts in case something goes down. Service alerts can be easily extended to support HAWQ specific checks. Currently, Ambari is using the HAWQ status command to verify if the HAWQ master is up and if all the segments are up or not. 
 
