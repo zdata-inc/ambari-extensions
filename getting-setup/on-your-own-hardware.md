@@ -99,3 +99,5 @@ sudo ambari-server start
 
 ### Begin Install
 You're all set to try the zData stack!  Point your URL to the fully qualified domain name of the Ambari Server (port 8080 by default), login, and setup a new cluster. When selecting a stack to use, you should see the zData stack definition listed.
+
+Look through [Creating a Cluster]({{ site.baseurl }}/getting-setup/with-vagrant.html#creating-a-cluster) in the Vagrant setup guide for a more in depth guide to creating a cluster with Ambari, make sure to modify the Vagrant specific parts where necessary.
