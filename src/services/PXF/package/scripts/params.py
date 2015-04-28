@@ -20,4 +20,4 @@ pxf_profiles = path.join(pxf_etc_config_path, "pxf-profiles.xml") # PXF profiles
 pxf_private_classpath = path.join(pxf_etc_config_path, "pxf-private.classpath") # Classpaths required to run PXF
 pxf_public_classpath = path.join(pxf_etc_config_path, "pxf-public.classpath") # Classpaths for custom connectors 
 pxf_log4j_properties = path.join(pxf_etc_config_path, "pxf-log4j.properties") # PXF Logging configuration
-pxf_pid_file = path.join(pxf_instance_root_path, "pxf-service/logs/tcserver.pid");
+pxf_pid_file = path.join(pxf_instance_root_path, "pxf-service/logs/tcserver.pid")
