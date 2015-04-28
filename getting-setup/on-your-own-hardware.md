@@ -3,89 +3,95 @@ layout: default
 title: Getting Setup On Your Own Hardware
 ---
 
-### Overview
-
 ### Disclaimer
 This article assumes the reader is using CentOS 6.5.
 
-### Prerequisites
-* All hosts should have FQDNs (fully qualified domain names)
-* Anything else Ambari says your hosts should / shouldn't have.
+### Preconfiguration
 
-### Setup Local Repository
-##### Pick a Host
-Pick a host that is accessible to all other hosts that will act as your local repository. We recommend using the same host as the one that will be used for the Ambari Server. Create a new directory called "phd" in your webroot directory. 
+Before getting started a bit of prep work is required.  Each host that is going to be a part of the cluster should have a FQDN (Fully Qualified Domain Name).  Each host should also have iptables stopped and disabled, SELinux disabled, and be configured with a common NTP server.
 
-```bash
+### Install Ambari (if necessary)
+
+If Ambari hasn't yet been setup, now is the time to do it.  Ambari doesn't require many resources, so the service can be installed on a smaller host.
+
+```sh
+# Add the Ambari 1.7.x repository
+wget http://public-repo-1.hortonworks.com/ambari/centos6/1.x/updates/1.7.0/ambari.repo -O /etc/yum.repos.d/ambari.repo
+# Add EPEL repository
+yum install epel-release
+
+# Install Ambari server
+yum install ambari-server
+
+# Configure Postgres, a dependency of Ambari
+service postgresql initdb
+
+# Configure Ambari
+ambari-server setup
+
+# Start and enable the services
+ambari-server start
+
+chkconfig postgresql on
+chkconfig ambari-server on
+```
+
+Alternatively you may follow <a href="https://cwiki.apache.org/confluence/display/AMBARI/Ambari+User+Guides" target="_blank">the installation steps provided in the Ambari Wiki</a>.
+
+#### Configure local RPM repository
+
+If a local RPM repository isn't already available where the Pivotal artifacts can be added for use during cluster creation, one will need to be setup.  This can be done on the Ambari host.  First the artifacts themselves need to be retrieved from [network.pivotal.io](https://network.pivotal.io), you will need an account if you don't have one already.
+
+Download the following to `/tmp/artifacts`:
+
+- [Pivotal HD 2.1 -> Pivotal HD 2.1.0](https://network.pivotal.io/products/pivotal-hd#/releases/2-1)
+- [Pivotal HD 2.1 -> PHD 2.1.0: Pivotal HAWQ 1.2.1.0](https://network.pivotal.io/products/pivotal-hd#/releases/2-1)
+- [4.3.5.0 Database Server -> Greenplum Database 4.3.5.0 for Red Hat Enterprise Linux 5 and 6](https://network.pivotal.io/products/pivotal-gpdb)
+
+After those have been downloaded and moved to `/tmp/artifacts` on the Ambari server the local RPM repository can be created:
+
+```sh
+# Install the needed packages to create a local RPM repository
+yum install httpd createrepo
+
+# Create the local repository
 mkdir -p /var/www/html/phd
-```
+tar -xvf /tmp/artifacts/PHD*.tar.gz -C /var/www/html/phd
+tar -xvf /tmp/artifacts/PADS*.tar.gz -C /var/www/html/phd
+createrepo /var/www/html/phd
 
-##### Install Packages
-As root, install or verify the following packages are insalled:
-* httpd
-* createrepo
-
-```bash
-yum install -y httpd createrepo
-```
-
-##### Download Software from Pivotal
-Download the Pivotal HD 2.1.0 and Pivotal HAWQ 1.2.1.0 from Pivotals website from [this address](https://network.pivotal.io/products/pivotal-hd). Copy these tar files to your repository host then untar them into `/var/www/html/phd`
-
-##### Create the Repo
-As root, cd to /var/www/html/phd and run createrepo .
-
-```bash
-createrepo .
-```
-
-#### Start Webserver
-Start up httpd and make sure httpd is ran after reboot:
-
-```bash
+# Start and enable the service
 service httpd start
 chkconfig httpd on
 ```
 
-#### Verify Repo is Working
-You don't need to create a .repo file. Ambari will do that for you during the installation process. Just make sure the webserver is actually working with a simple curl call.
+The repository should now be accessible at `http://<Ambari server FQDN>/phd`.  If this returns with a list of files in `/var/www/html/phd` then you're on the right track!
 
-```bash
-curl -L http://[your repository FQDN]/phd
+
+### Install zData stack
+
+```sh
+wget http://<latest release url>
+
+tar -xzf zdata-ambari-stack-<version>.tar.gz
+cd zdata-ambari-stack-<version>
+make install
 ```
 
-If this returns with a list of files in /var/www/html/phd then you're on the right track!
+It is possible to customize where Ambari is installed, and what stack the zData stack version should be installed into with the environment variables `AMBARI_PATH` and `AMBARI_STACK` respectively.  For advanced users only, picking a stack other than HDP may break things.
 
-### Install Ambari Server
-Follow the steps from the Ambari Wiki for directons on [how to install the latest Ambari Server](https://cwiki.apache.org/confluence/display/AMBARI/Ambari+User+Guides).
-
-### Clone zData Ambari Stack Repo 
-Clone the zData Ambari Stack Repo on the Ambari Server. Install git if needed.
-
-```bash
-yum install -y git
-git clone (link)
-
-# cd into ambari-stack and copy the src directory to /var/lib/ambari-server/resources/stacks/HDP
-cd ambari-stack && cp -r src /var/lib/ambari-server/resources/stacks/HDP/
+```sh
+AMBARI_PATH=/var/lib/non-standard-directory/resources/stacks AMBARI_STACK=PHD make install
 ```
 
 ### Start the Ambari Server
-Start or restart the Ambari Server service by running the following as root:
+Start or restart the Ambari Server service:
 
-```bash
-ambari-server restart # To restart
-ambari-server start   # To start
+```sh
+sudo ambari-server restart
+# Or
+sudo ambari-server start
 ```
 
 ### Begin Install
-You're all set to try the zData stack! Point your URL to the fully qualified domain name of the Ambari Server, login, and setup a new cluster. When selecting a stack to use, you should see the zData stack definition listed.
-
-#### Change Local Repo Url
-Select the custom stack definition and review the repo urls. Change the localhost entry to the FQDN of the Ambari Server.
-
-#### Configure HAWQ and Finish Install
-During the configuration portion of the install, you can change various settings for HAWQ. The HDFS url link and the hawq password will be required. Everything else has defaults but will need to be reviewed and can be edited to your desires.
-
-### Use Hawq
-After a successful install, you should be able to connect to HAWQ with the settings you configured. If you have some time and want to learn more about HAWQ, we recommend the HAWQ tutorials over at Pivotal's website located [at this address](http://pivotalhd.docs.pivotal.io/tutorial/getting-started/hawq.html).
+You're all set to try the zData stack!  Point your URL to the fully qualified domain name of the Ambari Server (port 8080 by default), login, and setup a new cluster. When selecting a stack to use, you should see the zData stack definition listed.
