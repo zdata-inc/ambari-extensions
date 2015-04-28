@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+    <property>
+        <name>minecraft_permissions</name>
+        <value>server.basics:
+    description: Admin permissions
+    default: false
+    children:
+        access-all: true
+</value>
+        <description>The permissions file for the Minecraft server.</description>
+    </property>
+</configuration>

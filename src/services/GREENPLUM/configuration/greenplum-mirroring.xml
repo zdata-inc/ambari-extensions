@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+    <property>
+        <name>enable_mirroring</name>
+        <value>false</value>
+        <description>Configure segment mirroring between nodes.  Possible values are 'true' and 'false'.</description>
+    </property>
+    <property>
+        <name>mirror_data_directory</name>
+        <value>/data{{segment_number}}/mirror</value>
+        <description>The mirror data directory for a given segment.  Available templating values: {{segment_number}}.</description>
+    </property>
+    
+    <property>
+        <name>mirror_port_base</name>
+        <value>50000</value>
+        <description>Beginning value for the segment mirroring ports.</description>
+    </property>
+    <property>
+        <name>mirror_replication_port_base</name>
+        <value>51000</value>
+        <description>Beginning value for the segment mirror replication ports.</description>
+    </property>
+</configuration>

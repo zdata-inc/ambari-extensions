@@ -1,4 +1,11 @@
 #!/bin/bash
-sudo yum install -y ambari-agent
+## Provisioning script for slave machines managed by Vagrant.
+cd /tmp
 
-sudo chkconfig ambari-agent on
+if [ -d /vagrant/artifacts/rpms ]; then
+    rpm --replacepkgs --nosignature -i /vagrant/artifacts/rpms/ambari-agent-1.7.0-209.x86_64.rpm
+else
+    yum install -y ambari-agent
+fi
+
+chkconfig ambari-agent on

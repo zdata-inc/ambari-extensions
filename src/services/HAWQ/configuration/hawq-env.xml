@@ -5,11 +5,13 @@
     <property>
         <name>hawq_user</name>
         <value>gpadmin</value>
+        <property-type>USER</property-type>
         <description>Username of Hawq user.</description>
     </property>
     <property>
         <name>hawq_password</name>
         <value></value>
+        <property-type>PASSWORD</property-type>
         <description>Password of the Hawq user.</description>
     </property>
     <property>
@@ -17,79 +19,80 @@
         <value>/usr/lib/hadoop</value>
         <description>Absolute path to where Hadoop is installed at.</description>
     </property>
-	<property>
-		<name>ARRAY_NAME</name>
-		<value>"zData Hawq Cluster"</value>
-		<description>Name of this Hawq system enclosed in quotes.</description>
-	</property>
-	<property>
-		<name>SEG_PREFIX</name>
-		<value>gpseg</value>
-		<description>Naming convention for utility-generated data directories.</description>
-	</property>
-	<property>
-		<name>PORT_BASE</name>
-		<value>40000</value>
-		<description>Base number by which primary segment port numbers are calculated.</description>
-	</property>
-	<property>
-		<name>DATA_DIRECTORY</name>
-		<value>/data1/primary /data2/primary</value>
-		<description>File system location(s) where primary segment data directories
-		 will be created. The number of locations in the list dictate
-		 the number of primary segments that will get created per
-		 physical host (if multiple addresses for a host are listed in
-		 the hostfile, the number of segments will be spread evenly across
-		 the specified interface addresses).</description>
-	</property>
-	<property>
-		<name>MASTER_DIRECTORY</name>
-		<value>/data/master</value>
-		<description>File system location where the master data directory will be created.</description>
-	</property>
-	<property>
-		<name>MASTER_PORT</name>
-		<value>6543</value>
-		<description>Port number for the master instance.</description>
-	</property>
-	<property>
-		<name>TRUSTED_SHELL</name>
-		<value>ssh</value>
-		<description>Shell utility used to connect to remote hosts.</description>
-	</property>
-	<property>
-		<name>CHECK_POINT_SEGMENTS</name>
-		<value>8</value>
-		<description>Maximum log file segments between automatic WAL checkpoints.</description>
-	</property>
-	<property>
-		<name>ENCODING</name>
-		<value>UNICODE</value>
-		<description>Default server-side character set encoding.</description>
-	</property>
-	<property>
-		<name>DATABASE_NAME</name>
-		<value>zdata</value>
-		<description>Create a database of this name after initialization.</description>
-	</property>
-     <property>
+    <property>
+        <name>ARRAY_NAME</name>
+        <value>zData Hawq Cluster</value>
+        <description>Name of this Hawq system.</description>
+    </property>
+    <property>
+        <name>SEG_PREFIX</name>
+        <value>gpseg</value>
+        <description>Naming convention for utility-generated data directories.</description>
+    </property>
+    <property>
+        <name>PORT_BASE</name>
+        <value>40000</value>
+        <description>Base number by which primary segment port numbers are calculated.</description>
+    </property>
+    <property>
+        <name>data_directory</name>
+        <value>/data{{segment_number}}/primary</value>
+        <description>The data directory for a given segment.  Available templating values: {{segment_number}}.</description>
+    </property>
+    <property>
+        <name>segments_per_node</name>
+        <value></value>
+        <description>Number of segments to create per node.</description>
+    </property>
+    <property>
+        <name>MASTER_DIRECTORY</name>
+        <value>/data/master</value>
+        <description>File system location where the master data directory will be created.</description>
+    </property>
+    <property>
+        <name>MASTER_PORT</name>
+        <value>5432</value>
+        <description>Port number for the master instance.</description>
+    </property>
+    <property>
+        <name>TRUSTED_SHELL</name>
+        <value>ssh</value>
+        <description>Shell utility used to connect to remote hosts.</description>
+    </property>
+    <property>
+        <name>CHECK_POINT_SEGMENTS</name>
+        <value>8</value>
+        <description>Maximum log file segments between automatic WAL checkpoints.</description>
+    </property>
+    <property>
+        <name>ENCODING</name>
+        <value>UNICODE</value>
+        <description>Default server-side character set encoding.</description>
+    </property>
+    <property>
+        <name>DATABASE_NAME</name>
+        <value></value>
+        <description>Create a database of this name after initialization.</description>
+    </property>
+    <property>
         <name>DFS_NAME</name>
         <value>hdfs</value>
         <description>The name of the DFS service.</description>
-      </property>
-     <property>
-        <name>DFS_URL</name>
-        <value>master.ambaricluster.local:8020</value>
-        <description></description>
-     </property>
-      <property>
-          <name>KERBEROS_KEYFILE</name>
-          <value>/etc/krb5.keytab</value>
-          <description></description>
-      </property>
-      <property>
-          <name>ENABLE_SECURE_FILESYSTEM</name>
-          <value>off</value>
-          <description></description>
-      </property>
+    </property>
+    <property>
+        <name>KERBEROS_KEYFILE</name>
+        <value>/etc/krb5.keytab</value>
+        <description>The Kerberos keyfile location if Kerberos is installed and enabled on the system.</description>
+    </property>
+    <property>
+        <name>ENABLE_SECURE_FILESYSTEM</name>
+        <value>off</value>
+        <description>Enable secure filesystem with Hawq. Default is off.</description>
+    </property>
+
+    <property>
+        <name>set_kernel_parameters</name>
+        <value>true</value>
+        <description>Whether to configure parameters in sysctl.conf and limits.conf to the recommended values.</description>
+    </property>
 </configuration>

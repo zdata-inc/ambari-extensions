@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+    <property>
+        <name>accept_eula</name>
+        <value></value>
+        <description>By typing "true" you accept Mojang's Eula: https://account.mojang.com/documents/minecraft_eula</description>
+    </property>
+    <property>
+        <name>minecraft_user</name>
+        <value>minecraft</value>
+        <description>User minecraft server is run as.</description>
+    </property>
+    <property>
+        <name>installation_path</name>
+        <value>/srv/minecraft/</value>
+        <description>Minecraft installation directory.</description>
+    </property>
+    <property>
+        <name>minimum_ram</name>
+        <value>1024M</value>
+        <description>Minimum RAM for minecraft server. Suffixes available: M, G.</description>
+    </property>
+    <property>
+        <name>maximum_ram</name>
+        <value>4G</value>
+        <description>Minimum RAM for minecraft server. Suffixes available: M, G.</description>
+    </property>
+    <property>
+        <name>admin_password</name>
+        <value></value>
+        <description>Password of the minecraft user.</description>
+    </property>
+    <property>
+        <name>installation_source</name>
+        <value>https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar</value>
+        <description>Where to download Minecraft server from.</description>
+    </property>
+</configuration>
