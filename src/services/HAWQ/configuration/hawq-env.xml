@@ -41,7 +41,7 @@
     </property>
     <property>
         <name>segments_per_node</name>
-        <value>2</value>
+        <value></value>
         <description>Number of segments to create per node.</description>
     </property>
     <property>
@@ -71,7 +71,7 @@
     </property>
     <property>
         <name>DATABASE_NAME</name>
-        <value>zdata</value>
+        <value></value>
         <description>Create a database of this name after initialization.</description>
     </property>
     <property>

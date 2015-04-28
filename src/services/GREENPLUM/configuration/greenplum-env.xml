@@ -34,12 +34,12 @@
     </property>
     <property>
         <name>database_name</name>
-        <value>zdata</value>
+        <value></value>
         <description>Name of the database to create post installation.</description>
     </property>
     <property>
         <name>segments_per_node</name>
-        <value>2</value>
+        <value></value>
         <description>Number of segments to create per node.</description>
     </property>
     <property>
@@ -54,7 +54,7 @@
     </property>
     <property>
         <name>master_port</name>
-        <value>6543</value>
+        <value>5432</value>
         <description>Port number for the master node.</description>
     </property>
     <property>
