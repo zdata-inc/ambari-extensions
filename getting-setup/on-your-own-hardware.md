@@ -74,6 +74,8 @@ The repository should now be accessible at `http://<Ambari server FQDN>/phd`.  I
 
 ### Install zData stack
 
+The latest release URL will always be to the tar archive attached to [the latest release](https://github.com/zdata-inc/ambari-stack/releases/latest).
+
 ```sh
 wget http://<latest release url>
 

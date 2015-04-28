@@ -24,14 +24,23 @@ The vagrant installation method is not tested on Windows, and most likely will n
 
 ### Installation
 
-1. First you will need to retrieve certain artifacts from Pivotal.  Visit [network.pivotal.io](https://network.pivotal.io), create an account if you don't have one already.
+1. First you'll need to get the project.  Either clone the git repository, or download the latest code from github:
 
-2. Next download the following to the artifacts directory:
+```sh
+git clone https://github.com/zdata-inc/ambari-stack.git
+# Or
+wget https://github.com/zdata-inc/ambari-stack/archive/master.zip
+unzip master.zip
+```
+
+2. Next you will need to retrieve certain artifacts from Pivotal.  Visit [network.pivotal.io](https://network.pivotal.io), create an account if you don't have one already.
+
+3. Download the following to the artifacts directory:
     - [Pivotal HD 2.1 -> Pivotal HD 2.1.0](https://network.pivotal.io/products/pivotal-hd#/releases/2-1)
     - [Pivotal HD 2.1 -> PHD 2.1.0: Pivotal HAWQ 1.2.1.0](https://network.pivotal.io/products/pivotal-hd#/releases/2-1)
     - [4.3.5.0 Database Server -> Greenplum Database 4.3.5.0 for Red Hat Enterprise Linux 5 and 6](https://network.pivotal.io/products/pivotal-gpdb)
 
-3. Run `vagrant up` to create and provision the virtual machines.  This step will install Ambari automatically.  
+4. Run `vagrant up` to create and provision the virtual machines.  This step will install Ambari automatically.  
     __Warning:__ Each of the virtual machines requires 4GB of RAM, only spin up one or two if RAM is limited!  
 
     ```sh
