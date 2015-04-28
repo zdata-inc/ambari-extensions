@@ -1,2 +1,5 @@
 baseurl: /ambari-stack
 markdown: redcarpet
+
+redcarpet:
+    extensions: ['with_toc_data']
