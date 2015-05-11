@@ -10,10 +10,10 @@ if [ -d /vagrant/artifacts/rpms ]; then
         /vagrant/artifacts/rpms/postgresql-libs-8.4.20-1.el6_5.x86_64.rpm \
         /vagrant/artifacts/rpms/postgresql-8.4.20-1.el6_5.x86_64.rpm \
         /vagrant/artifacts/rpms/postgresql-server-8.4.20-1.el6_5.x86_64.rpm \
-        /vagrant/artifacts/rpms/ambari-server-1.7.0-209.noarch.rpm
+        /vagrant/artifacts/rpms/ambari-server-2.0.0-151.noarch.rpm
 
     rpm --replacepkgs --nosignature -i \
-        /vagrant/artifacts/rpms/ambari-agent-1.7.0-209.x86_64.rpm
+        /vagrant/artifacts/rpms/ambari-agent-2.0.0-151.x86_64.rpm
 else
     yum install -y ambari-server ambari-agent
 fi
