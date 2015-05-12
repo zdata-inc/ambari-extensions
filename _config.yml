@@ -1,4 +1,4 @@
-baseurl: /ambari-stack
+baseurl: /ambari-extensions
 markdown: redcarpet
 
 redcarpet:
