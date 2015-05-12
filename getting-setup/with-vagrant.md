@@ -27,9 +27,9 @@ The vagrant installation method is not tested on Windows, and most likely will n
 1. First you'll need to get the project.  Either clone the git repository, or download the latest code from github:
 
 ```sh
-git clone https://github.com/zdata-inc/ambari-stack.git
+git clone https://github.com/zdata-inc/ambari-extensions.git
 # Or
-wget https://github.com/zdata-inc/ambari-stack/archive/master.zip
+wget https://github.com/zdata-inc/ambari-extensions/archive/master.zip
 unzip master.zip
 ```
 
@@ -66,7 +66,7 @@ Now you need to define a cluster in Ambari, and install the needed components on
 
 4. First you'll need to name your cluster and select its stack.  The name of the stack can be anything; for the stack we recommend 1.0.0.zData, as it's currently the only stack which can install Greenplum and HAWQ.
 
-    Next you will need to toggle down the 'Advanced Repository Options', and uncheck suse11.  You will also want to update the `Local-PHD-Repo` to point towards a local RPM repository that contains the files downloaded from Pivotal and put in the artifacts directory.  When Vagrant provisions the master machine it automatically creates a local RPM repository (this is done by the [setup-repo.sh script](https://github.com/zdata-inc/ambari-stack/blob/master/build/setup-repo.sh)), so the Ambari server's domain can be used here (`http://master.ambaricluster.local` by default).
+    Next you will need to toggle down the 'Advanced Repository Options', and uncheck suse11.  You will also want to update the `Local-PHD-Repo` to point towards a local RPM repository that contains the files downloaded from Pivotal and put in the artifacts directory.  When Vagrant provisions the master machine it automatically creates a local RPM repository (this is done by the [setup-repo.sh script](https://github.com/zdata-inc/ambari-extensions/blob/master/build/setup-repo.sh)), so the Ambari server's domain can be used here (`http://master.ambaricluster.local` by default).
 
 5. Next you'll need to tell Ambari what machines are going to be in the cluster, as well as a private key that can be used to login to each machine as root.  Vagrant configures the hostnames automatically to be `master.ambaricluster.local`, `slave1.ambaricluster.local`, `slave2.ambaricluster.local`, etc., and a private key will be located in `keys/private_key` that is already authorized onto each of the provisioned machines.
 

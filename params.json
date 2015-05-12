@@ -1,7 +1,7 @@
 {
-    "name":"Ambari Stack",
-    "tagline":"zData Ambari Stack with HAWQ and Greenplum Services",
+    "name":"Ambari Extensions",
+    "tagline":"zData Ambari Extensions with HAWQ and Greenplum Services",
     "body":"",
-    "google":"zData Ambari Stack with HAWQ and Greenplum Service.  Used to provision, manage, and monitor Hadoop/HDFS clusters easily with Nagios and Ganglia.",
+    "google":"zData Ambari Extensions with HAWQ and Greenplum Service.  Used to provision, manage, and monitor Hadoop/HDFS clusters easily with Nagios and Ganglia.",
     "note":"Don't delete this file! It's used internally to help with page regeneration."
 }

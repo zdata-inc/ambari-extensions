@@ -72,19 +72,19 @@ chkconfig httpd on
 The repository should now be accessible at `http://<Ambari server FQDN>/phd`.  If this returns with a list of files in `/var/www/html/phd` then you're on the right track!
 
 
-### Install zData stack
+### Install zData Extensions
 
-The latest release URL will always be to the tar archive attached to [the latest release](https://github.com/zdata-inc/ambari-stack/releases/latest).
+The latest release URL will always be to the tar archive attached to [the latest release](https://github.com/zdata-inc/ambari-extensions/releases/latest).
 
 ```sh
 wget http://<latest release url>
 
-tar -xzf zdata-ambari-stack-<version>.tar.gz
-cd zdata-ambari-stack-<version>
+tar -xzf zdata-ambari-extensions-<version>.tar.gz
+cd zdata-ambari-extensions-<version>
 make install
 ```
 
-It is possible to customize where Ambari is installed, and what stack the zData stack version should be installed into with the environment variables `AMBARI_PATH` and `AMBARI_STACK` respectively.  For advanced users only, picking a stack other than HDP may break things.
+It is possible to customize where Ambari is installed, and what stack the zData stack-version should be installed into with the environment variables `AMBARI_PATH` and `AMBARI_STACK` respectively.  For advanced users only, picking a stack other than HDP may break things.
 
 ```sh
 AMBARI_PATH=/var/lib/non-standard-directory/resources/stacks AMBARI_STACK=PHD make install
@@ -100,6 +100,6 @@ sudo ambari-server start
 ```
 
 ### Begin Install
-You're all set to try the zData stack!  Point your URL to the fully qualified domain name of the Ambari Server (port 8080 by default), login, and setup a new cluster. When selecting a stack to use, you should see the zData stack definition listed.
+You're all set to try the zData Ambari Extensions!  Point your URL to the fully qualified domain name of the Ambari Server (port 8080 by default), login, and setup a new cluster. When selecting a stack to use, you should see the zData stack definition listed.
 
 Look through [Creating a Cluster]({{ site.baseurl }}/getting-setup/with-vagrant.html#creating-a-cluster) in the Vagrant setup guide for a more in depth guide to creating a cluster with Ambari, make sure to modify the Vagrant specific parts where necessary.
