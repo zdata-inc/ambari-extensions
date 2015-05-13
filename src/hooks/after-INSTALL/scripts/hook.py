@@ -20,19 +20,16 @@ limitations under the License.
 import sys
 from resource_management import *
 from shared_initialization import *
-from repo_initialization import *
 
-class BeforeInstallHook(Hook):
+#Hook for hosts with only client without other components
+class AfterInstallHook(Hook):
 
   def hook(self, env):
     import params
 
-    self.run_custom_hook('before-ANY')
     env.set_params(params)
-    
-    install_repos()
-    install_packages()
-    setup_java()
+    setup_hdp_install_directory()
+    setup_config()
 
 if __name__ == "__main__":
-  BeforeInstallHook().execute()
+  AfterInstallHook().execute()
