@@ -7,3 +7,5 @@ DESTINATION="/var/lib/ambari-agent/cache/stacks/zData/9.9.9/"
 
 mkdir -p "$DESTINATION" 2> /dev/null
 cp -R /vagrant/src/* "$DESTINATION"
+
+find "$DESTINATION" -name "*.pyc" -delete
