@@ -140,7 +140,7 @@ Vagrant.configure(2) do |config|
                 EOF
             end
 
-            node.vm.synced_folder 'src', '/var/lib/ambari-server/resources/stacks/HDP/9.9.9.zData', create: true
+            node.vm.synced_folder 'src', '/var/lib/ambari-server/resources/stacks/zData/9.9.9', create: true
 
             node.vm.provision 'shell', privileged: false, inline: 'echo "export PATH=/vagrant/build:$PATH" >> ~/.bashrc'
             node.vm.provision 'shell', path: 'build/bootstrap.sh'
