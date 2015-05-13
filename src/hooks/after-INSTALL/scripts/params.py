@@ -29,12 +29,9 @@ stack_version_unformatted = str(config['hostLevelParams']['stack_version'])
 hdp_stack_version = format_hdp_stack_version(stack_version_unformatted)
 
 #hadoop params
-if hdp_stack_version != "" and compare_versions(hdp_stack_version, '2.2') >= 0:
-  mapreduce_libs_path = "/usr/hdp/current/hadoop-mapreduce-client/*"
-  hadoop_libexec_dir = "/usr/hdp/current/hadoop-client/libexec"
-else:
-  mapreduce_libs_path = "/usr/lib/hadoop-mapreduce/*"
-  hadoop_libexec_dir = "/usr/lib/hadoop/libexec"
+
+mapreduce_libs_path = "/usr/hdp/current/hadoop-mapreduce-client/*"
+hadoop_libexec_dir = "/usr/hdp/current/hadoop-client/libexec"
 
 hadoop_conf_dir = "/etc/hadoop/conf"
 hadoop_conf_empty_dir = "/etc/hadoop/conf.empty"

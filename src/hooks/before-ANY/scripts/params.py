@@ -68,32 +68,27 @@ def is_secure_port(port):
     return False
 
 #hadoop params
-if hdp_stack_version != "" and compare_versions(hdp_stack_version, '2.2') >= 0:
-  mapreduce_libs_path = "/usr/hdp/current/hadoop-mapreduce-client/*"
-  hadoop_libexec_dir = "/usr/hdp/current/hadoop-client/libexec"
-  hadoop_home = "/usr/hdp/current/hadoop-client"
-  if not security_enabled:
-    hadoop_secure_dn_user = '""'
-  else:
-    dfs_dn_port = get_port(dfs_dn_addr)
-    dfs_dn_http_port = get_port(dfs_dn_http_addr)
-    dfs_dn_https_port = get_port(dfs_dn_https_addr)
-    # We try to avoid inability to start datanode as a plain user due to usage of root-owned ports
-    if dfs_http_policy == "HTTPS_ONLY":
-      secure_dn_ports_are_in_use = is_secure_port(dfs_dn_port) or is_secure_port(dfs_dn_https_port)
-    elif dfs_http_policy == "HTTP_AND_HTTPS":
-      secure_dn_ports_are_in_use = is_secure_port(dfs_dn_port) or is_secure_port(dfs_dn_http_port) or is_secure_port(dfs_dn_https_port)
-    else:   # params.dfs_http_policy == "HTTP_ONLY" or not defined:
-      secure_dn_ports_are_in_use = is_secure_port(dfs_dn_port) or is_secure_port(dfs_dn_http_port)
-    if secure_dn_ports_are_in_use:
-      hadoop_secure_dn_user = hdfs_user
-    else:
-      hadoop_secure_dn_user = '""'
+
+mapreduce_libs_path = "/usr/hdp/current/hadoop-mapreduce-client/*"
+hadoop_libexec_dir = "/usr/hdp/current/hadoop-client/libexec"
+hadoop_home = "/usr/hdp/current/hadoop-client"
+if not security_enabled:
+  hadoop_secure_dn_user = '""'
 else:
-  mapreduce_libs_path = "/usr/lib/hadoop-mapreduce/*"
-  hadoop_libexec_dir = "/usr/lib/hadoop/libexec"
-  hadoop_home = "/usr/lib/hadoop"
-  hadoop_secure_dn_user = hdfs_user
+  dfs_dn_port = get_port(dfs_dn_addr)
+  dfs_dn_http_port = get_port(dfs_dn_http_addr)
+  dfs_dn_https_port = get_port(dfs_dn_https_addr)
+  # We try to avoid inability to start datanode as a plain user due to usage of root-owned ports
+  if dfs_http_policy == "HTTPS_ONLY":
+    secure_dn_ports_are_in_use = is_secure_port(dfs_dn_port) or is_secure_port(dfs_dn_https_port)
+  elif dfs_http_policy == "HTTP_AND_HTTPS":
+    secure_dn_ports_are_in_use = is_secure_port(dfs_dn_port) or is_secure_port(dfs_dn_http_port) or is_secure_port(dfs_dn_https_port)
+  else:   # params.dfs_http_policy == "HTTP_ONLY" or not defined:
+    secure_dn_ports_are_in_use = is_secure_port(dfs_dn_port) or is_secure_port(dfs_dn_http_port)
+  if secure_dn_ports_are_in_use:
+    hadoop_secure_dn_user = hdfs_user
+  else:
+    hadoop_secure_dn_user = '""'
 
 hadoop_dir = "/etc/hadoop"
 hadoop_conf_dir = "/etc/hadoop/conf"
