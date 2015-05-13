@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+
+<metainfo>
+    <schemaVersion>2.0</schemaVersion>
+    <services>
+        <service>
+            <name>HDFS</name>
+            <extends>common-services/HDFS/2.1.0.2.0</extends>
+        </service>
+        <service>
+            <name>ZOOKEEPER</name>
+            <extends>common-services/ZOOKEEPER/3.4.5.2.0</extends>
+        </service>
+    </services>
+</metainfo>
