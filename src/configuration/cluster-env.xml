@@ -35,4 +35,9 @@
         <property-type>GROUP</property-type>
         <description>Hadoop user group.</description>
     </property>
+    <property>
+        <name>hdp_stack_version</name>
+        <value>2.2.4.2</value>
+        <description>Version of HDP stack being used for common-services.</description>
+    </property>
 </configuration>

@@ -33,8 +33,8 @@ java_home = config['hostLevelParams']['java_home']
 
 ambari_server_hostname = config['clusterHostInfo']['ambari_server_host'][0]
 
-stack_version_unformatted = str(config['hostLevelParams']['stack_version'])
-hdp_stack_version = format_hdp_stack_version(stack_version_unformatted)
+hdp_stack_version_unformatted = str(config['configurations']['cluster-env']['hdp_stack_version'])
+hdp_stack_version = format_hdp_stack_version(hdp_stack_version_unformatted)
 
 security_enabled = config['configurations']['cluster-env']['security_enabled']
 hdfs_user = config['configurations']['hadoop-env']['hdfs_user']

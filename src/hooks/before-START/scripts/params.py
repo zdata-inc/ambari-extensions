@@ -24,8 +24,8 @@ import os
 
 config = Script.get_config()
 
-stack_version_unformatted = str(config['hostLevelParams']['stack_version'])
-hdp_stack_version = format_hdp_stack_version(stack_version_unformatted)
+hdp_stack_version_unformatted = str(config['configurations']['cluster-env']['hdp_stack_version'])
+hdp_stack_version = format_hdp_stack_version(hdp_stack_version_unformatted)
 
 #hadoop params
 

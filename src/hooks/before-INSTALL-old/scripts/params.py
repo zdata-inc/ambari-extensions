@@ -4,8 +4,8 @@ from resource_management.libraries.functions.version import format_hdp_stack_ver
 config = Script.get_config()
 tmp_dir = Script.get_tmp_dir()
 
-stack_version_unformatted = str(config['hostLevelParams']['stack_version'])
-stack_version = format_hdp_stack_version(stack_version_unformatted)
+hdp_stack_version_unformatted = str(config['configurations']['cluster-env']['hdp_stack_version'])
+hdp_stack_version = format_hdp_stack_version(hdp_stack_version_unformatted)
 
 user_group = config['configurations']['cluster-env']['user_group']
 
