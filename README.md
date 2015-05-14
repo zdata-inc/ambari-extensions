@@ -115,3 +115,7 @@ You can find these files at https://network.pivotal.io/products/pivotal-hd.  Cre
  - [Pivotal HD 2.1 -> Pivotal HD 2.1.0](https://network.pivotal.io/products/pivotal-hd#/releases/2-1)
  - [Pivotal HD 2.1 -> PHD 2.1.0: Pivotal HAWQ 1.2.1.0](https://network.pivotal.io/products/pivotal-hd#/releases/2-1)
  - [4.3.5.0 Database Server -> Greenplum Database 4.3.5.0 for Red Hat Enterprise Linux 5 and 6](https://network.pivotal.io/products/pivotal-gpdb)
+
+Licensing
+---------
+Ambari is an open source deployment tool, users must follow license agreements provided by Hortonworks and Pivotal software.
