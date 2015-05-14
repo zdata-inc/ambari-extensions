@@ -25,8 +25,8 @@ from resource_management.core.system import System
 config = Script.get_config()
 sudo = AMBARI_SUDO_BINARY
 
-stack_version_unformatted = str(config['hostLevelParams']['stack_version'])
-hdp_stack_version = format_hdp_stack_version(stack_version_unformatted)
+hdp_stack_version_unformatted = str(config['configurations']['cluster-env']['hdp_stack_version'])
+hdp_stack_version = format_hdp_stack_version(hdp_stack_version_unformatted)
 
 #hadoop params
 

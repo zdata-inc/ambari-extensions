@@ -2,6 +2,9 @@
 
 require 'json'
 
+CACHING=true
+cached_repositories=%w(HDP-2.2 HDP-UTILS-1.1.0.20)
+
 # ================================================================================
 # Variables
 # ================================================================================
@@ -36,6 +39,8 @@ end
 
 Vagrant.configure(2) do |config|
     config.vm.box = 'chef/centos-6.5'
+    vm_centos_major_version = '6'
+    vm_arch = 'x86_64'
 
 
     # ================================================================================
@@ -142,9 +147,13 @@ Vagrant.configure(2) do |config|
 
             node.vm.synced_folder 'src', '/var/lib/ambari-server/resources/stacks/zData/9.9.9', create: true
 
-            node.vm.provision 'shell', privileged: false, inline: 'echo "export PATH=/vagrant/build:$PATH" >> ~/.bashrc'
+            cached_repositories.each do |repo|
+                node.vm.synced_folder "artifacts/cache/master-#{i}/#{repo}", "/var/cache/yum/#{vm_arch}/#{vm_centos_major_version}/#{repo}", create: true if CACHING
+            end
+
             node.vm.provision 'shell', path: 'build/bootstrap.sh'
             node.vm.provision 'shell', path: 'build/bootstrap-master.sh'
+            node.vm.provision 'shell', privileged: false, inline: 'echo "export PATH=/vagrant/build:$PATH" >> ~/.bashrc'
             node.vm.provision :reload
         end
     end
@@ -170,9 +179,12 @@ Vagrant.configure(2) do |config|
                 EOF
             end
 
-            node.vm.provision 'shell', privileged: false, inline: 'echo "export PATH=/vagrant/build:$PATH" >> ~/.bashrc'
+            cached_repositories.each do |repo|
+                node.vm.synced_folder "artifacts/cache/slave-#{i}/#{repo}", "/var/cache/yum/#{vm_arch}/#{vm_centos_major_version}/#{repo}", create: true if CACHING
+            end
             node.vm.provision 'shell', path: 'build/bootstrap.sh'
             node.vm.provision 'shell', path: 'build/bootstrap-slave.sh'
+            node.vm.provision 'shell', privileged: false, inline: 'echo "export PATH=/vagrant/build:$PATH" >> ~/.bashrc'
             node.vm.provision :reload
         end
     end
