@@ -48,7 +48,6 @@ def master_install(env):
             gp_install_script.install_to(version_installation_path)
 
 
-    source_cmd = 'source %s;' % path.join(params.absolute_installation_path, 'greenplum_path.sh')
     relative_greenplum_path_file = path.join(version_installation_path, 'greenplum_path.sh')
 
     post_copy_commands = format(dedent("""
@@ -62,11 +61,11 @@ def master_install(env):
     create_host_files()
 
     Execute(
-        format(source_cmd + 'gpseginstall -f "{params.greenplum_all_hosts_file}" -u "{params.admin_user}" -p "{params.admin_password}"')
+        format(params.source_cmd + 'gpseginstall -f "{params.greenplum_all_hosts_file}" -u "{params.admin_user}" -p "{params.admin_password}"')
     )
 
     # Perform post_copy_commands on rest of machines in cluster.
-    Execute(source_cmd + utilities.gpsshify(post_copy_commands, hostfile=params.greenplum_all_hosts_file))
+    Execute(params.source_cmd + utilities.gpsshify(post_copy_commands, hostfile=params.greenplum_all_hosts_file))
 
     try:
         gpinitsystemCommand = ['gpinitsystem', '-a', '-c "%s"' % params.greenplum_initsystem_config_file]
@@ -78,7 +77,7 @@ def master_install(env):
             gpinitsystemCommand.append('-S')
 
         Execute(
-            source_cmd + " ".join(gpinitsystemCommand),
+            params.source_cmd + " ".join(gpinitsystemCommand),
             user=params.admin_user
         )
     except Fail as exception:

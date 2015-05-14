@@ -39,7 +39,7 @@ class Master(Script):
         self.configure(env)
 
         Execute(
-            "gpstart -a -v",
+            params.source_cmd + "gpstart -a -v",
             user=params.admin_user
         )
 
@@ -47,7 +47,7 @@ class Master(Script):
         import params
 
         Execute(
-            "gpstop -a -M smart -v",
+            params.source_cmd + "gpstop -a -M smart -v",
             user=params.admin_user
         )
 
@@ -55,7 +55,7 @@ class Master(Script):
         import params
 
         Execute(
-            "gpstop -a -M fast -v",
+            params.source_cmd + "gpstop -a -M fast -v",
             user=params.admin_user
         )
 

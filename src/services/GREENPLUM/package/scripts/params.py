@@ -39,6 +39,9 @@ mirror_data_directory_template = config['configurations']['greenplum-mirroring']
 portbase_mirror = config['configurations']['greenplum-mirroring']['mirror_port_base']
 portbase_mirror_replication = config['configurations']['greenplum-mirroring']['mirror_replication_port_base']
 
+# Commands
+source_cmd = 'source %s;' % path.join(absolute_installation_path, 'greenplum_path.sh')
+
 # Import file paths
 master_data_segment_directory = path.join(master_data_directory, segment_prefix + '-1')
 greenplum_segment_hosts_file = path.join(installation_path, 'greenplum-db', 'greenplum_segments')
