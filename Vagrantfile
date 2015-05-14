@@ -2,6 +2,8 @@
 
 require 'json'
 
+CACHING=true
+
 # ================================================================================
 # Variables
 # ================================================================================
@@ -142,6 +144,8 @@ Vagrant.configure(2) do |config|
 
             node.vm.synced_folder 'src', '/var/lib/ambari-server/resources/stacks/zData/9.9.9', create: true
 
+            node.vm.synced_folder "artifacts/cache/master-#{i}", '/var/cache/yum', create: true if CACHING
+
             node.vm.provision 'shell', privileged: false, inline: 'echo "export PATH=/vagrant/build:$PATH" >> ~/.bashrc'
             node.vm.provision 'shell', path: 'build/bootstrap.sh'
             node.vm.provision 'shell', path: 'build/bootstrap-master.sh'
@@ -169,6 +173,8 @@ Vagrant.configure(2) do |config|
                     hostname `cat /etc/hostname`
                 EOF
             end
+
+            node.vm.synced_folder "artifacts/cache/slave-#{i}", '/var/cache/yum', create: true if CACHING
 
             node.vm.provision 'shell', privileged: false, inline: 'echo "export PATH=/vagrant/build:$PATH" >> ~/.bashrc'
             node.vm.provision 'shell', path: 'build/bootstrap.sh'

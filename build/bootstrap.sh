@@ -4,6 +4,9 @@
 cd /tmp
 AMBARI_REPO=http://public-repo-1.hortonworks.com/ambari/centos6/2.x/updates/2.0.0/ambari.repo
 
+# Cache yum information
+sed -i 's/keepcache=0/keepcache=1/' /etc/yum.conf
+
 yum install -y wget
 
 if [ -d /vagrant/artifacts/rpms ]; then
