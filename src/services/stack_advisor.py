@@ -24,7 +24,7 @@ from math import ceil
 from stack_advisor import DefaultStackAdvisor
 
 
-class ZDATA05StackAdvisor(DefaultStackAdvisor):
+class zData999StackAdvisor(DefaultStackAdvisor):
 
   def getComponentLayoutValidations(self, services, hosts):
     """Returns array of Validation objects about issues with hostnames components assigned to"""
