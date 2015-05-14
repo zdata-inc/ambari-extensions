@@ -4,12 +4,12 @@ title: zData Ambari Extensions
 ---
 
 What is the zData Ambari Extension Pack?
--------------------------------
+----------------------------------------
 
 Ambari is an Apache sponsored project whose goal is to make provisioning, managing, and monitoring of Apache Hadoop and other distributed deployments easy. zData's new Ambari Extensions is built on top of Ambari and provides easy deployment of Pivotal Greenplum, Pivotal HAWQ, and [zData Chorus](http://www.zdatainc.com/zdata-chorus).
 
-Getting Setup
--------------
+Getting Started with zData Ambari Extensions
+--------------------------------------------
 
 Currently there are two different ways to get started with zData Ambari Extensions.
 
