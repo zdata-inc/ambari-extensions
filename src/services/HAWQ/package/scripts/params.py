@@ -36,6 +36,7 @@ DFS_DIRECTORY = 'hawq_data'
 # Important paths
 security_conf_path = "/etc/security/limits.d"
 hawq_install_path = "/usr/local/hawq/"
+hawq_bin_path = path.join(hawq_install_path, 'bin')
 MASTER_DIRECTORY = config["configurations"]["hawq-env"]["MASTER_DIRECTORY"]
 hadoop_home = config["configurations"]["hawq-env"]["hadoop_home"]
 hawq_environment_path = path.join(hawq_install_path, "greenplum_path.sh")
