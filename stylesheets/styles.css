@@ -140,6 +140,12 @@ hr {
   margin:0 0 24px;
 }
 
+small {
+    font-size: 0.85em;
+    line-height: 13px !important;
+    display: block;
+}
+
 /* Images */
 
 img {
