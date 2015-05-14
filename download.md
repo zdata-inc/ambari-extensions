@@ -33,3 +33,5 @@ title: Download
 </div>
 
 <script type='text/javascript' src='//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js'></script>
+
+<small>We will not use this information for any other purpose than to contact you via the mailing list you have signed up for. We WILL NOT pass your email address or other details to other companies. You may at any point have your details removed from our database by contacting our webmaster, visit [zdatainc.com](http://www.zdatainc.com) for more information.</small>
