@@ -23,15 +23,16 @@ def setup_hdp_install_directory():
   # This is a name of marker file.
   SELECT_ALL_PERFORMED_MARKER = "/var/lib/ambari-agent/data/hdp-select-set-all.performed"
   import params
+
   Execute(as_sudo(['touch', SELECT_ALL_PERFORMED_MARKER]) + ' ; ' +
-                 format('{sudo} /usr/bin/hdp-select set all `ambari-python-wrap /usr/bin/hdp-select versions | grep ^{stack_version_unformatted} | tail -1`'),
-          only_if=format('ls -d /usr/hdp/{stack_version_unformatted}*'),   # If any HDP version is installed
+                 format('{sudo} /usr/bin/hdp-select set all `ambari-python-wrap /usr/bin/hdp-select versions | grep ^{hdp_stack_version_unformatted} | tail -1`'),
+          only_if=format('ls -d /usr/hdp/{hdp_stack_version_unformatted}*'),   # If any HDP version is installed
           not_if=format("test -f {SELECT_ALL_PERFORMED_MARKER}")           # Do that only once (otherwise we break rolling upgrade logic)
   )
 
 def setup_config():
   import params
-  stackversion = params.stack_version_unformatted
+  stackversion = params.hdp_stack_version_unformatted
   if params.has_namenode or stackversion.find('Gluster') >= 0:
     XmlConfig("core-site.xml",
               conf_dir=params.hadoop_conf_dir,
