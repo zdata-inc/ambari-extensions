@@ -22,3 +22,8 @@ Setup your cluster with [Vagrant](https://www.vagrantup.com/) locally or remotel
 Deploy the zData Ambari Extension Pack onto an existing Ambari installation using your own hardware. Please note that the cluster should be running CentOS 6, it is not recommended or supported to have other services running outside of Ambari.
 
 [Further instructions on installation for your own Ambari cluster are available here.]({{ site.baseurl }}/getting-setup/on-your-own-hardware.html)
+
+Licensing
+---------
+Ambari is an open source deployment tool, users must follow license agreements provided by Hortonworks and Pivotal software.
+
