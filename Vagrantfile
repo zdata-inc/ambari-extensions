@@ -148,8 +148,8 @@ Vagrant.configure(2) do |config|
             node.vm.synced_folder 'src', '/var/lib/ambari-server/resources/stacks/zData/9.9.9', create: true
 
             cached_repositories.each do |repo|
-                node.vm.synced_folder "artifacts/cache/master-#{i}/#{repo}", "/var/cache/yum/#{vm_arch}/#{vm_centos_major_version}/#{repo}", create: true if CACHING
-            end
+                node.vm.synced_folder "artifacts/cache/master-#{i}/#{repo}", "/var/cache/yum/#{vm_arch}/#{vm_centos_major_version}/#{repo}", create: true
+            end if CACHING
 
             node.vm.provision 'shell', path: 'build/bootstrap.sh'
             node.vm.provision 'shell', path: 'build/bootstrap-master.sh'
@@ -180,8 +180,9 @@ Vagrant.configure(2) do |config|
             end
 
             cached_repositories.each do |repo|
-                node.vm.synced_folder "artifacts/cache/slave-#{i}/#{repo}", "/var/cache/yum/#{vm_arch}/#{vm_centos_major_version}/#{repo}", create: true if CACHING
-            end
+                node.vm.synced_folder "artifacts/cache/slave-#{i}/#{repo}", "/var/cache/yum/#{vm_arch}/#{vm_centos_major_version}/#{repo}", create: true
+            end if CACHING
+
             node.vm.provision 'shell', path: 'build/bootstrap.sh'
             node.vm.provision 'shell', path: 'build/bootstrap-slave.sh'
             node.vm.provision 'shell', privileged: false, inline: 'echo "export PATH=/vagrant/build:$PATH" >> ~/.bashrc'
