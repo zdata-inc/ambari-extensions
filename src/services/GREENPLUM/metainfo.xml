@@ -23,6 +23,17 @@
                         <timeout>4800</timeout>
                     </commandScript>
 
+                    <customCommands>
+                        <customCommand>
+                            <name>ForceStop</name>
+                            <commandScript>
+                                <script>scripts/master.py</script>
+                                <scriptType>PYTHON</scriptType>
+                                <timeout>600</timeout>
+                            </commandScript>
+                        </customCommand>
+                    </customCommands>
+
                     <configFiles>
                         <configFile>
                             <type>xml</type>
