@@ -107,7 +107,7 @@ def master_install(env):
 
 def refresh_pg_hba_file():
     import params
-    utilities.add_block_to_file(params.pg_hba_file, InlineTemplate(params.pg_hba_appendable_data), 'zdata-gp')
+    utilities.add_block_to_file(params.pg_hba_file, InlineTemplate(params.pg_hba_appendable_data).get_content(), 'zdata-gp')
 
 def create_host_files():
     """Create segment and all host files in greenplum absolute installation path."""
