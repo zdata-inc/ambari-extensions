@@ -67,6 +67,7 @@ class Master(Script):
 
         greenplum.create_host_files()
         greenplum.preinstallation_configure(env)
+        greenplum.refresh_pg_hba_file()
 
          
     def status(self, env):

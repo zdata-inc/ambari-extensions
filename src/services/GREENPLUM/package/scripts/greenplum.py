@@ -105,6 +105,10 @@ def master_install(env):
             Logger.info("No consensus.  Installation considered successful.")
             Logger.warning(">>>>> The log file located at %s should be reviewed so any reported warnings can be fixed!" % logfile)
 
+def refresh_pg_hba_file():
+    import params
+    utilities.add_block_to_file(params.pg_hba_file, InlineTemplate(params.pg_hba_appendable_data), 'zdata-gp')
+
 def create_host_files():
     """Create segment and all host files in greenplum absolute installation path."""
 
