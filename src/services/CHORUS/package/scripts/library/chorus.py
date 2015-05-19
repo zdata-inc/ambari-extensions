@@ -42,6 +42,7 @@ class Chorus(object):
         """
         Prepare and install Chorus onto the system via a given self extracting shell script.
         """
+        user = self.user()
 
         if not os.path.exists(self.params.INSTALLATION_DIRECTORY):
             self.create_directory(self.params.INSTALLATION_DIRECTORY)
@@ -50,11 +51,12 @@ class Chorus(object):
             self.create_directory(self.params.DATA_DIRECTORY)
 
         installer_path, is_installer_temporary = self.get_installer_path()
+        os.chown(installer_path, user['uid'], user['gid'])
 
         install_output = utilities.run(
             "/usr/bin/env bash %s" % installer_path,
             communicate=self._build_installation_parameters(),
-            user=self.user()
+            user=user
         )
 
         if install_output.find("An error has occurred. Trying to back out and restore previous state") != -1:
