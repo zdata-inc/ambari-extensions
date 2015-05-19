@@ -49,8 +49,10 @@ class Chorus(object):
         if not os.path.exists(self.params.DATA_DIRECTORY):
             self.create_directory(self.params.DATA_DIRECTORY)
 
+        installer_path, is_installer_temporary = self.get_installer_path()
+
         install_output = utilities.run(
-            "/usr/bin/env bash %s" % self.params.INSTALLER_PATH,
+            "/usr/bin/env bash %s" % installer_path,
             communicate=self._build_installation_parameters(),
             user=self.user()
         )
@@ -58,6 +60,10 @@ class Chorus(object):
         if install_output.find("An error has occurred. Trying to back out and restore previous state") != -1:
             with open(os.path.join(self.params.INSTALLATION_DIRECTORY, 'install.log'), 'r') as filehandle:
                 raise Exception("The installation encountered an error and attempted to roll back: %s" % filehandle.read())
+
+        # Delete installer if it was a temporary file.
+        if is_installer_temporary:
+            os.remove(installer_path)
 
         self.configure()
 
@@ -147,3 +153,10 @@ class Chorus(object):
             return not_running
         else:
             return True
+
+
+    def get_installer_path(self):
+        """Return the path for the Chorus installer.
+        Download to a temporary file if necessary."""
+
+        return utilities.resolve_from_source(self.params.INSTALLER_PATH)

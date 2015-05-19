@@ -5,6 +5,7 @@ Utility methods for Chorus installation and management
 import os
 from subprocess import Popen, PIPE
 from textwrap import dedent
+import urllib
 
 def cprint(color, message):
     """
@@ -46,6 +47,31 @@ def create_user(user):
         'uid': int(os.popen("id --user %s" % user).read().strip()),
         'gid': int(os.popen('id --group %s' % user).read().strip())
     }
+
+def resolve_from_source(installer_path, tmp_dir=None):
+    """Given a path resolve it to a local-system path.
+    Returns the path and whether or not the path is temporary.
+    """
+
+    filehandle, tmp_path = tempfile.mkstemp(dir=tmp_dir)
+    os.close(filehandle) # Don't need a filehandle
+    del filehandle
+
+    # Attempt to locate locallay
+    if os.path.exists(installer_path):
+        return (installer_path, False)
+
+    # Attempt to download URL
+    try:
+        Logger.info('Downloading Greenplum from %s to %s.' % (installer_path, tmp_path))
+        urllib.urlretrieve(installer_path, tmp_path)
+
+        return (tmp_path, True)
+    except IOError:
+        pass
+
+    # Default to erroring if none of the above retrieval methods were successful.
+    raise ValueError('Could not find greenplum installer at %s' % installer_path)
 
 def _preCommandExecution(user=None, setLang=True):
     """
