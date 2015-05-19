@@ -9,7 +9,7 @@
     </property>
     <property>
         <name>chorus.installation.installerpath</name>
-        <value>https://s3.amazonaws.com/open-chorus/zdata-chorus-5.1.0.0.sh</value>
+        <value>https://s3.amazonaws.com/zdata-chorus/zdata-chorus-5.1.0.0.sh</value>
         <description>The chorus installer's absolute file path.</description>
     </property>
     <property>
