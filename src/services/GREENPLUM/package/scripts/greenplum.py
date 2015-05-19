@@ -64,7 +64,7 @@ def master_install(env):
         format(params.source_cmd + 'gpseginstall -f "{params.greenplum_all_hosts_file}" -u "{params.admin_user}" -p "{params.admin_password}"')
     )
 
-    # Perform post_copy_commands on rest of machines in cluster.
+    # Perform post_copy_commands on rest of machines in cluster after binaries have been distributed.
     Execute(params.source_cmd + utilities.gpsshify(post_copy_commands, hostfile=params.greenplum_all_hosts_file))
 
     try:
