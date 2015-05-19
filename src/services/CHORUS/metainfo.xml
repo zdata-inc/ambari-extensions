@@ -18,7 +18,7 @@
                     <commandScript>
                         <script>scripts/master.py</script>
                         <scriptType>PYTHON</scriptType>
-                        <timeout>4800</timeout>
+                        <timeout>600</timeout>
                     </commandScript>
                 </component>
             </components>
