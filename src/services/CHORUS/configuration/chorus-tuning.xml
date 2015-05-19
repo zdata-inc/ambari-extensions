@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration supports_final="true" xmlns:xi="http://www.w3.org/2001/XInclude">
+    <property>
+        <name>chorus.minimum_memory</name>
+        <value>2048M</value>
+        <description>Minimum amount of memory to allocate to Chorus.</description>
+    </property>
+    <property>
+        <name>chorus.maximum_memory</name>
+        <value>4096M</value>
+        <description>Maximum amount of memory to allocate to Chorus.</description>
+    </property>
+</configuration>
