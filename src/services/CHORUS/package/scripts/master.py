@@ -30,9 +30,6 @@ class Master(Script):
         """
         self.configEnv(env)
 
-        if not os.path.exists(self._chorus().params.INSTALLER_PATH):
-            raise AttributeError('Installer could not be found at ' + self._chorus().params.INSTALLER_PATH)
-
         self.install_packages(env)
         env.set_params(self._chorus().params)
 
