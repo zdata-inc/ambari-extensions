@@ -13,7 +13,6 @@ Getting started with Vagrant
     ```shell
     vagrant plugin install vagrant-hostmanager
     vagrant plugin install vagrant-reload
-    vagrant plugin install vagrant-triggers
 
     vagrant plugin install vagrant-aws # To provision on AWS
     ```
@@ -21,21 +20,21 @@ Getting started with Vagrant
 2. Create boxes with Virtualbox
 
     ```shell
-    AMBARI_SLAVES=5 vagrant up # Bring up master, slave1, slave2, ..., slave5
-    AMBARI_SLAVES=1 vagrant up # Bring up master and slave1
-    AMBARI_SLAVES=0 vagrant up # Bring up just master
+    vagrant up # Bring up master, slave1
     ```
+
+    __Note:__ Copy `vagrant-env.conf.sample` to `vagrant-env.conf` and modify the values to change various vagrant settings such as the number of slave machines.
 
 3. Connect, vms created: master, slave0, slave1
 
     ```
     master.ambaricluster.local
-    slave0.ambaricluster.local
     slave1.ambaricluster.local
+    slave2.ambaricluster.local
 
     vagrant ssh master
-    vagrant ssh slave0
     vagrant ssh slave1
+    vagrant ssh slave2
     ```
 
 ### Additional steps to deploy to AWS:
@@ -91,7 +90,7 @@ Getting started with Vagrant
 4. Create the boxes on AWS
 
     ```shell
-    AMBARI_SLAVES=5 vagrant up --provider=aws --no-parallel
+    vagrant up --provider=aws --no-parallel
     vagrant hostmanager
     ```
 

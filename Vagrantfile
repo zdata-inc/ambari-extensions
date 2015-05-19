@@ -8,21 +8,15 @@ cached_repositories=%w(HDP-2.2)
 # Variables
 # ================================================================================
 # 
-# Create a hash of variables for use throughout the rest of the vagrant file.
-# When creating the machines for the first time the variables will be stored in
-# the variablesFile for use during subsequent calls to the vagrant command.
-# When the machines are destroyed, this file is also removed.
+# Retrieve the vagrant-env variables used to customize the local ambari environment.
 
-variablesFile = File.join File.dirname(__FILE__), '.vagrant', 'ambari-variables'
+variablesFile = [
+    File.join(File.dirname(__FILE__), 'vagrant-env.conf'),
+    File.join(File.dirname(__FILE__), 'vagrant-env.conf.sample')
+]
 
-params = {
-    'master_count' => (ENV['AMBARI_MASTERS'] || 1).to_i,
-    'slave_count' => (ENV['AMBARI_SLAVES'] || 1).to_i
-}
-
-# Overwrite parameters with those stored, fail silently
-params.merge!(JSON.parse(IO.read(variablesFile))) if File.exists? variablesFile rescue StandardError
-
+variablesFile = variablesFile.find { |path| File.exists? path }
+params = JSON.parse(IO.read(variablesFile))
 
 # ================================================================================
 # Shared SSH Key
@@ -65,23 +59,6 @@ Vagrant.configure(2) do |config|
             nil
         end
     end
-
-
-    # ================================================================================
-    # Triggers
-    # ================================================================================
-
-    config.trigger.after :up do
-        # Save variables for subsequent calls
-        File.open(variablesFile, 'w') do |file|
-            file.write(JSON.generate(params))
-        end
-    end
-
-    config.trigger.after :destroy do
-        File.delete variablesFile if File.exists? variablesFile
-    end
-
 
     # ================================================================================
     # Providers
