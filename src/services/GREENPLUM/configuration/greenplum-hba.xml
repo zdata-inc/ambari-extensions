@@ -2,7 +2,7 @@
 <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
 
 <configuration>
-    <property>
+    <property require-input="false">
         <name>pg_hba.contents</name>
         <value># This file contains Ambari specific pg_hba entries for the Greenplum database.
 # They are appended to the pg_hba.conf file.</value>
