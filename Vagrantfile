@@ -2,8 +2,7 @@
 
 require 'json'
 
-CACHING=true
-cached_repositories=%w(HDP-2.2 HDP-UTILS-1.1.0.20)
+cached_repositories=%w(HDP-2.2)
 
 # ================================================================================
 # Variables
@@ -149,7 +148,7 @@ Vagrant.configure(2) do |config|
 
             cached_repositories.each do |repo|
                 node.vm.synced_folder "artifacts/cache/master-#{i}/#{repo}", "/var/cache/yum/#{vm_arch}/#{vm_centos_major_version}/#{repo}", create: true
-            end if CACHING
+            end
 
             node.vm.provision 'shell', path: 'build/bootstrap.sh'
             node.vm.provision 'shell', path: 'build/bootstrap-master.sh'
@@ -181,7 +180,7 @@ Vagrant.configure(2) do |config|
 
             cached_repositories.each do |repo|
                 node.vm.synced_folder "artifacts/cache/slave-#{i}/#{repo}", "/var/cache/yum/#{vm_arch}/#{vm_centos_major_version}/#{repo}", create: true
-            end if CACHING
+            end
 
             node.vm.provision 'shell', path: 'build/bootstrap.sh'
             node.vm.provision 'shell', path: 'build/bootstrap-slave.sh'
