@@ -18,6 +18,7 @@ src=$(shell find src -type f \
 	-not -name 'Makefile.in' \
 	-not -name 'archive.zip' \
 	-not -path '*/.*' \
+	-not -path '*/services/MINECRAFT/*' \
 )
 
 dist: $(distdir).tar.gz

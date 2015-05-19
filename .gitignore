@@ -13,3 +13,4 @@ autom4te.cache/
 
 configure
 Makefile
+vagrant-env.conf

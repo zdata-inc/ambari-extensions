@@ -15,9 +15,14 @@ def preinstallation_configure(env):
     env.set_params(params)
 
     # Create user
+    Group(
+        params.admin_group
+    )
+
     User(
         params.admin_user,
         password=params.hashed_admin_password,
+        groups=[params.admin_group],
         action="create", shell="/bin/bash"
     )
 
@@ -61,10 +66,10 @@ def master_install(env):
     create_host_files()
 
     Execute(
-        format(params.source_cmd + 'gpseginstall -f "{params.greenplum_all_hosts_file}" -u "{params.admin_user}" -p "{params.admin_password}"')
+        format(params.source_cmd + 'gpseginstall -f "{params.greenplum_all_hosts_file}" -u "{params.admin_user}" -g "{params.admin_group}" -p "{params.admin_password}"')
     )
 
-    # Perform post_copy_commands on rest of machines in cluster.
+    # Perform post_copy_commands on rest of machines in cluster after binaries have been distributed.
     Execute(params.source_cmd + utilities.gpsshify(post_copy_commands, hostfile=params.greenplum_all_hosts_file))
 
     try:
