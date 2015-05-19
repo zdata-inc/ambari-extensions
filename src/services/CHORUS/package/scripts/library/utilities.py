@@ -5,7 +5,9 @@ Utility methods for Chorus installation and management
 import os
 from subprocess import Popen, PIPE
 from textwrap import dedent
-import urllib
+import urllib, tempfile
+
+from resource_management import *
 
 def cprint(color, message):
     """
@@ -71,7 +73,7 @@ def resolve_from_source(installer_path, tmp_dir=None):
         pass
 
     # Default to erroring if none of the above retrieval methods were successful.
-    raise ValueError('Could not find greenplum installer at %s' % installer_path)
+    raise ValueError('Installer could not be found at %s' % installer_path)
 
 def _preCommandExecution(user=None, setLang=True):
     """
