@@ -96,14 +96,35 @@ Getting started with Vagrant
 
 More information about getting started with Ambari using vagrant [is available here](http://zdata-inc.github.io/ambari-stack/getting-setup/with-vagrant.html).
 
-What Services Do Not Do
------------------------
-### Greenplum
 
+Services
+--------
+
+### Greenplum
+Installs and manages the Pivotal Greenplum database software.
+
+##### What The Service Does Not Do
  - Does not automatically create or setup XFS filesystem.
  - Does not specifiy an IO scheduler of deadline.
  - Does not configure read-ahead.
  - Does not disable transparent hugepage.
+
+### Chorus
+Installs and manages zData Chorus.
+
+##### Minimum Tuning Values
+
+ * inimum_memory = 256M
+ * maximum_memory = 256M
+ * young_heap_size = 128M
+ * max_perm_size = 256M
+
+### HAWQ
+Installs and manages the Pivotal HAWQ Hadoop SQL engine.
+
+### PXF
+Installs and manages the Pivotal Extension Framework, patches it to work with Hortonwork's Hadoop.
+
 
 Retrieve Artifacts
 ------------------
