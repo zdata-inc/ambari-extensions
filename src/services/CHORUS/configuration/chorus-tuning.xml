@@ -12,4 +12,14 @@
         <value>4096M</value>
         <description>Maximum amount of memory to allocate to Chorus.</description>
     </property>
+    <property>
+        <name>chorus.young_heap_size</name>
+        <value>1365M</value>
+        <description>Maximum amount of memory to allocate to Chorus.</description>
+    </property>
+    <property>
+        <name>chorus.max_perm_size</name>
+        <value>256M</value>
+        <description>Maximum amount of memory to allocate to Chorus.</description>
+    </property>
 </configuration>

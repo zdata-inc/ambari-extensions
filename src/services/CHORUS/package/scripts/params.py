@@ -16,8 +16,7 @@ EXECUTION_TIMEOUT = config['chorus-env']['chorus.server.executiontimeout']
 LOG_LEVEL = config['chorus-env']['chorus.server.loglevel']
 MAIL_ENABLED = config['chorus-env']['chorus.server.mailenabled']
 
-minimum_memory = '512M'
-maximum_memory = '2048M'
-
-# minimum_memory = config['chorus-tuning']['chorus.minimum_memory']
-# maximum_memory = config['chorus-tuning']['chorus.maximum_memory']
+minimum_memory = config['chorus-tuning']['chorus.minimum_memory']
+maximum_memory = config['chorus-tuning']['chorus.maximum_memory']
+maximum_memory = config['chorus-tuning']['chorus.young_heap_size']
+maximum_memory = config['chorus-tuning']['chorus.max_perm_size']

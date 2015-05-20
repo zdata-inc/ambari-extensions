@@ -7,7 +7,7 @@ server_port = {{SERVER_PORT}}
 postgres_port = 8543
 solr_port = 8983
 
-java_options = -Djava.security.egd=file:/dev/./urandom -server -Xmx{{maximum_memory}} -Xms{{minimum_memory}} -XX:MaxPermSize=30m -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:ParallelGCThreads=3 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=./ -XX:+CMSClassUnloadingEnabled
+java_options = -Djava.security.egd=file:/dev/./urandom -server -Xmx{{maximum_memory}} -Xms{{minimum_memory}} -Xmn{{young_heap_size}} -XX:MaxPermSize={{max_perm_size}} -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:ParallelGCThreads=3 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=./ -XX:+CMSClassUnloadingEnabled
 
 #java_options = -Djava.security.egd=file:/dev/./urandom -server -Xmx2048m -Xms512m -XX:MaxPermSize=128m
 
