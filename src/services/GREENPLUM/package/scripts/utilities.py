@@ -18,7 +18,10 @@ def append_bash_profile(user, to_be_appended, run=False, allow_duplicates=False)
     bashrc = "/home/%s/.bashrc" % user
 
     with open(bashrc, 'a+') as filehandle:
-        if to_be_appended.strip() not in map(lambda line: line.strip(), filehandle.readlines()) or allow_duplicates:
+        stripped_lines = [line.strip() for line in filehandle.readlines()]
+        to_be_appended_already_in_file = to_be_appended.strip() in stripped_lines
+
+        if not to_be_appended_already_in_file or allow_duplicates:
             Logger.info(format("Appending {to_be_appended} to {bashrc}"))
             filehandle.write(format("{to_be_appended}\n"))
 
