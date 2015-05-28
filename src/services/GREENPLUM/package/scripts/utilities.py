@@ -99,7 +99,7 @@ def add_block_to_file(filepath, data, uid, start_sentinel=None, end_sentinel=Non
 
     data = data.strip() + os.linesep
 
-    with open(filepath, 'rw+') as filehandle:
+    with open(filepath, 'r+') as filehandle:
         lines = filehandle.readlines()
         filehandle.seek(0)
         filehandle.truncate()
