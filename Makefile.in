@@ -33,6 +33,9 @@ $(distdir): $(src)
 	cp --parents $? $(tmp_dir)/$(distdir)
 	mv $(tmp_dir)/$(distdir)/src/* $(tmp_dir)/$(distdir) && rm -r $(tmp_dir)/$(distdir)/src
 
+test:
+	python -m unittest discover tests/
+
 clean:
 	rm -rf $(tmp_dir)
 	find . -name "Makefile" -delete
