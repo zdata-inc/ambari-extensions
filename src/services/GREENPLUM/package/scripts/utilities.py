@@ -135,8 +135,13 @@ def add_block_to_file(filepath, data, uid, start_sentinel=None, end_sentinel=Non
             filehandle.write(data)
             filehandle.write(end_sentinel + os.linesep)
 
+def parse_path_pattern_expression(path_pattern, number_required):
+    """Creates an array of size number_required containing paths generated from path_pattern."""
+
+    return []
+
 def gpsshify(command, host=None, hostfile=None, args=None):
-    """Return a gpssh command which will run the given command on the specified remote machines in the cluster.
+    """Return a gpssh command which will run the command on the specified remote machine in the cluster.
 
     command -- Command or commands which will be run on remote machines in the cluster.
     host -- A remote host to run the command on.
