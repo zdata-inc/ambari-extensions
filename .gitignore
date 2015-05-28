@@ -16,3 +16,4 @@ config.log
 configure
 Makefile
 vagrant-env.conf
+*.pyc
