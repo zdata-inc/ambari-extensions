@@ -37,6 +37,7 @@ test:
 	python -m unittest discover tests/
 
 clean:
+	find . -name '*.pyc' -delete
 	rm -rf $(tmp_dir)
 	find . -name "Makefile" -delete
 
