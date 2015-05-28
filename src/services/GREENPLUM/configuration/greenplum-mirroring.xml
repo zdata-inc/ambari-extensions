@@ -9,10 +9,14 @@
     </property>
     <property>
         <name>mirror_data_directory</name>
-        <value>/data{{segment_number}}/mirror</value>
-        <description>The mirror data directory for a given segment.  Available templating values: {{segment_number}}.</description>
+        <value>/data[1..2]/mirror</value>
+        <description>
+            A pattern expresion used to generate the mirror data directories for each segment on a host.
+            Ranges can be specified with [BEGIN..END] where BEGIN and END are positive whole numbers.
+            Ranges will repeat as necessary to create a data directory for each segment on a host.
+            Additionally the current segment's number can be used by referencing {i}.
+        </description>
     </property>
-    
     <property>
         <name>mirror_port_base</name>
         <value>50000</value>
