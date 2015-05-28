@@ -3,6 +3,8 @@ import os
 import random
 import string
 
+import re
+
 from resource_management import *
 from textwrap import dedent
 
@@ -135,10 +137,60 @@ def add_block_to_file(filepath, data, uid, start_sentinel=None, end_sentinel=Non
             filehandle.write(data)
             filehandle.write(end_sentinel + os.linesep)
 
-def parse_path_pattern_expression(path_pattern, number_required):
+def parse_path_pattern_expression(path_pattern, number_required, data=None, escape_character='\\'):
     """Creates an array of size number_required containing paths generated from path_pattern."""
+    if data == None:
+        data = {}
 
-    return []
+    parsed = []
+    parts = re.split(r'(?P<range>\[[0-9]+\.\.[0-9]+\]|\{.*?\})', path_pattern)
+
+    for part in parts:
+        range_part = re.match(r'^\[([0-9]+)\.\.([0-9]+)\]$', part)
+        variable_part = re.match(r'^\{(.*)\}$', part)
+
+        if range_part != None:
+            parsed.append({
+                'part_type': 'range',
+                'start': int(range_part.group(1)),
+                'end': int(range_part.group(2)),
+                'current': int(range_part.group(1))
+            })
+        elif variable_part != None:
+            parsed.append({
+                'part_type': 'variable',
+                'variable': variable_part.group(1)
+            })
+        else:
+            parsed.append({
+                'part_type': 'text',
+                'value': part
+            })
+
+    # Step 2, generate strings based on parsed pattern
+    generated_strings = []
+
+    for i in range(0, number_required):
+        generated_string = []
+        data['i'] = i
+
+        for part in parsed:
+            if part['part_type'] == 'range':
+                generated_string.append(str(part['current']))
+
+                part['current'] += 1
+                if part['current'] > part['end']:
+                    part['current'] = part['start']
+
+            elif part['part_type'] == 'variable':
+                if data.has_key(part['variable']):
+                    generated_string.append(data[part['variable']])
+            else:
+                generated_string.append(part['value'])
+
+        generated_strings.append(''.join(generated_string))
+
+    return generated_strings
 
 def gpsshify(command, host=None, hostfile=None, args=None):
     """Return a gpssh command which will run the command on the specified remote machine in the cluster.

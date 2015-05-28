@@ -80,11 +80,7 @@ enable_mirror_spreading = len(segment_nodes) > segments_per_node
 # Generate list of data and mirror directory paths from their templates
 @utilities.call()
 def data_directories():
-    directories = []
-    for segment_number in range(segments_per_node):
-        directories.append(InlineTemplate(data_directory_template, segment_number=(segment_number + 1)).get_content().strip())
-
-    return directories
+    return utilities.parse_path_pattern_expression(data_directory_template, segments_per_node)
 
 @utilities.call()
 def mirror_data_directories():
@@ -92,11 +88,7 @@ def mirror_data_directories():
     if not mirroring_enabled:
         return []
 
-    directories = []
-    for segment_number in range(segments_per_node):
-        directories.append(InlineTemplate(mirror_data_directory_template, segment_number=(segment_number + 1)).get_content().strip())
-
-    return directories
+    return utilities.parse_path_pattern_expression(mirror_data_directory_template, segments_per_node)
 
 # Pid files
 master_pid_path = path.join(master_data_segment_directory, 'postmaster.pid')
