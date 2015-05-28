@@ -12,3 +12,10 @@ Please note **this is not a production environment**.  We will make a few tweaks
 Without further delay, checkout the demonstration below to get an idea of the process, and stick around to read and go through the process at your own pace.
 
 [[ Insert Video ]]
+
+Configuring AWS
+---------------
+
+Before we begin to look at setting up Greenplum we need to setup some hardware to put it on.  With Amazon this is relatively straight forward.
+
+We'll need to be logged into an Amazon AWS account, and in the EC2 management area.
