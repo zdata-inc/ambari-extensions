@@ -19,16 +19,22 @@ def append_bash_profile(user, to_be_appended, run=False, allow_duplicates=False)
 
     bashrc = "/home/%s/.bashrc" % user
 
-    with open(bashrc, 'a+') as filehandle:
+    append_to_file(bashrc, to_be_appended, allow_duplicates)
+
+    if run:
+        Execute(to_be_appended, user=user)
+
+def append_to_file(filepath, to_be_appended, allow_duplicates=False):
+    """Appends a given string to a file."""
+
+    with open(filepath, 'a+') as filehandle:
         stripped_lines = [line.strip() for line in filehandle.readlines()]
         to_be_appended_already_in_file = to_be_appended.strip() in stripped_lines
 
         if not to_be_appended_already_in_file or allow_duplicates:
-            Logger.info(format("Appending {to_be_appended} to {bashrc}"))
-            filehandle.write(format("{to_be_appended}\n"))
+            Logger.info(format("Appending {to_be_appended} to {filepath}"))
+            filehandle.write(to_be_appended + os.linesep)
 
-    if run:
-        Execute(to_be_appended, user=user)
 
 def get_configuration_file(variable_file):
     """Retrieves a simple config file and formats it into a dictionary.
