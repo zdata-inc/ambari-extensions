@@ -7,7 +7,7 @@ cached_repositories=%w(HDP-2.2)
 # ================================================================================
 # Variables
 # ================================================================================
-# 
+#
 # Retrieve the vagrant-env variables used to customize the local ambari environment.
 
 variablesFile = [
@@ -21,7 +21,7 @@ params = JSON.parse(IO.read(variablesFile))
 # ================================================================================
 # Shared SSH Key
 # ================================================================================
-# 
+#
 # Create an SSH key that can be shared between all the machines.
 # This key will be used by Ambari during registration step.
 
@@ -39,7 +39,7 @@ Vagrant.configure(2) do |config|
     # ================================================================================
     # Host Manager configuration
     # ================================================================================
-    # 
+    #
     # The HostManager plugin is used to configure each of the machines to be able to communicate
     # to the others via their hostname, even when the IP address are dynamic.
 
