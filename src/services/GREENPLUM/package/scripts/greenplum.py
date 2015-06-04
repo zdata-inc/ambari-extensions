@@ -63,26 +63,29 @@ def master_install(env):
     # Run on master to allow gpseginstall to function correctly.
     Execute(post_copy_commands)
 
+    for host in params.all_nodes:
+        Execute(format("ssh-keyscan {host} >> ~/.ssh/known_hosts"))
+
     create_host_files()
 
     Execute(
         format(params.source_cmd + 'gpseginstall -f "{params.greenplum_all_hosts_file}" -u "{params.admin_user}" -g "{params.admin_group}" -p "{params.admin_password}"')
     )
 
-    # Perform post_copy_commands on rest of machines in cluster after binaries have been distributed.
+    # Perform post_copy_commands on all machines in cluster after binaries have been distributed.
     Execute(params.source_cmd + utilities.gpsshify(post_copy_commands, hostfile=params.greenplum_all_hosts_file))
 
     try:
-        gpinitsystemCommand = ['gpinitsystem', '-a', '-c "%s"' % params.greenplum_initsystem_config_file]
+        gpinitsystem_command = ['gpinitsystem', '-a', '-c "%s"' % params.greenplum_initsystem_config_file]
 
         if params.master_standby_node != None:
-            gpinitsystemCommand.append('-s "' + params.master_standby_node + '"')
+            gpinitsystem_command.append('-s "' + params.master_standby_node + '"')
 
         if params.mirroring_enabled and params.enable_mirror_spreading:
-            gpinitsystemCommand.append('-S')
+            gpinitsystem_command.append('-S')
 
         Execute(
-            params.source_cmd + " ".join(gpinitsystemCommand),
+            params.source_cmd + " ".join(gpinitsystem_command),
             user=params.admin_user
         )
     except Fail as exception:
