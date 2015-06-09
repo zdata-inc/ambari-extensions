@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+    <property>
+        <name>greenplum_command_center_instance_name</name>
+        <value>{cluster_name}</value>
+        <description>Name of the Greenplum Command Center instance.</description>
+    </property>
+    <property>
+        <name>greenplum_command_center_port</name>
+        <value>28080</value>
+        <description>Port to run Greenplum Command Center on.</description>
+    </property>
+
+    <property>
+        <name>greenplum_master</name>
+        <value>{master_node}</value>
+        <description>Greenplum Master hostname.</description>
+    </property>
+    <property>
+        <name>greenplum_master_port</name>
+        <value>{master_port}</value>
+        <description>Greenplum Master database port.</description>
+    </property>
+    <property>
+        <name>greenplum_master_port</name>
+        <value>{master_port}</value>
+        <description>Greenplum Master database port.</description>
+    </property>
+</configuration>

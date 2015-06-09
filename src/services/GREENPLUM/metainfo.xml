@@ -33,14 +33,6 @@
                             </commandScript>
                         </customCommand>
                     </customCommands>
-
-                    <configFiles>
-                        <configFile>
-                            <type>xml</type>
-                            <fileName>greenplum-mirroring.xml</fileName>
-                            <dictionaryName>greenplum-mirroring</dictionaryName>
-                        </configFile>
-                    </configFiles>
                 </component>
 
                 <component>
@@ -66,6 +58,23 @@
                         <scriptType>PYTHON</scriptType>
                         <timeout>600</timeout>
                     </commandScript>
+                    <configFiles>
+                        <configFile>
+                            <type>xml</type>
+                            <fileName>greenplum-env.xml</fileName>
+                            <dictionaryName>greenplum-env</dictionaryName>
+                        </configFile>
+                        <configFile>
+                            <type>xml</type>
+                            <fileName>greenplum-hba.xml</fileName>
+                            <dictionaryName>greenplum-hba</dictionaryName>
+                        </configFile>
+                        <configFile>
+                            <type>xml</type>
+                            <fileName>greenplum-mirroring.xml</fileName>
+                            <dictionaryName>greenplum-mirroring</dictionaryName>
+                        </configFile>
+                    </configFiles>
                 </component>
 
                 <component>
@@ -94,7 +103,46 @@
 
             <configuration-dependencies>
                 <config-type>greenplum-env</config-type>
+                <config-type>greenplum-hba</config-type>
                 <config-type>greenplum-mirroring</config-type>
+            </configuration-dependencies>
+        </service>
+
+        <service>
+            <name>GREENPLUM_COMMAND_CENTER</name>
+            <displayName>Greenplum Command Center</displayName>
+            <comment>Greenplum Management Web GUI</comment>
+            <version>0.0.1</version>
+
+            <configuration-dir>configuration-gpcc</configuration-dir>
+
+            <components>
+                <component>
+                    <name>GPCC</name>
+                    <displayName>Greenplum Command Center</displayName>
+                    <category>MASTER</category>
+                    <cardinality>1+</cardinality>
+                    <commandScript>
+                        <script>scripts/gpcc.py</script>
+                        <scriptType>PYTHON</scriptType>
+                        <timeout>600</timeout>
+                    </commandScript>
+                    <configFiles>
+                        <configFile>
+                            <type>xml</type>
+                            <fileName>greenplum-cc-env.xml</fileName>
+                            <dictionaryName>greenplum-cc-env</dictionaryName>
+                        </configFile>
+                    </configFiles>
+                </component>
+            </components>
+
+            <requiredServices>
+                <service>GREENPLUM</service>
+            </requiredServices>
+
+            <configuration-dependencies>
+                <config-type>greenplum-cc-env</config-type>
             </configuration-dependencies>
         </service>
     </services>
