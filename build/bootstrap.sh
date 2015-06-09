@@ -2,7 +2,7 @@
 ## Provisioning script for all machines managed by Vagrant, run first.
 
 # Include function definitions.
-. functions.sh
+source /vagrant/build/functions.sh
 
 # List of functions to run.
 functionList="vagrantSetupHostsFile vagrantCreateSharedKeys installDesiredPackages setupNTPD disableFirewall removeMemoryLimitationOnUsers setSystemScheduling disableTHP disableSelinux configureSSH setupRaidsAndDataDirs"
