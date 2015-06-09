@@ -149,10 +149,10 @@ def parse_path_pattern_expression(path_pattern, number_required, data=None, esca
         data = {}
 
     parsed = []
-    parts = re.split(r'(?P<range>\[[0-9]+\.\.[0-9]+\]|\{.*?\})', path_pattern)
+    parts = re.split(r'(?P<range>\[[0-9]+-[0-9]+\]|\{.*?\})', path_pattern)
 
     for part in parts:
-        range_part = re.match(r'^\[([0-9]+)\.\.([0-9]+)\]$', part)
+        range_part = re.match(r'^\[([0-9]+)-([0-9]+)\]$', part)
         variable_part = re.match(r'^\{(.*)\}$', part)
 
         if range_part != None:
