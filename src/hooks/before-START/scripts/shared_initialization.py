@@ -27,8 +27,8 @@ def setup_hadoop():
   """
   import params
 
-  Execute(("setenforce","0"),
-          only_if="test -f /selinux/enforce",
+  Execute(("setenforce", "0"),
+          only_if='test -f /selinux/enforce && [[ "$(< /selinux/enforce)" != "0" ]]',
           sudo=True,
   )
 
@@ -98,7 +98,7 @@ def setup_database():
   """
   import params
   db_driver_download_url = None
-  
+
   if params.server_db_name == 'oracle' and params.oracle_driver_url != "":
     db_driver_download_url = params.oracle_driver_symlink_url
   elif params.server_db_name == 'mysql' and params.mysql_driver_url != "":
@@ -163,7 +163,7 @@ def install_snappy():
   if params.has_namenode:
     Directory([so_target_dir_x86, so_target_dir_x64],
               recursive=True,
-    )    
+    )
     Link(so_target_x86,
          to=so_src_x86,
     )
