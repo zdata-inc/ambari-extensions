@@ -23,7 +23,6 @@ from math import ceil
 
 from stack_advisor import DefaultStackAdvisor
 
-
 class zData999StackAdvisor(DefaultStackAdvisor):
 
   def getComponentLayoutValidations(self, services, hosts):
@@ -81,11 +80,12 @@ class zData999StackAdvisor(DefaultStackAdvisor):
 
   def getServiceConfigurationRecommenderDict(self):
     return {
+      "GREENPLUM": self.recommendGreenplumConfigurations,
       "YARN": self.recommendYARNConfigurations,
       "MAPREDUCE2": self.recommendMapReduce2Configurations,
       "HDFS": self.recommendHDFSConfigurations,
       "HBASE": self.recommendHbaseEnvConfigurations,
-      "AMBARI_METRICS": self.recommendAmsConfigurations
+      "AMBARI_METRICS": self.recommendAmsConfigurations,
     }
 
   def putProperty(self, config, configType):
@@ -94,6 +94,11 @@ class zData999StackAdvisor(DefaultStackAdvisor):
     def appendProperty(key, value):
       config[configType]["properties"][key] = str(value)
     return appendProperty
+
+  def recommendGreenplumConfigurations(self, configurations, clusterData, services, hosts):
+    putGreenplumProperty = self.putProperty(configurations, 'greenplum-env')
+
+    putGreenplumProperty('master_port', '5432')
 
   def recommendYARNConfigurations(self, configurations, clusterData, services, hosts):
     putYarnProperty = self.putProperty(configurations, "yarn-site")
@@ -175,6 +180,7 @@ class zData999StackAdvisor(DefaultStackAdvisor):
         putHbaseEnvProperty("hbase_master_heapsize", "1024m")
         putAmsEnvProperty("metrics_collector_heapsize", "512m")
         putHbaseEnvProperty("hbase_master_xmn_size", "128m")
+
 
   def getConfigurationClusterSummary(self, servicesList, hosts, components):
 
@@ -276,6 +282,7 @@ class zData999StackAdvisor(DefaultStackAdvisor):
 
   def getServiceConfigurationValidators(self):
     return {
+      "GREENPLUM": {"greenplum-env": self.validateGPConfigurationsEnv},
       "HDFS": {"hadoop-env": self.validateHDFSConfigurationsEnv},
       "MAPREDUCE2": {"mapred-site": self.validateMapReduce2Configurations},
       "YARN": {"yarn-site": self.validateYARNConfigurations},
@@ -284,6 +291,27 @@ class zData999StackAdvisor(DefaultStackAdvisor):
               "ams-hbase-env": self.validateAmsHbaseEnvConfigurations,
               "ams-site": self.validateAmsSiteConfigurations},
     }
+
+  def validateGPConfigurationsEnv(self, properties, recommendedDefaults, configurations, services, hosts):
+    import socket
+
+    validationItems = []
+
+    hostnames = [hostname
+        for service in services['services']
+        for component in service['components']
+        for hostname in component['StackServiceComponents']['hostnames']
+        if component['StackServiceComponents']['component_name'] == 'GREENPLUM_MASTER'
+    ]
+
+    master_port_ambari_collision = None
+
+    if properties['master_port'] == '5432' and socket.gethostname() in hostnames:
+      master_port_ambari_collision = self.getErrorItem('Master port will collide with Ambari database!  Please change port from 5432.')
+
+    validationItems.append({ 'config-name':'master_port', 'item': master_port_ambari_collision })
+
+    return self.toConfigurationValidationProblems(validationItems, 'greenplum-env')
 
   def validateAmsSiteConfigurations(self, properties, recommendedDefaults, configurations, services, hosts):
     validationItems = []
