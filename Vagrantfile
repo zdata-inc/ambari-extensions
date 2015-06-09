@@ -25,7 +25,7 @@ params.merge!(JSON.parse(IO.read(variablesFile))) if File.exists? variablesFile 
 # ================================================================================
 # Shared SSH Key
 # ================================================================================
-# 
+#
 # Create an SSH key that can be shared between all the machines.
 # This key will be used by Ambari during registration step.
 
@@ -35,8 +35,8 @@ Dir.chdir(File.dirname(__FILE__)) do
 end
 
 Vagrant.configure(2) do |config|
-    config.vm.box = 'chef/centos-6.5'
-
+    config.vm.box_url = 'https://s3-us-west-2.amazonaws.com/zdata-vagrant/boxes/vagrant-centos-66-zdata.box'
+    config.vm.box = 'vagrant-centos-66-zdata'
 
     # ================================================================================
     # Host Manager configuration
