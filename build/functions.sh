@@ -173,10 +173,10 @@ function setupRaidsAndDataDirs() {
     # Get the number of raid devices.
     raid_device_count=$(echo "$raid_devices" | wc -l)
 
-    if [ "$raid_device_count" != "0" ]; then
+    if [ "$raid_device_count" -gt 1 ]; then
         # Set block read ahead on each device for Greenplum.
         for blockdev in $raid_devices; do
-            blockdev --setra 16384 $blockdev
+            blockdev --setra 16384 $blockdev || return 1
         done
 
         # Find out whether there is an even or odd amount of devices.
@@ -195,23 +195,23 @@ function setupRaidsAndDataDirs() {
                 device_list_2=$(echo "$raid_devices" | tail -${num_devices_per_raid})
 
                 # Create both raid devices.
-                mdadm --create /dev/md0 --level=5 --chunk 256K --raid-devices=${num_devices_per_raid} $device_list_1
-                mdadm --create /dev/md1 --level=5 --chunk 256K --raid-devices=${num_devices_per_raid} $device_list_2
-                mdadm --detail --scan >> /etc/mdadm.conf
-                mkfs.xfs -f /dev/md0
-                mkfs.xfs -f /dev/md1
+                mdadm --create /dev/md0 --level=5 --chunk 256K --raid-devices=${num_devices_per_raid} $device_list_1 || return 1
+                mdadm --create /dev/md1 --level=5 --chunk 256K --raid-devices=${num_devices_per_raid} $device_list_2 || return 1
+                mdadm --detail --scan >> /etc/mdadm.conf || return 1
+                mkfs.xfs -f /dev/md0 || return 1
+                mkfs.xfs -f /dev/md1 || return 1
 
                 # Create data directories.
-                mkdir /data1 /data2
-                chmod 777 /data1 /data2
+                mkdir /data1 /data2 || return 1
+                chmod 777 /data1 /data2 || return 1
 
                 # Add mount info to fstab.
-                echo /dev/md0 /data1 xfs rw,noatime,inode64,allocsize=16m 0 0 >> /etc/fstab
-                echo /dev/md1 /data2 xfs rw,noatime,inode64,allocsize=16m 0 0 >> /etc/fstab
+                echo /dev/md0 /data1 xfs rw,noatime,inode64,allocsize=16m 0 0 >> /etc/fstab || return 1
+                echo /dev/md1 /data2 xfs rw,noatime,inode64,allocsize=16m 0 0 >> /etc/fstab || return 1
 
                 # Set scheduler for these devices to deadline.
-                echo deadline > /sys/block/md0/queue/scheduler
-                echo deadline > /sys/block/md1/queue/scheduler
+                echo deadline > /sys/block/md0/queue/scheduler || return 1
+                echo deadline > /sys/block/md1/queue/scheduler || return 1
             fi
         else
             # There is only enough devices to create one RAID5 volumes, md0.
@@ -221,28 +221,22 @@ function setupRaidsAndDataDirs() {
                 device_list=$raid_devices
 
                 # Create raid device.
-                mdadm --create /dev/md0 --level=5 --chunk 256K --raid-devices=${raid_device_count} $device_list
-                mdadm --detail --scan >> /etc/mdadm.conf
-                mkfs.xfs -f /dev/md0
+                mdadm --create /dev/md0 --level=5 --chunk 256K --raid-devices=${raid_device_count} $device_list || return 1
+                mdadm --detail --scan >> /etc/mdadm.conf || return 1
+                mkfs.xfs -f /dev/md0 || return 1
 
                 # Create data directory.
-                mkdir /data
-                chmod 777 /data
+                mkdir /data || return 1
+                chmod 777 /data || return 1
 
                 # add mount info to fstab.
-                echo /dev/md0 /data xfs rw,noatime,inode64,allocsize=16m 0 0 >> /etc/fstab
+                echo /dev/md0 /data xfs rw,noatime,inode64,allocsize=16m 0 0 >> /etc/fstab || return 1
 
                 # Set scheduler for these devices to deadline.
-                echo deadline > /sys/block/md0/queue/scheduler
+                echo deadline > /sys/block/md0/queue/scheduler || return 1
             fi
         fi
         # Mount new logical disks.
-        mount -a
+        mount -a || return 1
     fi
 }
-
-# Testing
-#setupPivotalAmbari /vagrant/artifacts/AMBARI-1.7.1-87-centos6.tar
-#setupVanillaAmbari /vagrant/artifacts/ambari.repo
-#setupVanillaAmbari 
-#setupVanillaAmbari
