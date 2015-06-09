@@ -159,8 +159,6 @@ Vagrant.configure(2) do |config|
             end
 
             node.vm.provision 'shell', path: 'build/bootstrap.sh'
-            node.vm.provision 'shell', path: 'build/bootstrap-slave.sh'
-            node.vm.provision 'shell', privileged: false, inline: 'echo "export PATH=/vagrant/build:$PATH" >> ~/.bashrc'
             node.vm.provision :reload
         end
     end
