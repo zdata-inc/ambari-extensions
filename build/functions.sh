@@ -1,5 +1,7 @@
 #!/bin/bash
 
+defaultRepoUrl="http://public-repo-1.hortonworks.com/ambari/centos6/2.x/updates/2.0.1/ambari.repo"
+
 if [ "$EUID" != 0 ]; then
         echo "Please run as root user"
         exit 1
@@ -20,7 +22,7 @@ function vagrantCreateSharedKeys () {
     if [ ! -d ~/.ssh ]; then
         mkdir ~/.ssh || return 1
     fi
-    
+
     cat /vagrant/keys/private_key.pub >> ~/.ssh/authorized_keys || return 1
     cp /vagrant/keys/private_key ~/.ssh/id_rsa || return 1
     cp /vagrant/keys/private_key.pub ~/.ssh/id_rsa.pub || return 1
@@ -37,7 +39,7 @@ function setupApache2() {
 
 function setupNTPD() {
     yum install -y ntp ntpdate || return 1
-    
+
     # Configure and sync up time. Make sure ntpd starts up on restart.
     service ntpd stop || return 1
     ntpdate pool.ntp.org || return 1
@@ -93,25 +95,25 @@ function createCustomLocalRepo() {
     localRepoDir=/var/www/html/ambari-extensions
     # Directory of artifacts that should be put into custom local repo (optional).
     vagrantRepoItemsDir=/vagrant/artifacts/repoItems
-    
+
     setupApache2 || return 1
 
     yum install -y createrepo || return 1
-    mkdir -p $localRepoDir || return 1 
-    
+    mkdir -p $localRepoDir || return 1
+
     if [ -f "$vagrantRepoItemsDir" ]; then
         # Uncompress each file ending with ".tar.gz" and put in the custom local repo.
         for compressedFile in $(ls $vagrantRepoItemsDir/*.tar.gz); do
-            tar -xzf ${vagrantRepoItemsDir}/${compressedFile} -C $localRepoDir || return 1 
-        done 
-      
-        # Copy each non-compressed file to the custom local repo. 
+            tar -xzf ${vagrantRepoItemsDir}/${compressedFile} -C $localRepoDir || return 1
+        done
+
+        # Copy each non-compressed file to the custom local repo.
         for noncompressedFile in $(ls $vagrantRepoItemsDir | grep -v tar.gz); do
             cp -r ${vagrantRepoItemsDir}/${noncompressedFile} $localRepoDir/. || return 1
         done
     fi
-    
-    createrepo $localRepoDir || return 1 
+
+    createrepo $localRepoDir || return 1
 
     # Test custom local repo.
     curl http://localhost/$(basename $localRepoDir)/repodata/repomd.xml &> /dev/null || return 1
@@ -128,17 +130,13 @@ function copyAmbariArtifacts() {
 }
 
 function setupVanillaAmbari() {
-    defaultRepoUrl="http://public-repo-1.hortonworks.com/ambari/centos6/2.x/updates/2.0.1/ambari.repo"
     repoFile=$1
-    if [ -z "$repoFile" ]; then
+    if [ -z "$repoFile" -o ! -e "$repoFile" ]; then
         curl $defaultRepoUrl -o /etc/yum.repos.d/ambari.repo || return 1
-        return 0
     fi
 
-    if [ -f "$repoFile" ]; then
+    if [ -e "$repoFile" ]; then
         cp $repoFile /etc/yum.repos.d/ambari.repo || return 1
-    else
-        return 1
     fi
 
     createCustomLocalRepo || return 1
@@ -156,17 +154,17 @@ function setupPivotalAmbari() {
     if [ -z "$tarFilePath" ]; then
         return 1
     fi
-    
+
     if [ ! -f "$tarFilePath" ]; then
         return 1
     fi
 
     setupApache2 || return 1
-    
+
     mkdir /staging || return  1
     chmod a+rx /staging || return 1
     tar -xzf $tarFilePath -C /staging/ || return 1
-    
+
     stagedAmbariDir=$(ls /staging | grep -i AMBARI)
     mv /var/www/html/${stagedAmbariDir} /var/www/html/ambari-extensions
 
@@ -179,7 +177,7 @@ function setupPivotalAmbari() {
     yum install -y openssl ambari-server || return 1
 
     copyAmbariArtifacts || return 1
-    
+
     ambari-server setup -s || return 1
     ambari-server start || return 1
 }
@@ -189,7 +187,7 @@ function setupRaidsAndDataDirs() {
     yum install -y xfsprogs mdadm unzip ntp ntpdate wget openssl || return 1
 
     # Get a list of raid devices.
-    raid_devices=$(ls /dev/xvd* 2> /dev/null | grep -v xvda 2> /dev/null) 
+    raid_devices=$(ls /dev/xvd* 2> /dev/null | grep -v xvda 2> /dev/null)
 
     # Get the number of raid devices.
     raid_device_count=$(echo "$raid_devices" | wc -l)

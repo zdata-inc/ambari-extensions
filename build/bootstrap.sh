@@ -5,17 +5,19 @@
 source /vagrant/build/functions.sh
 
 # List of functions to run.
-functionList="vagrantSetupHostsFile vagrantCreateSharedKeys installDesiredPackages setupNTPD disableFirewall removeMemoryLimitationOnUsers setSystemScheduling disableTHP disableSelinux configureSSH setupRaidsAndDataDirs"
+functionList="vagrantSetupHostsFile vagrantCreateSharedKeys installDesiredPackages setupNTPD disableFirewall removeMemoryLimitationOnUsers setSystemScheduling disableTHP disableSelinux configureSSH"
 
 for functionName in $functionList; do
 	echo ""
 	echo "Running $functionName"
 	echo ""
 	# Call function name.
-    $functionName
+
+	$functionName
 
     # Check return code.
  	if [ $? -ne 0 ]; then
 		echo "Function $functionName returned non-zero exit code!"
 	fi
 done
+echo "Blah"

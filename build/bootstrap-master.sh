@@ -6,5 +6,5 @@ source /vagrant/build/functions.sh
 
 # Choose which function to run to setup Ambari version.
 ## setupPivotalAmbari only works on zdata extensions 0.4 release branch
-#setupPivotalAmbari /vagrant/artifacts/AMBARI-1.7.1-87-centos6.tar
-setupVanillaAmbari /vagrant/artifacts/ambari.repo
+setupPivotalAmbari /vagrant/artifacts/AMBARI-1.7.1-87-centos6.tar
+#setupVanillaAmbari /vagrant/artifacts/ambari.repo
