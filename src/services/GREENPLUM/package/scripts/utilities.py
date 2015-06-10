@@ -77,7 +77,7 @@ def set_kernel_parameter(name, value, logoutput=True):
             else:
                 log_line.append("already saved")
 
-    except Fail as exception:
+    except Fail:
         log_line.append("sysctl failed to modify parameter, considered bad.")
     finally:
         if logoutput:
@@ -134,7 +134,7 @@ def add_block_to_file(filepath, data, uid, start_sentinel=None, end_sentinel=Non
             filehandle.write(data)
             filehandle.write(end_sentinel + os.linesep)
 
-def parse_path_pattern_expression(path_pattern, number_required, data=None, escape_character='\\'):
+def parse_path_pattern_expression(path_pattern, number_required, data=None):
     """Creates an array of size number_required containing paths generated from path_pattern."""
     if data == None:
         data = {}
