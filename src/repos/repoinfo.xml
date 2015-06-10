@@ -28,7 +28,7 @@
       <reponame>HDP-UTILS</reponame>
     </repo>
     <repo>
-      <baseurl>http://localhost/phd</baseurl>
+      <baseurl>http://localhost/ambari-extensions</baseurl>
       <repoid>Local-PHD-Repo</repoid>
       <reponame>Local-PHD-Repo</reponame>
     </repo>
