@@ -57,10 +57,10 @@
     </property>
     <property>
         <name>data_directory</name>
-        <value>/data[1..2]/primary</value>
+        <value>/data[1-2]/primary</value>
         <description>
             A pattern expresion used to generate the data directories for each segment on a host.
-            Ranges can be specified with [BEGIN..END] where BEGIN and END are positive whole numbers.
+            Ranges can be specified with [BEGIN-END] where BEGIN and END are positive whole numbers.
             Ranges will repeat as necessary to create a data directory for each segment on a host.
             Additionally the current segment's number can be used by referencing {i}.
         </description>
