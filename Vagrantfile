@@ -125,7 +125,7 @@ Vagrant.configure(2) do |config|
                 EOF
             end
 
-            node.vm.synced_folder 'src', '/var/lib/ambari-server/resources/stacks/zData/9.9.9', create: true
+            node.vm.synced_folder 'src', '/var/lib/ambari-server/resources/stacks/PHD/9.9.9.zData', create: true
 
             cached_repositories.each do |repo|
                 node.vm.synced_folder "artifacts/cache/master-#{i}/#{repo}", "/var/cache/yum/#{vm_arch}/#{vm_centos_major_version}/#{repo}", create: true

@@ -90,6 +90,20 @@ function setupAmbariExtensions() {
     cd ~
 }
 
+function moveItemsInRepo() {
+    if [ -f "$vagrantRepoItemsDir" ]; then
+        # Uncompress each file ending with ".tar.gz" and put in the custom local repo.
+        for compressedFile in $(ls $vagrantRepoItemsDir/*.tar*); do
+            tar -xzf ${vagrantRepoItemsDir}/${compressedFile} -C $localRepoDir || return 1
+        done
+
+        # Copy each non-compressed file to the custom local repo.
+        for noncompressedFile in $(ls $vagrantRepoItemsDir | grep -v tar); do
+            cp -r ${vagrantRepoItemsDir}/${noncompressedFile} $localRepoDir/. || return 1
+        done
+    fi
+}
+
 function createCustomLocalRepo() {
     # Directory to contain custom local repo.
     localRepoDir=/var/www/html/ambari-extensions
@@ -101,17 +115,7 @@ function createCustomLocalRepo() {
     yum install -y createrepo || return 1
     mkdir -p $localRepoDir || return 1
 
-    if [ -f "$vagrantRepoItemsDir" ]; then
-        # Uncompress each file ending with ".tar.gz" and put in the custom local repo.
-        for compressedFile in $(ls $vagrantRepoItemsDir/*.tar.gz); do
-            tar -xzf ${vagrantRepoItemsDir}/${compressedFile} -C $localRepoDir || return 1
-        done
-
-        # Copy each non-compressed file to the custom local repo.
-        for noncompressedFile in $(ls $vagrantRepoItemsDir | grep -v tar.gz); do
-            cp -r ${vagrantRepoItemsDir}/${noncompressedFile} $localRepoDir/. || return 1
-        done
-    fi
+    moveItemsInRepo || return 1
 
     createrepo $localRepoDir || return 1
 
@@ -121,11 +125,11 @@ function createCustomLocalRepo() {
 
 function copyAmbariArtifacts() {
     if [ -f /vagrant/artifacts/jdk-7u67-linux-x64.tar.gz ]; then
-        cp /vagrant/artifacts/jdk-7u67-linux-x64.tar.gz /var/lib/ambari-server/resources/jdk-7u67-linux-x64.tar.gz
+        \cp -n /vagrant/artifacts/jdk-7u67-linux-x64.tar.gz /var/lib/ambari-server/resources/jdk-7u67-linux-x64.tar.gz
     fi
 
     if [ -f /vagrant/artifacts/UnlimitedJCEPolicyJDK7.zip ]; then
-        cp /vagrant/artifacts/UnlimitedJCEPolicyJDK7.zip /var/lib/ambari-server/resources/UnlimitedJCEPolicyJDK7.zip
+        \cp -n /vagrant/artifacts/UnlimitedJCEPolicyJDK7.zip /var/lib/ambari-server/resources/UnlimitedJCEPolicyJDK7.zip
     fi
 }
 
@@ -149,7 +153,7 @@ function setupVanillaAmbari() {
     ambari-server start || return 1
 }
 
-function setupPivotalAmbari() {
+function setupPivotalSoftwareSpecificRepo() {
     tarFilePath=$1
     if [ -z "$tarFilePath" ]; then
         return 1
@@ -159,20 +163,29 @@ function setupPivotalAmbari() {
         return 1
     fi
 
-    setupApache2 || return 1
-
-    mkdir /staging || return  1
+    mkdir -p /staging || return  1
     chmod a+rx /staging || return 1
     tar -xzf $tarFilePath -C /staging/ || return 1
 
-    stagedAmbariDir=$(ls /staging | grep -i AMBARI)
+    stagedDir=""
+    for dir in $(ls /staging); do 
+        search=$(echo $tarFilePath | grep $dir)
+        if [ -n "$search" ]; then
+            stagedDir=$dir
+        fi
+    done
+    
+    setupApache2 || return 1
 
     echo ""
-    /staging/${stagedAmbariDir}/setup_repo.sh || return 1
+    /staging/${stagedDir}/setup_repo.sh || return 1
     echo ""
 
-    cp -r /var/www/html/${stagedAmbariDir} /var/www/html/ambari-extensions || return 1
-    curl http://localhost/ambari-extensions/repodata/repomd.xml &> /dev/null || return 1
+    curl http://localhost/$stagedDir/repodata/repomd.xml &> /dev/null || return 1
+}
+
+function setupPivotalAmbari() {
+    setupPivotalSoftwareSpecificRepo $1 || return 1
 
     yum install -y openssl ambari-server || return 1
 

@@ -18,43 +18,38 @@
 <reposinfo>
   <os type="redhat6">
     <repo>
-      <baseurl>http://public-repo-1.hortonworks.com/HDP/centos6/2.x/updates/2.0.6.1</baseurl>
-      <repoid>HDP-2.0.6</repoid>
-      <reponame>HDP</reponame>
+      <baseurl>http://SET_REPO_URL</baseurl>
+      <repoid>PHD-3.0</repoid>
+      <reponame>PHD</reponame>
     </repo>
     <repo>
-      <baseurl>http://public-repo-1.hortonworks.com/HDP-UTILS-1.1.0.17/repos/centos6</baseurl>
-      <repoid>HDP-UTILS-1.1.0.17</repoid>
-      <reponame>HDP-UTILS</reponame>
-    </repo>
-    <repo>
-      <baseurl>http://localhost/ambari-extensions</baseurl>
-      <repoid>Local-PHD-Repo</repoid>
-      <reponame>Local-PHD-Repo</reponame>
+      <baseurl>http://SET_REPO_URL</baseurl>
+      <repoid>PHD-UTILS-1.1.0.20</repoid>
+      <reponame>PHD-UTILS</reponame>
     </repo>
   </os>
   <os type="redhat5">
     <repo>
-      <baseurl>http://public-repo-1.hortonworks.com/HDP/centos5/2.x/updates/2.0.6.1</baseurl>
-      <repoid>HDP-2.0.6</repoid>
-      <reponame>HDP</reponame>
+      <baseurl>http://SET_REPO_URL</baseurl>
+      <repoid>PHD-3.0</repoid>
+      <reponame>PHD</reponame>
     </repo>
     <repo>
-      <baseurl>http://public-repo-1.hortonworks.com/HDP-UTILS-1.1.0.17/repos/centos5</baseurl>
-      <repoid>HDP-UTILS-1.1.0.17</repoid>
-      <reponame>HDP-UTILS</reponame>
+      <baseurl>http://SET_REPO_URL</baseurl>
+      <repoid>PHD-UTILS-1.1.0.20</repoid>
+      <reponame>PHD-UTILS</reponame>
     </repo>
   </os>
   <os type="suse11">
     <repo>
-      <baseurl>http://public-repo-1.hortonworks.com/HDP/suse11/2.x/updates/2.0.6.1</baseurl>
-      <repoid>HDP-2.0.6</repoid>
-      <reponame>HDP</reponame>
-      <repo>
-        <baseurl>http://public-repo-1.hortonworks.com/HDP-UTILS-1.1.0.17/repos/suse11</baseurl>
-        <repoid>HDP-UTILS-1.1.0.17</repoid>
-        <reponame>HDP-UTILS</reponame>
-      </repo>
+      <baseurl>http://SET_REPO_URL</baseurl>
+      <repoid>PHD-3.0</repoid>
+      <reponame>PHD</reponame>
+    </repo>
+    <repo>
+      <baseurl>http://SET_REPO_URL</baseurl>
+      <repoid>PHD-UTILS-1.1.0.20</repoid>
+      <reponame>PHD-UTILS</reponame>
     </repo>
   </os>
 </reposinfo>
