@@ -117,7 +117,7 @@ function createCustomLocalRepo() {
     curl http://localhost/$(basename $localRepoDir)/repodata/repomd.xml &> /dev/null || return 1
 }
 
-functions copyAmbariArtifacts() {
+function copyAmbariArtifacts() {
     if [ -f /vagrant/artifacts/jdk-7u67-linux-x64.tar.gz ]; then
         cp /vagrant/artifacts/jdk-7u67-linux-x64.tar.gz /var/lib/ambari-server/resources/jdk-7u67-linux-x64.tar.gz
     fi
