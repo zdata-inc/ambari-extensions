@@ -117,6 +117,16 @@ function createCustomLocalRepo() {
     curl http://localhost/$(basename $localRepoDir)/repodata/repomd.xml &> /dev/null || return 1
 }
 
+functions copyAmbariArtifacts() {
+    if [ -f /vagrant/artifacts/jdk-7u67-linux-x64.tar.gz ]; then
+        cp /vagrant/artifacts/jdk-7u67-linux-x64.tar.gz /var/lib/ambari-server/resources/jdk-7u67-linux-x64.tar.gz
+    fi
+
+    if [ -f /vagrant/artifacts/UnlimitedJCEPolicyJDK7.zip ]; then
+        cp /vagrant/artifacts/UnlimitedJCEPolicyJDK7.zip /var/lib/ambari-server/resources/UnlimitedJCEPolicyJDK7.zip
+    fi
+}
+
 function setupVanillaAmbari() {
     defaultRepoUrl="http://public-repo-1.hortonworks.com/ambari/centos6/2.x/updates/2.0.1/ambari.repo"
     repoFile=$1
@@ -134,6 +144,8 @@ function setupVanillaAmbari() {
     createCustomLocalRepo || return 1
 
     yum install -y openssl ambari-server || return 1
+
+    copyAmbariArtifacts || return 1
 
     ambari-server setup -s || return 1
     ambari-server start || return 1
@@ -166,14 +178,8 @@ function setupPivotalAmbari() {
 
     yum install -y openssl ambari-server || return 1
 
-    if [ -f /vagrant/artifacts/jdk-7u67-linux-x64.tar.gz ]; then
-        cp /vagrant/artifacts/jdk-7u67-linux-x64.tar.gz /var/lib/ambari-server/resources/jdk-7u67-linux-x64.tar.gz
-    fi
-
-    if [ -f /vagrant/artifacts/UnlimitedJCEPolicyJDK7.zip ]; then
-        cp /vagrant/artifacts/UnlimitedJCEPolicyJDK7.zip /var/lib/ambari-server/resources/UnlimitedJCEPolicyJDK7.zip
-    fi
-
+    copyAmbariArtifacts || return 1
+    
     ambari-server setup -s || return 1
     ambari-server start || return 1
 }
