@@ -76,7 +76,7 @@ function disableSelinux() {
 function configureSSH() {
     # Configure sshd to enable RootLogin and PasswordAuthentication, then restart sshd.
     # NOTE - This may not be required if there is a common key on mdw that can ssh into other hosts before the Greenplum installer runs.
-    sed -i -e 's/#PermitRootLogin.*$/PermitRootLogin yes/g' -e 's/PasswordAuthentication .*$/PasswordAuthentication yes/' /etc/ssh/sshd_config || return 1
+    sed -i -e 's/#\?PermitRootLogin.*$/PermitRootLogin yes/g' -e 's/#\?PasswordAuthentication .*$/PasswordAuthentication yes/' /etc/ssh/sshd_config || return 1
     service sshd restart || return 1
 }
 
