@@ -156,12 +156,12 @@ function setupPivotalAmbari() {
     tar -xzf $tarFilePath -C /staging/ || return 1
     
     stagedAmbariDir=$(ls /staging | grep -i AMBARI)
- 
+    mv /var/www/html/${stagedAmbariDir} /var/www/html/ambari-extensions
+
     echo ""
     /staging/${stagedAmbariDir}/setup_repo.sh || return 1
     echo ""
 
-    mv /var/www/html/${stagedAmbariDir} /var/www/html/ambari-extensions 
     curl http://localhost/ambari-extensions/repodata/repomd.xml &> /dev/null || return 1
 
     yum install -y openssl ambari-server || return 1
