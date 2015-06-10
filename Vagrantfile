@@ -15,6 +15,8 @@ variablesFile = [
     File.join(File.dirname(__FILE__), 'vagrant-env.conf.sample')
 ]
 
+abort 'Failed to find configuration file.' if variablesFile.nil?
+
 variablesFile = variablesFile.find { |path| File.exists? path }
 params = JSON.parse(IO.read(variablesFile))
 
