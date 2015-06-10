@@ -81,7 +81,7 @@ def master_install(env):
             gpinitsystem_command.append('-S')
 
         Execute(
-            source_path_command + " ".join(gpinitsystemCommand),
+            source_path_command + " ".join(gpinitsystem_command),
             user=params.admin_user
         )
     except Fail as exception:
