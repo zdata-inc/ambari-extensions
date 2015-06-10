@@ -20,4 +20,3 @@ for functionName in $functionList; do
 		echo "Function $functionName returned non-zero exit code!"
 	fi
 done
-echo "Blah"
