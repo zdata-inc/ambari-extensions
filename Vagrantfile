@@ -107,6 +107,7 @@ Vagrant.configure(2) do |config|
             node.vm.network 'private_network', type: :dhcp
 
             node.vm.hostname = "master#{displayedI}.ambaricluster.local"
+            node.hostmanager.aliases = ["master#{displayedI}", "master#{i}"]
 
             node.vm.provider 'aws' do |aws, override|
                 aws.tags = {
@@ -141,6 +142,7 @@ Vagrant.configure(2) do |config|
         config.vm.define "slave#{i}" do |node|
             node.vm.network 'private_network', type: :dhcp
             node.vm.hostname = "slave#{i}.ambaricluster.local"
+            node.hostmanager.aliases = ["slave#{i}"]
 
             node.vm.provider 'aws' do |aws, override|
                 aws.tags = {
