@@ -134,6 +134,9 @@ function setupVanillaAmbari() {
     createCustomLocalRepo || return 1
 
     yum install -y openssl ambari-server || return 1
+
+    ambari-server setup -s || return 1
+    ambari-server start || return 1
 }
 
 function setupPivotalAmbari() {
@@ -161,6 +164,17 @@ function setupPivotalAmbari() {
     curl http://localhost/${stagedAmbariDir}/repodata/repomd.xml &> /dev/null || return 1
 
     yum install -y openssl ambari-server || return 1
+
+    if [ -f /vagrant/artifacts/jdk-7u67-linux-x64.tar.gz ]; then
+        cp /vagrant/artifacts/jdk-7u67-linux-x64.tar.gz /var/lib/ambari-server/resources/jdk-7u67-linux-x64.tar.gz
+    fi
+
+    if [ -f /vagrant/artifacts/UnlimitedJCEPolicyJDK7.zip ]; then
+        cp /vagrant/artifacts/UnlimitedJCEPolicyJDK7.zip /var/lib/ambari-server/resources/UnlimitedJCEPolicyJDK7.zip
+    fi
+
+    ambari-server setup -s || return 1
+    ambari-server start || return 1
 }
 
 function setupRaidsAndDataDirs() {
