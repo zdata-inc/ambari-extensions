@@ -33,6 +33,8 @@ end
 Vagrant.configure(2) do |config|
     config.vm.box_url = 'https://s3-us-west-2.amazonaws.com/zdata-vagrant/boxes/vagrant-centos-66-zdata.box'
     config.vm.box = 'vagrant-centos-66-zdata'
+    vm_centos_major_version = '6'
+    vm_arch = 'x86_64'
 
 
     # ================================================================================
