@@ -25,6 +25,66 @@ from stack_advisor import DefaultStackAdvisor
 
 
 class zData999StackAdvisor(DefaultStackAdvisor):
+    def recommendComponentLayout(self, services, hosts):
+        resource = {}
+        recommended_layout = { 'resources': [ resource ] }
+
+        import pprint
+        pprint.pprint(services)
+        pprint.pprint(hosts)
+
+        return recommended_layout
+
+              # "resources" : [
+                # {
+                  # "hosts" : [
+                    # "c6402.ambari.apache.org",
+                    # "c6401.ambari.apache.org"
+                  # ],
+                  # "services" : [
+                    # "HDFS"
+                  # ],
+                  # "recommendations" : {
+                    # "blueprint" : {
+                      # "host_groups" : [
+                        # {
+                          # "name" : "host-group-2",
+                          # "components" : [
+                            # { "name" : "JOURNALNODE" },
+                            # { "name" : "ZKFC" },
+                            # { "name" : "DATANODE" },
+                            # { "name" : "SECONDARY_NAMENODE" }
+                          # ]
+                        # },
+                        # {
+                          # "name" : "host-group-1",
+                          # "components" : [
+                            # { "name" : "HDFS_CLIENT" },
+                            # { "name" : "NAMENODE" },
+                            # { "name" : "JOURNALNODE" },
+                            # { "name" : "ZKFC" },
+                            # { "name" : "DATANODE" }
+                          # ]
+                        # }
+                      # ]
+                    # },
+                    # "blueprint_cluster_binding" : {
+                      # "host_groups" : [
+                        # {
+                          # "name" : "host-group-1",
+                          # "hosts" : [ { "fqdn" : "c6401.ambari.apache.org" } ]
+                        # },
+                        # {
+                          # "name" : "host-group-2",
+                          # "hosts" : [ { "fqdn" : "c6402.ambari.apache.org" } ]
+                        # }
+                      # ]
+                    # }
+                  # }
+                # }
+              # ]
+            # }
+
     def getComponentLayoutValidations(self, services, hosts):
         """Returns array of Validation objects about issues with hostnames components assigned to"""
         items = []
@@ -107,7 +167,8 @@ class zData999StackAdvisor(DefaultStackAdvisor):
     def recommendGreenplumConfigurations(self, configurations, clusterData, services, hosts):
         putGreenplumProperty = self.putProperty(configurations, 'greenplum-env')
 
-        putGreenplumProperty('master_port', '5432')
+        putGreenplumProperty('master_port', '5432' if not component_on_ambari(services, 'GREENPLUM_MASTER') else '6543')
+        putGreenplumProperty('segments_per_node', max(int(clusterData['cpu']), 2))
 
     def recommendYARNConfigurations(self, configurations, clusterData, services, hosts):
         putYarnProperty = self.putProperty(configurations, "yarn-site")
@@ -306,20 +367,10 @@ class zData999StackAdvisor(DefaultStackAdvisor):
         }
 
     def validateGPConfigurationsEnv(self, properties, recommendedDefaults, configurations, services, hosts):
-        import socket
-
         validationItems = []
-
-        hostnames = [hostname
-                     for service in services['services']
-                     for component in service['components']
-                     for hostname in component['StackServiceComponents']['hostnames']
-                     if component['StackServiceComponents']['component_name'] == 'GREENPLUM_MASTER'
-                     ]
-
         master_port_ambari_collision = None
 
-        if properties['master_port'] == '5432' and socket.gethostname() in hostnames:
+        if properties['master_port'] == '5432' and component_on_ambari(services, 'GREENPLUM_MASTER'):
             master_port_ambari_collision = self.getErrorItem(
                 'Master port will collide with Ambari database!  Please change port from 5432.')
 
@@ -774,6 +825,17 @@ def getHeapsizeProperties():
                                    "default": "512m"}],
             }
 
+def component_on_ambari(services, component_name):
+    import socket
+
+    hostnames = [hostname
+         for service in services['services']
+         for component in service['components']
+         for hostname in component['StackServiceComponents']['hostnames']
+         if component['StackServiceComponents']['component_name'] == component_name
+     ]
+
+    return socket.gethostname() in hostnames
 
 def getMemorySizeRequired(components, configurations):
     totalMemoryRequired = 512 * 1024 * 1024  # 512Mb for OS needs
