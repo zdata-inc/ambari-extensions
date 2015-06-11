@@ -15,6 +15,8 @@ variablesFile = [
     File.join(File.dirname(__FILE__), 'vagrant-env.conf.sample')
 ]
 
+abort 'Failed to find configuration file.' if variablesFile.nil?
+
 variablesFile = variablesFile.find { |path| File.exists? path }
 params = JSON.parse(IO.read(variablesFile))
 
@@ -107,6 +109,7 @@ Vagrant.configure(2) do |config|
             node.vm.network 'private_network', type: :dhcp
 
             node.vm.hostname = "master#{displayedI}.ambaricluster.local"
+            node.hostmanager.aliases = ["master#{displayedI}", "master#{i}"]
 
             node.vm.provider 'aws' do |aws, override|
                 aws.tags = {
@@ -141,6 +144,7 @@ Vagrant.configure(2) do |config|
         config.vm.define "slave#{i}" do |node|
             node.vm.network 'private_network', type: :dhcp
             node.vm.hostname = "slave#{i}.ambaricluster.local"
+            node.hostmanager.aliases = ["slave#{i}"]
 
             node.vm.provider 'aws' do |aws, override|
                 aws.tags = {
@@ -160,6 +164,7 @@ Vagrant.configure(2) do |config|
                 node.vm.synced_folder "artifacts/cache/slave-#{i}/#{repo}", "/var/cache/yum/#{vm_arch}/#{vm_centos_major_version}/#{repo}", create: true
             end
 
+            node.vm.provision 'shell', privileged: false, inline: 'echo "export PATH=/vagrant/build:$PATH" >> ~/.bashrc'
             node.vm.provision 'shell', path: 'build/bootstrap.sh'
             node.vm.provision :reload
         end
