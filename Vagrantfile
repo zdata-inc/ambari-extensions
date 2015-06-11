@@ -15,10 +15,11 @@ variablesFile = [
     File.join(File.dirname(__FILE__), 'vagrant-env.conf.sample')
 ]
 
+variablesFile = variablesFile.find { |path| File.exists? path }
 abort 'Failed to find configuration file.' if variablesFile.nil?
 
-variablesFile = variablesFile.find { |path| File.exists? path }
 params = JSON.parse(IO.read(variablesFile))
+
 
 # ================================================================================
 # Shared SSH Key
@@ -125,7 +126,8 @@ Vagrant.configure(2) do |config|
                 EOF
             end
 
-            node.vm.synced_folder 'src', '/var/lib/ambari-server/resources/stacks/PHD/9.9.9.zData', create: true
+            node.vm.synced_folder 'src', '/var/lib/ambari-server/resources/stacks/zData/9.9.9', create: true if params['flavor'] == 'vanilla'
+            node.vm.synced_folder 'src', '/var/lib/ambari-server/resources/stacks/PHD/9.9.9.zData', create: true if params['flavor'] == 'pivotal'
 
             cached_repositories.each do |repo|
                 node.vm.synced_folder "artifacts/cache/master-#{i}/#{repo}", "/var/cache/yum/#{vm_arch}/#{vm_centos_major_version}/#{repo}", create: true
