@@ -46,6 +46,10 @@ class Master(Script):
     def stop(self, env):
         import params
 
+        if not greenplum.is_running(params.master_pid_path):
+            print "Greenplum is not running."
+            return
+
         Execute(
             "gpstop -a -M smart -v",
             user=params.admin_user
@@ -59,7 +63,7 @@ class Master(Script):
             user=params.admin_user
         )
 
-    def recover_master():
+    def recover_master(self):
         print "Noop: Recovering master"
 
     def configure(self, env):
@@ -68,7 +72,6 @@ class Master(Script):
         greenplum.create_host_files()
         greenplum.preinstallation_configure(env)
 
-         
     def status(self, env):
         import params
         if not greenplum.is_running(params.master_pid_path):
