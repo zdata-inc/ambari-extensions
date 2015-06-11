@@ -164,6 +164,7 @@ Vagrant.configure(2) do |config|
                 node.vm.synced_folder "artifacts/cache/slave-#{i}/#{repo}", "/var/cache/yum/#{vm_arch}/#{vm_centos_major_version}/#{repo}", create: true
             end
 
+            node.vm.provision 'shell', privileged: false, inline: 'echo "export PATH=/vagrant/build:$PATH" >> ~/.bashrc'
             node.vm.provision 'shell', path: 'build/bootstrap.sh'
             node.vm.provision :reload
         end
