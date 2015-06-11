@@ -8,12 +8,11 @@ Ambari is a tool which makes provisioning, managing, and monitoring of Apache Ha
 Getting started with Vagrant
 ----------------------------
 
-1. Requires the following plugins: vagrant-hostmanager, vagrant-reload, vagrant-triggers
+1. Requires the following plugins: vagrant-hostmanager, vagrant-reload
 
     ```shell
     vagrant plugin install vagrant-hostmanager
     vagrant plugin install vagrant-reload
-    vagrant plugin install vagrant-triggers
 
     vagrant plugin install vagrant-aws # To provision on AWS
     ```
