@@ -1,4 +1,5 @@
 {
     "master_count": 1,
-    "slave_count": 1
+    "slave_count": 1,
+    "flavor": "vanilla"
 }
