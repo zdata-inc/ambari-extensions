@@ -131,8 +131,10 @@ Vagrant.configure(2) do |config|
                 node.vm.synced_folder "artifacts/cache/master-#{i}/#{repo}", "/var/cache/yum/#{vm_arch}/#{vm_centos_major_version}/#{repo}", create: true
             end
 
-            node.vm.provision 'shell', path: 'build/bootstrap.sh'
-            node.vm.provision 'shell', path: 'build/bootstrap-master.sh'
+            node.vm.provision 'shell' do |shell|
+                shell.path = 'build/bootstrap.sh'
+                shell.args = ['master', params['flavor']]
+            end
             node.vm.provision 'shell', privileged: false, inline: 'echo "export PATH=/vagrant/build:$PATH" >> ~/.bashrc'
             node.vm.provision :reload
         end
@@ -165,7 +167,10 @@ Vagrant.configure(2) do |config|
             end
 
             node.vm.provision 'shell', privileged: false, inline: 'echo "export PATH=/vagrant/build:$PATH" >> ~/.bashrc'
-            node.vm.provision 'shell', path: 'build/bootstrap.sh'
+            node.vm.provision 'shell' do |shell|
+                shell.path = 'build/bootstrap.sh'
+                shell.args = ['slave', params['flavor']]
+            end
             node.vm.provision :reload
         end
     end
