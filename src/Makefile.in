@@ -2,7 +2,6 @@ package = @PACKAGE_NAME@
 version = @PACKAGE_VERSION@
 tarname = @PACKAGE_TARNAME@
 distdir = $(tarname)-$(version)
-stackversion=@STACK_NAME@.$(version)
 
 prefix = @prefix@
 exec_prefix = @exec_prefix@

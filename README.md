@@ -20,21 +20,21 @@ Getting started with Vagrant
 2. Create boxes with Virtualbox
 
     ```shell
-    AMBARI_SLAVES=5 vagrant up # Bring up master, slave1, slave2, ..., slave5
-    AMBARI_SLAVES=1 vagrant up # Bring up master and slave1
-    AMBARI_SLAVES=0 vagrant up # Bring up just master
+    vagrant up # Bring up master, slave1
     ```
+
+    __Note:__ Copy `vagrant-env.conf.sample` to `vagrant-env.conf` and modify the values to change various vagrant settings such as the number of slave machines.
 
 3. Connect, vms created: master, slave0, slave1
 
     ```
     master.ambaricluster.local
-    slave0.ambaricluster.local
     slave1.ambaricluster.local
+    slave2.ambaricluster.local
 
     vagrant ssh master
-    vagrant ssh slave0
     vagrant ssh slave1
+    vagrant ssh slave2
     ```
 
 ### Additional steps to deploy to AWS:
@@ -90,20 +90,41 @@ Getting started with Vagrant
 4. Create the boxes on AWS
 
     ```shell
-    AMBARI_SLAVES=5 vagrant up --provider=aws --no-parallel
+    vagrant up --provider=aws --no-parallel
     vagrant hostmanager
     ```
 
 More information about getting started with Ambari using vagrant [is available here](http://zdata-inc.github.io/ambari-stack/getting-setup/with-vagrant.html).
 
-What Services Do Not Do
------------------------
-### Greenplum
 
+Services
+--------
+
+### Greenplum
+Installs and manages the Pivotal Greenplum database software.
+
+##### What The Service Does Not Do
  - Does not automatically create or setup XFS filesystem.
  - Does not specifiy an IO scheduler of deadline.
  - Does not configure read-ahead.
  - Does not disable transparent hugepage.
+
+### Chorus
+Installs and manages zData Chorus.
+
+##### Minimum Tuning Values
+
+ * inimum_memory = 256M
+ * maximum_memory = 256M
+ * young_heap_size = 128M
+ * max_perm_size = 256M
+
+### HAWQ
+Installs and manages the Pivotal HAWQ Hadoop SQL engine.
+
+### PXF
+Installs and manages the Pivotal Extension Framework, patches it to work with Hortonwork's Hadoop.
+
 
 Retrieve Artifacts
 ------------------

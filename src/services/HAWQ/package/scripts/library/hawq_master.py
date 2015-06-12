@@ -4,6 +4,8 @@ from library import utilities
 from library import hawq
 from resource_management import *
 
+import getpass
+
 def create_user():
     import params
 
@@ -22,10 +24,15 @@ def create_user():
 def exchange_keys():
     import params
 
-    # Exchange private keys for root and gpadmin
-    Execute('gpssh-exkeys -f"%s" -p"%s";' % (params.hawq_hostfile_seg_path, params.hawq_password), user=params.hawq_user, tries=3, try_sleep=15)
+    # Exchange private keys for hawq user and root
+    Execute(params.source_cmd + "gpssh-exkeys -f '%s' -p '%s'" % (params.hawq_hostfile_seg_path, params.hawq_password),
+        user=params.hawq_user,
+        tries=3, try_sleep=15
+    )
 
-    Execute("source %s; gpssh-exkeys -f %s;" % (params.hawq_environment_path, params.hawq_hostfile_seg_path))
+    Execute(params.source_cmd + "gpssh-exkeys -f '%s'" % (params.hawq_hostfile_seg_path),
+        user=getpass.getuser() # Make sure gpssh-exkeys can retrieve the correct user
+    )
 
 def create_host_files():
     import params
@@ -68,7 +75,7 @@ def initialize():
 
     # Install
     # Fixes issue #5
-    Execute("sed -i 's/GP_CHECK_HDFS=.*/GP_CHECK_HDFS=echo/' /usr/local/hawq/bin/lib/gp_bash_functions.sh")
+    Execute(('sed', '-i', 's/GP_CHECK_HDFS=.*/GP_CHECK_HDFS=echo/', path.join(params.hawq_bin_path, 'lib', 'gp_bash_functions.sh')))
 
     Execute(format("""
         hdfs dfs -mkdir hdfs://{params.DFS_URI};
@@ -78,7 +85,8 @@ def initialize():
 
     try:
         Execute(
-            format("gpinitsystem -a -c %s" % params.gpinitsystem_config_path),
+            params.source_cmd + "gpinitsystem -a -c %s" % params.gpinitsystem_config_path,
+            path=[params.hawq_bin_path],
             user=params.hawq_user
         )
     except Fail as exception:

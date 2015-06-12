@@ -39,7 +39,7 @@ class Master(Script):
         self.configure(env)
 
         Execute(
-            "gpstart -a -v",
+            params.source_cmd + "gpstart -a -v",
             user=params.admin_user
         )
 
@@ -51,7 +51,7 @@ class Master(Script):
             return
 
         Execute(
-            "gpstop -a -M smart -v",
+            params.source_cmd + "gpstop -a -M smart -v",
             user=params.admin_user
         )
 
@@ -59,7 +59,7 @@ class Master(Script):
         import params
 
         Execute(
-            "gpstop -a -M fast -v",
+            params.source_cmd + "gpstop -a -M fast -v",
             user=params.admin_user
         )
 
@@ -71,6 +71,7 @@ class Master(Script):
 
         greenplum.create_host_files()
         greenplum.preinstallation_configure(env)
+        greenplum.refresh_pg_hba_file()
 
     def status(self, env):
         import params

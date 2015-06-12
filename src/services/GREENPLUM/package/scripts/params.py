@@ -15,6 +15,7 @@ set_kernel_parameters = default('configurations/greenplum-env/set_kernel_paramet
 installation_path = config['configurations']['greenplum-env']['installation_path']
 absolute_installation_path = path.join(installation_path, 'greenplum-db')
 admin_user = config['configurations']['greenplum-env']['admin_user']
+admin_group = config['configurations']['greenplum-env']['admin_group']
 admin_password = config['configurations']['greenplum-env']['admin_password']
 hashed_admin_password = utilities.crypt_password(admin_password)
 
@@ -40,12 +41,19 @@ mirror_data_directory_template = config['configurations']['greenplum-mirroring']
 portbase_mirror = config['configurations']['greenplum-mirroring']['mirror_port_base']
 portbase_mirror_replication = config['configurations']['greenplum-mirroring']['mirror_replication_port_base']
 
+pg_hba_appendable_data = default('configurations/greenplum-hba/pg_hba.contents', '')
+
+
+# Commands
+source_cmd = 'source %s;' % path.join(absolute_installation_path, 'greenplum_path.sh')
+
 # Import file paths
-master_data_segment_directory = path.join(master_data_directory, segment_prefix + '-1')
-greenplum_segment_hosts_file = path.join(installation_path, 'greenplum-db', 'greenplum_segments')
-greenplum_all_hosts_file = path.join(installation_path, 'greenplum-db', 'greenplum_hosts')
-greenplum_initsystem_config_file = path.join('/home', admin_user, 'gpconfigs', 'gpinitsystem_config')
 security_conf_file = "/etc/security/limits.d/greenplum.conf"
+greenplum_initsystem_config_file = path.join('/home', admin_user, 'gpconfigs', 'gpinitsystem_config')
+greenplum_all_hosts_file = path.join(installation_path, 'greenplum-db', 'greenplum_hosts')
+greenplum_segment_hosts_file = path.join(installation_path, 'greenplum-db', 'greenplum_segments')
+master_data_segment_directory = path.join(master_data_directory, segment_prefix + '-1')
+pg_hba_file = path.join(master_data_segment_directory, 'pg_hba.conf')
 
 # Hosts
 hostname = config['hostname']

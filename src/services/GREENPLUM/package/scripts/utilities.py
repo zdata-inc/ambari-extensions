@@ -19,13 +19,22 @@ def append_bash_profile(user, to_be_appended, run=False, allow_duplicates=False)
 
     bashrc = "/home/%s/.bashrc" % user
 
-    with open(bashrc, 'a+') as filehandle:
-        if to_be_appended.strip() not in map(lambda line: line.strip(), filehandle.readlines()) or allow_duplicates:
-            Logger.info(format("Appending {to_be_appended} to {bashrc}"))
-            filehandle.write(format("{to_be_appended}\n"))
+    append_to_file(bashrc, to_be_appended, allow_duplicates)
 
     if run:
         Execute(to_be_appended, user=user)
+
+def append_to_file(filepath, to_be_appended, allow_duplicates=False):
+    """Appends a given string to a file."""
+
+    with open(filepath, 'a+') as filehandle:
+        stripped_lines = [line.strip() for line in filehandle.readlines()]
+        to_be_appended_already_in_file = to_be_appended.strip() in stripped_lines
+
+        if not to_be_appended_already_in_file or allow_duplicates:
+            Logger.info(format("Appending {to_be_appended} to {filepath}"))
+            filehandle.write(to_be_appended + os.linesep)
+
 
 def get_configuration_file(variable_file):
     """Retrieves a simple config file and formats it into a dictionary.
@@ -190,7 +199,7 @@ def parse_path_pattern_expression(path_pattern, number_required, data=None, esca
     return generated_strings
 
 def gpsshify(command, host=None, hostfile=None, args=None):
-    """Return a gpssh command which will run the given command on the specified remote machines in the cluster.
+    """Return a gpssh command which will run the command on the specified remote machine in the cluster.
 
     command -- Command or commands which will be run on remote machines in the cluster.
     host -- A remote host to run the command on.
