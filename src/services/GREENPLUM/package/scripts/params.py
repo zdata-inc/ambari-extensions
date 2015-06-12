@@ -2,6 +2,7 @@ from resource_management.libraries.functions.default import default
 from resource_management import *
 from resource_management.core.source import InlineTemplate
 import utilities
+from glob import glob
 from os import path
 
 config = Script.get_config()
@@ -89,3 +90,9 @@ def all_data_directories():
 # Pid files
 master_pid_path = path.join(master_data_segment_directory, 'postmaster.pid')
 segment_pid_globs = map(lambda pid_path: path.join(pid_path, segment_prefix + '[0-9]', 'postmaster.pid'), all_data_directories)
+
+segment_pids = [
+    path.join(pid_path, path.basename(pid_glob))
+    for pid_glob in segment_pid_globs
+    for pid_path in glob(path.dirname(pid_glob))
+]
