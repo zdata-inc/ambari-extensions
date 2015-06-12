@@ -82,6 +82,10 @@ def mirror_data_directories():
 
     return utilities.parse_path_pattern_expression(mirror_data_directory_template, segments_per_node)
 
+@utilities.call()
+def all_data_directories():
+    return data_directories + mirror_data_directories
+
 # Pid files
 master_pid_path = path.join(master_data_segment_directory, 'postmaster.pid')
-segment_pid_globs = map(lambda pid_path: path.join(pid_path, segment_prefix + '[0-9]', 'postmaster.pid'), data_directories)
+segment_pid_globs = map(lambda pid_path: path.join(pid_path, segment_prefix + '[0-9]', 'postmaster.pid'), all_data_directories)
