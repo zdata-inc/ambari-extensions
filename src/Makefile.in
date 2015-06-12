@@ -14,8 +14,9 @@ AMBARI_PATH?=@AMBARI_PATH@
 AMBARI_STACK?=@AMBARI_STACK@
 
 install:
-	mkdir $(AMBARI_PATH)/$(AMBARI_STACK)/$(stackversion)
-	cp -r . $(AMBARI_PATH)/$(AMBARI_STACK)/$(stackversion)
+	mkdir -p $(AMBARI_PATH)/$(AMBARI_STACK)/$(stackversion)
+	cp -r . $(AMBARI_PATH)/$(AMBARI_STACK)$(stackversion)
+	rm -f $(AMBARI_PATH)/$(AMBARI_STACK)/$(stackversion)/Makefile
 
 uninstall:
 	rm -rf $(AMBARI_PATH)/$(AMBARI_STACK)/$(stackversion)
