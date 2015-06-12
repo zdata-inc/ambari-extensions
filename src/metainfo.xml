@@ -3,4 +3,5 @@
     <versions>
         <active>true</active>
     </versions>
+    <extends>2.1</extends>
 </metainfo>

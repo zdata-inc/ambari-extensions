@@ -16,58 +16,40 @@
    limitations under the License.
 -->
 <reposinfo>
-  <latest>http://public-repo-1.hortonworks.com/HDP/hdp_urlinfo.json</latest>
-  <os family="redhat6">
+  <os type="redhat6">
     <repo>
-      <baseurl>http://public-repo-1.hortonworks.com/HDP/centos6/2.x/GA/2.2.0.0</baseurl>
-      <repoid>HDP-2.2</repoid>
-      <reponame>HDP</reponame>
+      <baseurl>http://SET_REPO_URL</baseurl>
+      <repoid>PHD-3.0</repoid>
+      <reponame>PHD</reponame>
     </repo>
     <repo>
-      <baseurl>http://public-repo-1.hortonworks.com/HDP-UTILS-1.1.0.20/repos/centos6</baseurl>
-      <repoid>HDP-UTILS-1.1.0.20</repoid>
-      <reponame>HDP-UTILS</reponame>
-    </repo>
-    <repo>
-      <baseurl>http://localhost/ambari-extensions</baseurl>
-      <repoid>Local-PHD-Repo</repoid>
-      <reponame>Local-PHD-Repo</reponame>
+      <baseurl>http://SET_REPO_URL</baseurl>
+      <repoid>PHD-UTILS-1.1.0.20</repoid>
+      <reponame>PHD-UTILS</reponame>
     </repo>
   </os>
-  <os family="redhat5">
+  <os type="redhat5">
     <repo>
-      <baseurl>http://public-repo-1.hortonworks.com/HDP/centos5/2.x/GA/2.2.0.0</baseurl>
-      <repoid>HDP-2.2</repoid>
-      <reponame>HDP</reponame>
+      <baseurl>http://SET_REPO_URL</baseurl>
+      <repoid>PHD-3.0</repoid>
+      <reponame>PHD</reponame>
     </repo>
     <repo>
-      <baseurl>http://public-repo-1.hortonworks.com/HDP-UTILS-1.1.0.20/repos/centos5</baseurl>
-      <repoid>HDP-UTILS-1.1.0.20</repoid>
-      <reponame>HDP-UTILS</reponame>
-    </repo>
-  </os>
-  <os family="suse11">
-    <repo>
-      <baseurl>http://public-repo-1.hortonworks.com/HDP/suse11sp3/2.x/GA/2.2.0.0</baseurl>
-      <repoid>HDP-2.2</repoid>
-      <reponame>HDP</reponame>
-    </repo>
-    <repo>
-      <baseurl>http://public-repo-1.hortonworks.com/HDP-UTILS-1.1.0.20/repos/suse11sp3</baseurl>
-      <repoid>HDP-UTILS-1.1.0.20</repoid>
-      <reponame>HDP-UTILS</reponame>
+      <baseurl>http://SET_REPO_URL</baseurl>
+      <repoid>PHD-UTILS-1.1.0.20</repoid>
+      <reponame>PHD-UTILS</reponame>
     </repo>
   </os>
-  <os family="ubuntu12">
+  <os type="suse11">
     <repo>
-      <baseurl>http://public-repo-1.hortonworks.com/HDP/ubuntu12/2.x/GA/2.2.0.0</baseurl>
-      <repoid>HDP-2.2</repoid>
-      <reponame>HDP</reponame>
+      <baseurl>http://SET_REPO_URL</baseurl>
+      <repoid>PHD-3.0</repoid>
+      <reponame>PHD</reponame>
     </repo>
     <repo>
-      <baseurl>http://public-repo-1.hortonworks.com/HDP-UTILS-1.1.0.20/repos/ubuntu12</baseurl>
-      <repoid>HDP-UTILS-1.1.0.20</repoid>
-      <reponame>HDP-UTILS</reponame>
+      <baseurl>http://SET_REPO_URL</baseurl>
+      <repoid>PHD-UTILS-1.1.0.20</repoid>
+      <reponame>PHD-UTILS</reponame>
     </repo>
   </os>
 </reposinfo>
