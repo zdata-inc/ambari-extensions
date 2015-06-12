@@ -1,6 +1,7 @@
 import sys
+import time
 from os import path
-import greenplum, utilities
+import greenplum
 from resource_management import *
 
 class Segment(Script):
@@ -21,11 +22,61 @@ class Segment(Script):
         )
 
     def stop(self, env):
-        print 'Cannot stop single segment host.  Can only stop the cluster via master.'
+        import params
+
+        pids = [
+            {'pidfile': pidfile, 'running': True}
+            for pidfile in params.segment_pids
+        ]
+
+        print 'Waiting for', str(len(pids)), 'segments to stop.',
+
+        while True:
+            running_pids = [pid for pid in pids if pid['running']]
+
+            if len(running_pids) == 0:
+                break
+
+            for pid in running_pids:
+                pid['running'] = greenplum.is_running(pid['pidfile'])
+
+            time.sleep(1)
+            sys.stdout.write('.')
+
+        print
+        if all([pid['running'] == False for pid in pids]):
+            print "All segments on host stopped."
+        else:
+            raise RuntimeError("Error stopping all segments!")
 
     def start(self, env):
+        import params
         self.configure(env)
-        print 'Cannot start single segment host.  Can only start the cluster via master.'
+
+        pids = [
+            {'pidfile': pidfile, 'running': False}
+            for pidfile in params.segment_pids
+        ]
+
+        print 'Waiting for', str(len(pids)), 'segments to start.',
+
+        while True:
+            stopped_pids = [pid for pid in pids if not pid['running']]
+
+            if len(stopped_pids) == 0:
+                break
+
+            for pid in stopped_pids:
+                pid['running'] = greenplum.is_running(pid['pidfile'])
+
+            time.sleep(1)
+            sys.stdout.write('.')
+
+        print
+        if all([pid['running'] == True for pid in pids]):
+            print "All segments on host started."
+        else:
+            raise RuntimeError("Not all segments on host started!")
 
     def configure(self, env):
         pass
