@@ -2,8 +2,6 @@
 
 require 'json'
 
-cached_repositories=%w(HDP-2.2)
-
 # ================================================================================
 # Variables
 # ================================================================================
@@ -36,9 +34,6 @@ end
 Vagrant.configure(2) do |config|
     config.vm.box_url = 'https://s3-us-west-2.amazonaws.com/zdata-vagrant/boxes/vagrant-centos-66-zdata.box'
     config.vm.box = 'vagrant-centos-66-zdata'
-    vm_centos_major_version = '6'
-    vm_arch = 'x86_64'
-
 
     # ================================================================================
     # Host Manager configuration
@@ -62,6 +57,16 @@ Vagrant.configure(2) do |config|
         rescue StandardError
             nil
         end
+    end
+    # ================================================================================
+    # Cachier configuration
+    # ================================================================================
+    #
+    # Cachier is a vagrant plugin which provides caching of downloaded packages between guest
+    # machines.  This should speed up provisioning quite a bit.
+
+    if Vagrant.has_plugin? 'vagrant-cachier'
+        config.cache.scope = :machine
     end
 
     # ================================================================================
@@ -129,10 +134,6 @@ Vagrant.configure(2) do |config|
             node.vm.synced_folder 'src', '/var/lib/ambari-server/resources/stacks/zData/9.9.9', create: true if params['flavor'] == 'vanilla'
             node.vm.synced_folder 'src', '/var/lib/ambari-server/resources/stacks/PHD/9.9.9.zData', create: true if params['flavor'] == 'pivotal'
 
-            cached_repositories.each do |repo|
-                node.vm.synced_folder "artifacts/cache/master-#{i}/#{repo}", "/var/cache/yum/#{vm_arch}/#{vm_centos_major_version}/#{repo}", create: true
-            end
-
             node.vm.provision 'shell' do |shell|
                 shell.path = 'build/bootstrap.sh'
                 shell.args = ['master', params['flavor']]
@@ -162,10 +163,6 @@ Vagrant.configure(2) do |config|
                     sed -i 's/^HOSTNAME=.*$/HOSTNAME=#{node.vm.hostname}/' /etc/sysconfig/network
                     hostname `cat /etc/hostname`
                 EOF
-            end
-
-            cached_repositories.each do |repo|
-                node.vm.synced_folder "artifacts/cache/slave-#{i}/#{repo}", "/var/cache/yum/#{vm_arch}/#{vm_centos_major_version}/#{repo}", create: true
             end
 
             node.vm.provision 'shell', privileged: false, inline: 'echo "export PATH=/vagrant/build:$PATH" >> ~/.bashrc'
