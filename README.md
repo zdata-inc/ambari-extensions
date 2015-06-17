@@ -14,7 +14,8 @@ Getting started with Vagrant
     vagrant plugin install vagrant-hostmanager
     vagrant plugin install vagrant-reload
 
-    vagrant plugin install vagrant-aws # To provision on AWS
+    vagrant plugin install vagrant-aws # Optional, provision on AWS
+    vagrant plugin install vagrant-cachier # Optional, cache downloaded packages to speed up provisioning
     ```
 
 2. Create boxes with Virtualbox
