@@ -2,6 +2,8 @@ import unittest
 import __builtin__ as builtins #pylint:disable=import-error
 from mock.mock import Mock, patch, mock_open
 
+from pprint import pprint, pformat
+
 from contextlib import contextmanager
 
 import logging
@@ -63,10 +65,6 @@ class TestUtilities(unittest.TestCase):
         handle = mocked_file()
         self.assertEqual(handle.write.call_count, 0, "Text appended despite duplicate text existing.")
 
-    def test_set_kernel_parameter(self):
-        pass
-
-
     @patch.object(StaticFile, 'get_content')
     def test_get_configuration_file(self, static_file_mock):
         with Environment('/'):
@@ -80,6 +78,40 @@ class TestUtilities(unittest.TestCase):
 
         self.assertDictContainsSubset({'key1':'value1', 'key2':'value2'}, testresult)
         self.assertFalse(testresult.has_key('key3'))
+
+    @patch("resource_management.core.providers.system.ExecuteProvider")
+    def test_set_kernel_parameter(self, execute_mock):
+        sysctl_contents = ""
+        mocked_file = self.__mock_file(sysctl_contents)
+
+        with self.__with_mocked_file(mocked_file), Environment('/'):
+            utilities.set_kernel_parameter('pname', 'pvalue')
+
+        self.assertTrue(execute_mock.called)
+
+        execute_mock_called_command = execute_mock.call_args[0][0].command
+        self.assertTrue(
+            'sysctl -w pname="pvalue"' in execute_mock_called_command,
+            "Invalid sysctl command called. %s" % pformat(execute_mock_called_command)
+        )
+
+        handle = mocked_file()
+
+        handle.write.assert_called_once_with("pname = pvalue\n")
+
+    @patch("resource_management.core.providers.system.ExecuteProvider")
+    def test_set_duplicate_kernel_parameter(self, execute_mock):
+        sysctl_contents = "#sysctl file\npname = pvalue\n"
+        mocked_file = self.__mock_file(sysctl_contents)
+
+        with self.__with_mocked_file(mocked_file), Environment('/'):
+            utilities.set_kernel_parameter('pname', 'pvalue')
+
+        self.assertFalse(execute_mock.called)
+
+        handle = mocked_file()
+
+        self.assertEqual(handle.write.call_count, 0, "Text appended despite duplicate text existing.")
 
     def test_parse_pattern_sequence_parsing(self):
         self.assertEqual(
