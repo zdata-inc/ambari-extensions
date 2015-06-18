@@ -2,6 +2,8 @@ import unittest
 import __builtin__ as builtins #pylint:disable=import-error
 from mock.mock import Mock, patch, mock_open
 
+from contextlib import contextmanager
+
 import logging
 from resource_management.core.system import System
 from resource_management.core.environment import Environment
@@ -14,6 +16,17 @@ import utilities # pylint:disable=import-error
 class TestUtilities(unittest.TestCase):
     def setUp(self):
         logging.getLogger('resource_management').setLevel(logging.CRITICAL)
+
+    def __mock_file(self, return_value=""):
+        open_mock = mock_open(read_data=return_value)
+        open_mock.return_value.readlines = Mock(return_value=return_value.split("\n"))
+
+        return open_mock
+
+    @contextmanager
+    def __with_mocked_file(self, mocked_file):
+        with patch.object(builtins, 'open', mocked_file, create=True):
+            yield
 
     @patch.object(utilities, 'append_to_file')
     def test_append_to_profile(self, append_to_file_mock):
@@ -29,29 +42,30 @@ class TestUtilities(unittest.TestCase):
             self.assertTrue(execute_mock.called)
 
     def test_append_to_file(self):
-        open_mock = mock_open()
-        with Environment('/'):
-            with patch.object(builtins, 'open', open_mock, create=True):
-                utilities.append_to_file('/test', 'some_command')
+        mocked_file = self.__mock_file()
 
-        open_mock.assert_called_once_with('/test', 'a+')
-        handle = open_mock()
+        with self.__with_mocked_file(mocked_file), Environment('/'):
+            utilities.append_to_file('/test', 'some_command')
+
+        mocked_file.assert_called_once_with('/test', 'a+')
+        handle = mocked_file()
         handle.write.assert_called_once_with("some_command\n")
 
     def test_append_to_file_no_duplicates(self):
         bashrc_contents = "# .bashrc file\nsome_command\n"
+        mocked_file = self.__mock_file(bashrc_contents)
 
-        open_mock = mock_open()
-        open_mock.return_value.readlines = Mock(return_value=bashrc_contents.split("\n"))
+        with self.__with_mocked_file(mocked_file), Environment('/'):
+            utilities.append_to_file('/test', 'some_command')
 
-        with patch.object(builtins, 'open', open_mock, create=True):
-            with Environment('/'):
-                utilities.append_to_file('/test', 'some_command')
+        self.assertTrue('/test' in mocked_file.call_args[0], "Wrong file being edited.")
 
-        self.assertTrue('/test' in open_mock.call_args[0], "Wrong file being edited.")
-
-        handle = open_mock()
+        handle = mocked_file()
         self.assertEqual(handle.write.call_count, 0, "Text appended despite duplicate text existing.")
+
+    def test_set_kernel_parameter(self):
+        pass
+
 
     @patch.object(StaticFile, 'get_content')
     def test_get_configuration_file(self, static_file_mock):
