@@ -2,6 +2,7 @@ package = @PACKAGE_NAME@
 version = @PACKAGE_VERSION@
 tarname = @PACKAGE_TARNAME@
 distdir = $(tarname)-$(version)
+stackversion=@STACK_NAME@.$(version)
 
 prefix = @prefix@
 exec_prefix = @exec_prefix@
@@ -14,7 +15,7 @@ AMBARI_STACK?=@AMBARI_STACK@
 
 install:
 	mkdir -p $(AMBARI_PATH)/$(AMBARI_STACK)/$(stackversion)
-	cp -r . $(AMBARI_PATH)/$(AMBARI_STACK)$(stackversion)
+	cp -r . $(AMBARI_PATH)/$(AMBARI_STACK)/$(stackversion)
 	rm -f $(AMBARI_PATH)/$(AMBARI_STACK)/$(stackversion)/Makefile
 
 uninstall:
