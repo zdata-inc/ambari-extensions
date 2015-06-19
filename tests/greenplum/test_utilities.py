@@ -113,6 +113,32 @@ class TestUtilities(unittest.TestCase):
 
         self.assertEqual(handle.write.call_count, 0, "Text appended despite duplicate text existing.")
 
+    add_blocks_to_file_dataprovider = lambda: (
+        ("", "block", "#SS", "#ES", "#SS\nblock\n#ES\n"),
+        ("\n", "block", "#SS", "#ES", "#SS\nblock\n#ES\n"),
+        ("test", "block", "#SS", "#ES", "test\n#SS\nblock\n#ES\n"),
+        ("test\n", "block", "#SS", "#ES", "test\n#SS\nblock\n#ES\n"),
+        ("test\n#SS\nold\n#ES\ntest2", "new", "#SS", "#ES", "test\n#SS\nnew\n#ES\ntest2"),
+        ("#SS\nold\n#ES\ntest2", "new", "#SS", "#ES", "#SS\nnew\n#ES\ntest2"),
+        ("#SS\nold\n#ES\ntest2\n#SS\nold2\n#ES\ntest3", "new", "#SS", "#ES", "#SS\nnew\n#ES\ntest2\n#SS\nold2\n#ES\ntest3"),
+    )
+
+    @data_provider(add_blocks_to_file_dataprovider)
+    def test_add_block_to_filestream(self, file_contents, data, start_sentinel, end_sentinel, expected_result):
+        new_file_contents = []
+
+        mocked_file = self.__mock_file(file_contents)
+        mocked_file.return_value.write = Mock(
+            side_effect=lambda s: new_file_contents.append(s) #pylint:disable=unnecessary-lambda
+        )
+
+        with self.__with_mocked_file(mocked_file), Environment('/'):
+            utilities.add_block_to_file('/test', data, None, start_sentinel, end_sentinel)
+
+        new_file_contents = "".join(new_file_contents)
+
+        self.assertEqual(new_file_contents, expected_result)
+
     def test_parse_pattern_sequence_parsing(self):
         self.assertEqual(
             utilities.parse_path_pattern_expression('[1-2]', 5),
