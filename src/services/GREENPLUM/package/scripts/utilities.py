@@ -109,23 +109,27 @@ def add_block_to_file(filepath, data, uid, start_sentinel=None, end_sentinel=Non
     if end_sentinel == None:
         end_sentinel = '#### End automatically generated {uid}'.format(uid=uid)
 
-    data = data.strip() + os.linesep
-
     with open(filepath, 'r+') as filehandle:
-        lines = filehandle.readlines()
-        filehandle.seek(0)
+        file_contents = filehandle.read()
+        lines = []
+
+        if file_contents != "\n" and file_contents != '':
+            lines = file_contents.split(os.linesep)
+
         filehandle.truncate()
 
         in_block = False
         block_found = False
 
+        iterator = 0
         for line in lines:
             # State logic
             is_start_sentinel = line.strip() == start_sentinel.strip()
             is_end_sentinel = line.strip() == end_sentinel.strip()
             is_sentinel = is_start_sentinel or is_end_sentinel
+            is_last_line = iterator == len(lines) - 1
 
-            if not in_block and is_start_sentinel:
+            if not in_block and is_start_sentinel and not block_found:
                 in_block = True
                 block_found = True
             elif in_block and is_end_sentinel:
@@ -135,13 +139,19 @@ def add_block_to_file(filepath, data, uid, start_sentinel=None, end_sentinel=Non
             # Appends new text block after start_sentinel, skips to end_sentinel.
             if not in_block or is_sentinel:
                 filehandle.write(line)
+                if not is_last_line:
+                    filehandle.write(os.linesep)
 
             if in_block and is_start_sentinel:
-                filehandle.write(data)
+                filehandle.write(data.strip() + os.linesep)
+
+            iterator += 1
 
         if not block_found:
+            if len(lines) > 0 and len(lines[-1]) > 0 and lines[-1][-1] != "\n":
+                filehandle.write("\n")
             filehandle.write(start_sentinel + os.linesep)
-            filehandle.write(data)
+            filehandle.write(data.strip() + os.linesep)
             filehandle.write(end_sentinel + os.linesep)
 
 def parse_path_pattern_expression(path_pattern, number_required, data=None, escape_character='\\'):
