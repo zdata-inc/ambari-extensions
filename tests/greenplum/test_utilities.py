@@ -1,4 +1,9 @@
-import unittest
+try:
+    import unittest2 as unittest
+except ImportError:
+    import unittest
+
+from unittest_data_provider import data_provider
 import __builtin__ as builtins #pylint:disable=import-error
 from mock.mock import Mock, patch, mock_open
 
