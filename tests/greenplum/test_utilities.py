@@ -7,6 +7,7 @@ from unittest_data_provider import data_provider
 import __builtin__ as builtins #pylint:disable=import-error
 from mock.mock import Mock, patch, mock_open
 
+from textwrap import dedent
 from pprint import pprint, pformat
 
 from contextlib import contextmanager
@@ -159,6 +160,44 @@ class TestUtilities(unittest.TestCase):
             utilities.parse_path_pattern_expression('/data[1-2]/primary', 3),
             ['/data1/primary', '/data2/primary', '/data1/primary']
         )
+
+    def test_gpsshify(self):
+        with Environment('/'):
+            self.assertEqual(
+                utilities.gpsshify('command', host='host1'),
+                dedent("""
+                cat <<EOF | gpssh -h "host1"
+                    command
+                EOF""")
+            )
+
+            self.assertEqual(
+                utilities.gpsshify('command', hostfile='hosts'),
+                dedent("""
+                cat <<EOF | gpssh -f "hosts"
+                    command
+                EOF""")
+            )
+
+            self.assertEqual(
+                utilities.gpsshify('command\'"', host='host1'),
+                dedent("""
+                cat <<EOF | gpssh -h "host1"
+                    command'"
+                EOF""")
+            )
+
+            self.assertEqual(
+                utilities.gpsshify('command', host='host1', args='test'),
+                dedent("""
+                cat <<EOF | gpssh -h "host1" test
+                    command
+                EOF""")
+            )
+
+            with self.assertRaises(ValueError):
+                utilities.gpsshify('command', args='test'),
+
 
 if __name__ == '__main__':
     unittest.main()
