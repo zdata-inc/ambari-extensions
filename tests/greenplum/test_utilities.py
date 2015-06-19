@@ -8,6 +8,9 @@ import __builtin__ as builtins #pylint:disable=import-error
 from mock.mock import Mock, patch, mock_open
 
 from textwrap import dedent
+import math
+import collections
+
 from pprint import pprint, pformat
 
 from contextlib import contextmanager
@@ -197,6 +200,36 @@ class TestUtilities(unittest.TestCase):
 
             with self.assertRaises(ValueError):
                 utilities.gpsshify('command', args='test'),
+
+    def test_random_string(self):
+        import string
+
+        self.assertEqual(
+            len(utilities.random_string(15)),
+            15
+        )
+
+        self.assertEqual(
+            utilities.random_string(5, ['a']),
+            'aaaaa'
+        )
+
+        # Verify distribution is reasonably random
+        letter_frequencies = collections.defaultdict(lambda: 0)
+
+        for _ in range(1, 10000):
+            for letter in utilities.random_string(16):
+                letter_frequencies[letter] += 1
+
+        standard_deviation = self.__standard_deviation(letter_frequencies.values())
+
+        self.assertLessEqual(standard_deviation, 100, "Standard deviation of letter frequency is too high!  Are you sure it is random?")
+
+    def __standard_deviation(self, values):
+        mean = sum(values) / len(values)
+        respective_deviations = [math.pow(count - mean, 2) for count in values]
+
+        return math.sqrt(sum(respective_deviations) / len(values))
 
 
 if __name__ == '__main__':
