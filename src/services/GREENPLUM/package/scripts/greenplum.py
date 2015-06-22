@@ -55,8 +55,8 @@ def master_install(env):
 
     relative_greenplum_path_file = path.join(version_installation_path, 'greenplum_path.sh')
 
-    Link(params.absolute_installation_path, to=version_installation_path)
     Execute("sed -i 's@^GPHOME=.*@GPHOME={0}@' '{1}';".format(version_installation_path, relative_greenplum_path_file))
+    Link(params.absolute_installation_path, to=version_installation_path)
 
     for host in params.all_nodes:
         Execute("ssh-keyscan {0} >> ~/.ssh/known_hosts".format(host))
@@ -67,9 +67,11 @@ def master_install(env):
 
     # Link version installation path to absolute one.
     Execute(params.source_cmd + utilities.gpsshify(
-        "if [ ! -e '{1}' ]; then ln -s '{0}' '{1}'; fi".format(version_installation_path, params.absolute_installation_path),
-        hostfile=params.greenplum_all_hosts_file
-    ))
+            ('ln', '-s', version_installation_path, params.absolute_installation_path),
+            hostfile=params.greenplum_all_hosts_file
+        ),
+        only_if=('test', '-L', params.absolute_installation_path)
+    )
 
     try:
         gpinitsystem_command = ['gpinitsystem', '-a', '-c "%s"' % params.greenplum_initsystem_config_file]

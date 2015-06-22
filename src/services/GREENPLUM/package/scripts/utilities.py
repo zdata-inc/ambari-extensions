@@ -6,6 +6,7 @@ import string
 import re
 
 from resource_management import *
+from resource_management.core.shell import string_cmd_from_args_list
 from textwrap import dedent
 
 def append_bash_profile(user, to_be_appended, run=False, allow_duplicates=False):
@@ -209,6 +210,9 @@ def gpsshify(command, host=None, hostfile=None, args=None):
 
     if host == None and hostfile == None:
         raise ValueError('Either host or hostfile must be given')
+
+    if isinstance(command, (list, tuple)):
+        command = string_cmd_from_args_list(command)
 
     arguments = []
     if host != None:
