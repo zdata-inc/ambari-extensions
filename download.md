@@ -5,7 +5,8 @@ title: Download
 
 # Downloads
 ## Download Link
-<a href="https://github.com/zdata-inc/ambari-extensions/releases/download/v0.4.0/zdata-ambari-stack-0.4.0.tar.gz">Download Latest Release (0.4)</a>
+<a href="https://github.com/zdata-inc/ambari-extensions/releases/download/v0.4.0/zdata-ambari-stack-0.4.0.tar.gz">Download zData Ambari Extensions Latest Release (0.4)</a>
+<a href="https://s3-us-west-2.amazonaws.com/zdata-ambari/artifacts/provisioning/aws/ambari-server-bootstrap.sh">Download Ambari Server Bootstrap Script</a> (to be used with Greenplum + Ambari on AWS video documentation).
 
 <!-- Begin MailChimp Signup Form -->
 <link href="//cdn-images.mailchimp.com/embedcode/classic-081711.css" rel="stylesheet" type="text/css">

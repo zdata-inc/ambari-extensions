@@ -27,3 +27,9 @@ Licensing
 ---------
 Ambari is an open source deployment tool, users must follow license agreements provided by Hortonworks and Pivotal software.
 
+Ambari Server Bootstrap Script
+------------------------------
+This script is used to quickly provision a server with Ambari, including zData's Ambari Extensions.  
+This script is needed to follow along with zData's Greenplum + Ambari on AWS in Minutes video
+
+Download [Ambari Server Bootstrap](https://s3-us-west-2.amazonaws.com/zdata-ambari/artifacts/provisioning/aws/ambari-server-bootstrap.sh).
