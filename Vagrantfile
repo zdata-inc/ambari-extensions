@@ -73,28 +73,30 @@ Vagrant.configure(2) do |config|
     # Providers
     # ================================================================================
 
-    config.vm.provider :aws do |aws, override|
-        aws.ami = 'ami-d47c57bc'
+    unless ENV['ACCESS_KEY_ID'].nil? || ENV['SECRET_ACCESS_KEY'].nil? then
+        config.vm.provider :aws do |aws, override|
+            aws.ami = 'ami-d47c57bc'
 
-        override.vm.box = 'dummy'
-        override.ssh.username = 'root'
+            override.vm.box = 'dummy'
+            override.ssh.username = 'root'
 
-        # Use AWS specific service to retrieve public IP for the machine.
-        override.hostmanager.ip_resolver = proc do |vm, resolving_vm|
-            return if vm.id.nil?
+            # Use AWS specific service to retrieve public IP for the machine.
+            override.hostmanager.ip_resolver = proc do |vm, resolving_vm|
+                return if vm.id.nil?
 
-            buffer = ''
-            vm.communicate.execute("curl --connect-timeout 5 http://169.254.169.254/latest/meta-data/public-ipv4") do |type, data|
-                buffer += data if type == :stdout
+                buffer = ''
+                vm.communicate.execute("curl --connect-timeout 5 http://169.254.169.254/latest/meta-data/public-ipv4") do |type, data|
+                    buffer += data if type == :stdout
+                end
+
+                buffer.strip
             end
 
-            buffer.strip
+            # Only sync specific folders, otherwise we'd be rsyncing GBs of data.
+            override.vm.synced_folder ".", "/vagrant", disabled: true
+            override.vm.synced_folder "build", "/vagrant/build", create: true
+            override.vm.synced_folder "keys", "/vagrant/keys", create: true
         end
-
-        # Only sync specific folders, otherwise we'd be rsyncing GBs of data.
-        override.vm.synced_folder ".", "/vagrant", disabled: true
-        override.vm.synced_folder "build", "/vagrant/build", create: true
-        override.vm.synced_folder "keys", "/vagrant/keys", create: true
     end
 
 
