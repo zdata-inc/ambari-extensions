@@ -2,6 +2,8 @@ zData Ambari Extensions
 =======================
 Ambari is a tool which makes provisioning, managing, and monitoring of Apache Hadoop deployments easy.  zData's Ambari Extensions builds atop Ambari to provide easy deployment and management of HAWQ, Chorus, and soon other Pivotal technologies.
 
+The master branch contains code to work with Apache Ambari.  There is a pivotal branch which works with Pivotal Ambari.
+
 [Visit the project's documentation for quick start guides and more information.](http://zdata-inc.github.io/ambari-extensions)
 
 
