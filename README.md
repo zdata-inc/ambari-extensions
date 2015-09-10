@@ -33,11 +33,9 @@ Getting started with Vagrant
     ```
     master.ambaricluster.local
     slave1.ambaricluster.local
-    slave2.ambaricluster.local
 
     vagrant ssh master
     vagrant ssh slave1
-    vagrant ssh slave2
     ```
 
 ### Additional steps to deploy to AWS:
