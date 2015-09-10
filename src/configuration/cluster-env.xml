@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+    <property>
+        <name>security_enabled</name>
+        <value>false</value>
+        <description>Hadoop Security</description>
+    </property>
+    <property>
+        <name>kerberos_domain</name>
+        <value>EXAMPLE.COM</value>
+        <description>Kerberos realm.</description>
+    </property>
+    <property>
+        <name>ignore_groupsusers_create</name>
+        <value>false</value>
+        <property-type>ADDITIONAL_USER_PROPERTY</property-type>
+        <description>Whether to ignore failures on users and group creation</description>
+    </property>
+    <property>
+        <name>smokeuser</name>
+        <value>ambari-qa</value>
+        <property-type>USER</property-type>
+        <description>User executing service checks</description>
+    </property>
+    <property>
+        <name>smokeuser_keytab</name>
+        <value>/etc/security/keytabs/smokeuser.headless.keytab</value>
+        <description>Path to smoke test user keytab file</description>
+    </property>
+    <property>
+        <name>user_group</name>
+        <value>hadoop</value>
+        <property-type>GROUP</property-type>
+        <description>Hadoop user group.</description>
+    </property>
+    <property>
+        <name>hdp_stack_version</name>
+        <value>2.2.4.2</value>
+        <description>Version of HDP stack being used for common-services.</description>
+    </property>
+</configuration>

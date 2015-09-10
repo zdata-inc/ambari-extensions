@@ -5,27 +5,24 @@ require 'json'
 # ================================================================================
 # Variables
 # ================================================================================
-# 
-# Create a hash of variables for use throughout the rest of the vagrant file.
-# When creating the machines for the first time the variables will be stored in
-# the variablesFile for use during subsequent calls to the vagrant command.
-# When the machines are destroyed, this file is also removed.
+#
+# Retrieve the vagrant-env variables used to customize the local ambari environment.
 
-variablesFile = File.join File.dirname(__FILE__), '.vagrant', 'ambari-variables'
+variablesFile = [
+    File.join(File.dirname(__FILE__), 'vagrant-env.conf'),
+    File.join(File.dirname(__FILE__), 'vagrant-env.conf.sample')
+]
 
-params = {
-    'master_count' => (ENV['AMBARI_MASTERS'] || 1).to_i,
-    'slave_count' => (ENV['AMBARI_SLAVES'] || 1).to_i
-}
+variablesFile = variablesFile.find { |path| File.exists? path }
+abort 'Failed to find configuration file.' if variablesFile.nil?
 
-# Overwrite parameters with those stored, fail silently
-params.merge!(JSON.parse(IO.read(variablesFile))) if File.exists? variablesFile rescue StandardError
+params = JSON.parse(IO.read(variablesFile))
 
 
 # ================================================================================
 # Shared SSH Key
 # ================================================================================
-# 
+#
 # Create an SSH key that can be shared between all the machines.
 # This key will be used by Ambari during registration step.
 
@@ -35,13 +32,13 @@ Dir.chdir(File.dirname(__FILE__)) do
 end
 
 Vagrant.configure(2) do |config|
-    config.vm.box = 'chef/centos-6.5'
-
+    config.vm.box_url = 'https://s3-us-west-2.amazonaws.com/zdata-vagrant/boxes/vagrant-centos-66-zdata.box'
+    config.vm.box = 'vagrant-centos-66-zdata'
 
     # ================================================================================
     # Host Manager configuration
     # ================================================================================
-    # 
+    #
     # The HostManager plugin is used to configure each of the machines to be able to communicate
     # to the others via their hostname, even when the IP address are dynamic.
 
@@ -61,50 +58,45 @@ Vagrant.configure(2) do |config|
             nil
         end
     end
-
-
     # ================================================================================
-    # Triggers
+    # Cachier configuration
     # ================================================================================
+    #
+    # Cachier is a vagrant plugin which provides caching of downloaded packages between guest
+    # machines.  This should speed up provisioning quite a bit.
 
-    config.trigger.after :up do
-        # Save variables for subsequent calls
-        File.open(variablesFile, 'w') do |file|
-            file.write(JSON.generate(params))
-        end
+    if Vagrant.has_plugin? 'vagrant-cachier'
+        config.cache.scope = :machine
     end
-
-    config.trigger.after :destroy do
-        File.delete variablesFile if File.exists? variablesFile
-    end
-
 
     # ================================================================================
     # Providers
     # ================================================================================
 
-    config.vm.provider :aws do |aws, override|
-        aws.ami = 'ami-d47c57bc'
+    unless ENV['ACCESS_KEY_ID'].nil? || ENV['SECRET_ACCESS_KEY'].nil? then
+        config.vm.provider :aws do |aws, override|
+            aws.ami = 'ami-d47c57bc'
 
-        override.vm.box = 'dummy'
-        override.ssh.username = 'root'
+            override.vm.box = 'dummy'
+            override.ssh.username = 'root'
 
-        # Use AWS specific service to retrieve public IP for the machine.
-        override.hostmanager.ip_resolver = proc do |vm, resolving_vm|
-            return if vm.id.nil?
+            # Use AWS specific service to retrieve public IP for the machine.
+            override.hostmanager.ip_resolver = proc do |vm, resolving_vm|
+                return if vm.id.nil?
 
-            buffer = ''
-            vm.communicate.execute("curl --connect-timeout 5 http://169.254.169.254/latest/meta-data/public-ipv4") do |type, data|
-                buffer += data if type == :stdout
+                buffer = ''
+                vm.communicate.execute("curl --connect-timeout 5 http://169.254.169.254/latest/meta-data/public-ipv4") do |type, data|
+                    buffer += data if type == :stdout
+                end
+
+                buffer.strip
             end
 
-            buffer.strip
+            # Only sync specific folders, otherwise we'd be rsyncing GBs of data.
+            override.vm.synced_folder ".", "/vagrant", disabled: true
+            override.vm.synced_folder "build", "/vagrant/build", create: true
+            override.vm.synced_folder "keys", "/vagrant/keys", create: true
         end
-
-        # Only sync specific folders, otherwise we'd be rsyncing GBs of data.
-        override.vm.synced_folder ".", "/vagrant", disabled: true
-        override.vm.synced_folder "build", "/vagrant/build", create: true
-        override.vm.synced_folder "keys", "/vagrant/keys", create: true
     end
 
 
@@ -125,6 +117,7 @@ Vagrant.configure(2) do |config|
             node.vm.network 'private_network', type: :dhcp
 
             node.vm.hostname = "master#{displayedI}.ambaricluster.local"
+            node.hostmanager.aliases = ["master#{displayedI}", "master#{i}"]
 
             node.vm.provider 'aws' do |aws, override|
                 aws.tags = {
@@ -140,11 +133,14 @@ Vagrant.configure(2) do |config|
                 EOF
             end
 
-            node.vm.synced_folder 'src', '/var/lib/ambari-server/resources/stacks/HDP/9.9.9.zData', create: true
+            node.vm.synced_folder 'src', '/var/lib/ambari-server/resources/stacks/zData/9.9.9', create: true if params['flavor'] == 'vanilla'
+            node.vm.synced_folder 'src', '/var/lib/ambari-server/resources/stacks/PHD/9.9.9.zData', create: true if params['flavor'] == 'pivotal'
 
+            node.vm.provision 'shell' do |shell|
+                shell.path = 'build/bootstrap.sh'
+                shell.args = ['master', params['flavor']]
+            end
             node.vm.provision 'shell', privileged: false, inline: 'echo "export PATH=/vagrant/build:$PATH" >> ~/.bashrc'
-            node.vm.provision 'shell', path: 'build/bootstrap.sh'
-            node.vm.provision 'shell', path: 'build/bootstrap-master.sh'
             node.vm.provision :reload
         end
     end
@@ -155,6 +151,7 @@ Vagrant.configure(2) do |config|
         config.vm.define "slave#{i}" do |node|
             node.vm.network 'private_network', type: :dhcp
             node.vm.hostname = "slave#{i}.ambaricluster.local"
+            node.hostmanager.aliases = ["slave#{i}"]
 
             node.vm.provider 'aws' do |aws, override|
                 aws.tags = {
@@ -171,8 +168,10 @@ Vagrant.configure(2) do |config|
             end
 
             node.vm.provision 'shell', privileged: false, inline: 'echo "export PATH=/vagrant/build:$PATH" >> ~/.bashrc'
-            node.vm.provision 'shell', path: 'build/bootstrap.sh'
-            node.vm.provision 'shell', path: 'build/bootstrap-slave.sh'
+            node.vm.provision 'shell' do |shell|
+                shell.path = 'build/bootstrap.sh'
+                shell.args = ['slave', params['flavor']]
+            end
             node.vm.provision :reload
         end
     end

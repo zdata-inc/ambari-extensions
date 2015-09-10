@@ -12,7 +12,7 @@ class Client(Script):
         greenplum.create_host_files()
 
     def status(self, env):
-        pass
+        raise ClientComponentHasNoStatus()
 
 if __name__ == "__main__":
     Client().execute()

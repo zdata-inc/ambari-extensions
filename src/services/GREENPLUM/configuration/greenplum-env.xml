@@ -20,11 +20,19 @@
     <property>
         <name>admin_user</name>
         <value>gpadmin</value>
+        <property-type>USER</property-type>
         <description>The Greenplum system user used to administer the cluster.</description>
+    </property>
+    <property>
+        <name>admin_group</name>
+        <value>gpadmin</value>
+        <property-type>GROUP</property-type>
+        <description>The Greenplum system user's group.</description>
     </property>
     <property>
         <name>admin_password</name>
         <value></value>
+        <property-type>PASSWORD</property-type>
         <description>Password for the Greenplum system user.</description>
     </property>
     <property>
@@ -49,8 +57,13 @@
     </property>
     <property>
         <name>data_directory</name>
-        <value>/data{{segment_number}}/primary</value>
-        <description>The data directory for a given segment.  Available templating values: {{segment_number}}.</description>
+        <value>/data[1-2]/primary</value>
+        <description>
+            A pattern expresion used to generate the data directories for each segment on a host.
+            Ranges can be specified with [BEGIN-END] where BEGIN and END are positive whole numbers.
+            Ranges will repeat as necessary to create a data directory for each segment on a host.
+            Additionally the current segment's number can be used by referencing {i}.
+        </description>
     </property>
     <property>
         <name>master_port</name>

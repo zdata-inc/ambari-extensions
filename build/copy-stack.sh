@@ -3,5 +3,14 @@
 
 [ $EUID == 0 ] || exec sudo bash "$0" "$@" # Run as root
 
-mkdir -p /var/lib/ambari-agent/cache/stacks/HDP/9.9.9.zData 2> /dev/null
-cp -R /vagrant/src/* /var/lib/ambari-agent/cache/stacks/HDP/9.9.9.zData
+DESTINATIONS=(
+    "/var/lib/ambari-agent/cache/stacks/zData/9.9.9/"
+    "/var/lib/ambari-agent/cache/stacks/PHD/9.9.9.zData/"
+)
+
+for DESTINATION in "${DESTINATIONS[@]}"; do
+    mkdir -p "$DESTINATION" 2> /dev/null;
+    cp -R /vagrant/src/* "$DESTINATION";
+
+    find "$DESTINATION" -name "*.pyc" -delete;
+done

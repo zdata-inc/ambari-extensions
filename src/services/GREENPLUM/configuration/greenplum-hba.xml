@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+    <property require-input="false">
+        <name>pg_hba.contents</name>
+        <value># This file contains Ambari specific pg_hba entries for the Greenplum database.
+# They are appended to the pg_hba.conf file.</value>
+        <description>
+            The Greenplum PG_HBA file.  Used to define each user's access to the database system.
+            These values are appended, default PG_HBA values are *not* overwritten!  The file must be
+            edited manually to modify those.
+        </description>
+    </property>
+</configuration>

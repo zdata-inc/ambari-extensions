@@ -15,9 +15,14 @@ def preinstallation_configure(env):
     env.set_params(params)
 
     # Create user
+    Group(
+        params.admin_group
+    )
+
     User(
         params.admin_user,
         password=params.hashed_admin_password,
+        groups=[params.admin_group],
         action="create", shell="/bin/bash"
     )
 
@@ -48,37 +53,35 @@ def master_install(env):
             gp_install_script.install_to(version_installation_path)
 
 
-    source_path_command = 'source %s;' % path.join(params.absolute_installation_path, 'greenplum_path.sh')
-    greenplum_path_file = path.join(version_installation_path, 'greenplum_path.sh')
+    relative_greenplum_path_file = path.join(version_installation_path, 'greenplum_path.sh')
 
-    post_copy_commands = format(dedent("""
-        ln -s '{version_installation_path}' '{params.absolute_installation_path}';
-        sed -i 's@^GPHOME=.*@GPHOME={version_installation_path}@' '{greenplum_path_file}';
-    """).strip())
+    Link(params.absolute_installation_path, to=version_installation_path)
+    Execute("sed -i 's@^GPHOME=.*@GPHOME={0}@' '{1}';".format(version_installation_path, relative_greenplum_path_file))
 
-    # Run on master to allow gpseginstall to function correctly.
-    Execute(post_copy_commands)
+    for host in params.all_nodes:
+        Execute("ssh-keyscan {0} >> ~/.ssh/known_hosts".format(host))
 
     create_host_files()
 
-    Execute(
-        format(source_path_command + 'gpseginstall -f "{params.greenplum_all_hosts_file}" -u "{params.admin_user}" -p "{params.admin_password}"')
-    )
+    Execute(format(params.source_cmd + 'gpseginstall -f "{params.greenplum_all_hosts_file}" -u "{params.admin_user}" -g "{params.admin_group}" -p "{params.admin_password}"'))
 
-    # Perform post_copy_commands on rest of machines in cluster.
-    Execute(source_path_command + utilities.gpsshify(post_copy_commands, hostfile=params.greenplum_all_hosts_file))
+    # Link version installation path to absolute one.
+    Execute(params.source_cmd + utilities.gpsshify(
+        "if [ ! -e '{1}' ]; then ln -s '{0}' '{1}'; fi".format(version_installation_path, params.absolute_installation_path),
+        hostfile=params.greenplum_all_hosts_file
+    ))
 
     try:
-        gpinitsystemCommand = ['gpinitsystem', '-a', '-c "%s"' % params.greenplum_initsystem_config_file]
+        gpinitsystem_command = ['gpinitsystem', '-a', '-c "%s"' % params.greenplum_initsystem_config_file]
 
         if params.master_standby_node != None:
-            gpinitsystemCommand.append('-s "' + params.master_standby_node + '"')
+            gpinitsystem_command.append('-s "' + params.master_standby_node + '"')
 
         if params.mirroring_enabled and params.enable_mirror_spreading:
-            gpinitsystemCommand.append('-S')
+            gpinitsystem_command.append('-S')
 
         Execute(
-            source_path_command + " ".join(gpinitsystemCommand),
+            params.source_cmd + " ".join(gpinitsystem_command),
             user=params.admin_user
         )
     except Fail as exception:
@@ -105,6 +108,10 @@ def master_install(env):
         else:
             Logger.info("No consensus.  Installation considered successful.")
             Logger.warning(">>>>> The log file located at %s should be reviewed so any reported warnings can be fixed!" % logfile)
+
+def refresh_pg_hba_file():
+    import params
+    utilities.add_block_to_file(params.pg_hba_file, InlineTemplate(params.pg_hba_appendable_data).get_content(), 'zdata-gp')
 
 def create_host_files():
     """Create segment and all host files in greenplum absolute installation path."""
