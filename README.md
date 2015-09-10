@@ -1,8 +1,8 @@
-zData Ambari Stack
-==================
-Ambari is a tool which makes provisioning, managing, and monitoring of Apache Hadoop deployments easy.  zData's stack builds atop Ambari to provide easy deployment and management of HAWQ, Chorus, and soon other Pivotal technologies.
+zData Ambari Extensions
+=======================
+Ambari is a tool which makes provisioning, managing, and monitoring of Apache Hadoop deployments easy.  zData's Ambari Extensions builds atop Ambari to provide easy deployment and management of HAWQ, Chorus, and soon other Pivotal technologies.
 
-[Visit the project's documentation for quick start guides and more information.](http://zdata-inc.github.io/ambari-stack)
+[Visit the project's documentation for quick start guides and more information.](http://zdata-inc.github.io/ambari-extensions)
 
 
 Getting started with Vagrant
@@ -95,7 +95,7 @@ Getting started with Vagrant
     vagrant hostmanager
     ```
 
-More information about getting started with Ambari using vagrant [is available here](http://zdata-inc.github.io/ambari-stack/getting-setup/with-vagrant.html).
+More information about getting started with Ambari using vagrant [is available here](http://zdata-inc.github.io/ambari-extensions/getting-setup/with-vagrant.html).
 
 
 Services
@@ -125,7 +125,6 @@ Installs and manages the Pivotal HAWQ Hadoop SQL engine.
 
 ### PXF
 Installs and manages the Pivotal Extension Framework, patches it to work with Hortonwork's Hadoop.
-
 
 Retrieve Artifacts
 ------------------
