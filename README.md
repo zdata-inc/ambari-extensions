@@ -126,6 +126,29 @@ Installs and manages the Pivotal HAWQ Hadoop SQL engine.
 ### PXF
 Installs and manages the Pivotal Extension Framework, patches it to work with Hortonwork's Hadoop.
 
+Development
+-----------
+
+### Writing features for both Vanilla and Pivotal
+Sometimes it's possible to use the same code for both Pivotal and Apache Ambari, when this is the case you can use git to help simplify merging a feature branch to both branches.
+
+```
+git checkout master
+git checkout -b feature/##
+
+# Do feature
+
+# Pivotal port
+git checkout -b feature/##_pivotal_port
+git rebase --onto pivotal master feature/##_pivotal_port
+git checkout pivotal
+git merge --ff-only feature/##_pivotal_port
+git branch -D feature/##_pivotal_port
+
+# Merge to master
+git checkout master
+git merge feature/##_pivotal_port
+```
 
 Retrieve Artifacts
 ------------------
