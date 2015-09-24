@@ -1,8 +1,10 @@
-zData Ambari Stack
-==================
-Ambari is a tool which makes provisioning, managing, and monitoring of Apache Hadoop deployments easy.  zData's stack builds atop Ambari to provide easy deployment and management of HAWQ, Chorus, and soon other Pivotal technologies.
+zData Ambari Extensions
+=======================
+Ambari is a tool which makes provisioning, managing, and monitoring of Apache Hadoop deployments easy.  zData's Ambari Extensions builds atop Ambari to provide easy deployment and management of HAWQ, Chorus, and soon other Pivotal technologies.
 
-[Visit the project's documentation for quick start guides and more information.](http://zdata-inc.github.io/ambari-stack)
+The master branch contains code to work with Apache Ambari.  There is a pivotal branch which works with Pivotal Ambari.
+
+[Visit the project's documentation for quick start guides and more information.](http://zdata-inc.github.io/ambari-extensions)
 
 
 Getting started with Vagrant
@@ -31,11 +33,9 @@ Getting started with Vagrant
     ```
     master.ambaricluster.local
     slave1.ambaricluster.local
-    slave2.ambaricluster.local
 
     vagrant ssh master
     vagrant ssh slave1
-    vagrant ssh slave2
     ```
 
 ### Additional steps to deploy to AWS:
@@ -126,6 +126,29 @@ Installs and manages the Pivotal HAWQ Hadoop SQL engine.
 ### PXF
 Installs and manages the Pivotal Extension Framework, patches it to work with Hortonwork's Hadoop.
 
+Development
+-----------
+
+### Writing features for both Vanilla and Pivotal
+Sometimes it's possible to use the same code for both Pivotal and Apache Ambari, when this is the case you can use git to help simplify merging a feature branch to both branches.
+
+```
+git checkout master
+git checkout -b feature/##
+
+# Do feature
+
+# Pivotal port
+git checkout -b feature/##_pivotal_port
+git rebase --onto pivotal master feature/##_pivotal_port
+git checkout pivotal
+git merge --ff-only feature/##_pivotal_port
+git branch -D feature/##_pivotal_port
+
+# Merge to master
+git checkout master
+git merge feature/##_pivotal_port
+```
 
 Retrieve Artifacts
 ------------------

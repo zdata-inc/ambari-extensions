@@ -55,25 +55,21 @@ def master_install(env):
 
     relative_greenplum_path_file = path.join(version_installation_path, 'greenplum_path.sh')
 
-    post_copy_commands = format(dedent("""
-        ln -s '{version_installation_path}' '{params.absolute_installation_path}';
-        sed -i 's@^GPHOME=.*@GPHOME={version_installation_path}@' '{relative_greenplum_path_file}';
-    """).strip())
-
-    # Run on master to allow gpseginstall to function correctly.
-    Execute(post_copy_commands)
+    Link(params.absolute_installation_path, to=version_installation_path)
+    Execute("sed -i 's@^GPHOME=.*@GPHOME={0}@' '{1}';".format(version_installation_path, relative_greenplum_path_file))
 
     for host in params.all_nodes:
-        Execute(format("ssh-keyscan {host} >> ~/.ssh/known_hosts"))
+        Execute("ssh-keyscan {0} >> ~/.ssh/known_hosts".format(host))
 
     create_host_files()
 
-    Execute(
-        format(params.source_cmd + 'gpseginstall -f "{params.greenplum_all_hosts_file}" -u "{params.admin_user}" -g "{params.admin_group}" -p "{params.admin_password}"')
-    )
+    Execute(format(params.source_cmd + 'gpseginstall -f "{params.greenplum_all_hosts_file}" -u "{params.admin_user}" -g "{params.admin_group}" -p "{params.admin_password}"'))
 
-    # Perform post_copy_commands on all machines in cluster after binaries have been distributed.
-    Execute(params.source_cmd + utilities.gpsshify(post_copy_commands, hostfile=params.greenplum_all_hosts_file))
+    # Link version installation path to absolute one.
+    Execute(params.source_cmd + utilities.gpsshify(
+        "if [ ! -e '{1}' ]; then ln -s '{0}' '{1}'; fi".format(version_installation_path, params.absolute_installation_path),
+        hostfile=params.greenplum_all_hosts_file
+    ))
 
     try:
         gpinitsystem_command = ['gpinitsystem', '-a', '-c "%s"' % params.greenplum_initsystem_config_file]
