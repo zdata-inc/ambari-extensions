@@ -1,6 +1,7 @@
 from __future__ import with_statement
 import sys
 import urllib
+import os
 from os import path
 from textwrap import dedent
 from resource_management import *
@@ -25,6 +26,9 @@ def preinstallation_configure(env):
         groups=[params.admin_group],
         action="create", shell="/bin/bash"
     )
+
+    for host in params.all_nodes:
+        Execute("ssh-keyscan {0} >> ~/.ssh/known_hosts".format(host))
 
     if params.set_kernel_parameters:
         utilities.set_kernel_parameters(utilities.get_configuration_file('system-variables'))
@@ -54,14 +58,19 @@ def master_install(env):
 
 
     relative_greenplum_path_file = path.join(version_installation_path, 'greenplum_path.sh')
-
     Execute("sed -i 's@^GPHOME=.*@GPHOME={0}@' '{1}';".format(version_installation_path, relative_greenplum_path_file))
+
+    source_env = os.environ.copy().update(utilities.get_environment(params.source_cmd))
+    import pprint
+    pprint.pprint(source_env)
+
     Link(params.absolute_installation_path, to=version_installation_path)
 
-    for host in params.all_nodes:
-        Execute("ssh-keyscan {0} >> ~/.ssh/known_hosts".format(host))
-
     create_host_files()
+
+    configure_and_distribute_ssh_keys(params.admin_user, params.greenplum_all_hosts_file)
+
+    sys.exit(1)
 
     Execute(format(params.source_cmd + 'gpseginstall -f "{params.greenplum_all_hosts_file}" -u "{params.admin_user}" -g "{params.admin_group}" -p "{params.admin_password}"'))
 
@@ -110,6 +119,43 @@ def master_install(env):
         else:
             Logger.info("No consensus.  Installation considered successful.")
             Logger.warning(">>>>> The log file located at %s should be reviewed so any reported warnings can be fixed!" % logfile)
+
+def configure_and_distribute_ssh_keys(user, hostfile):
+    """Configure passwordless login for user on all machines."""
+    import params
+
+    ssh_dir = format('/home/{user}/.ssh')
+    idrsa_file = path.join(ssh_dir, 'id_rsa')
+    idrsapub_file = path.join(ssh_dir, 'id_rsa.pub')
+    authkeys_file = path.join(ssh_dir, 'authorized_keys')
+
+    # Generate an rsa id if the user doesn't already have one
+    Execute(
+        'cat /dev/zero | ssh-keygen -q -t rsa -b 2048 -N ""',
+        not_if=format('test -f {idrsa_file}'),
+        user=user
+    )
+
+    # Distribute RSA key
+    Execute(
+        params.source_cmd +
+        utilities.gpsshify(('mkdir', ssh_dir), hostfile=hostfile)
+    )
+
+    Execute(
+        format(params.source_cmd + "gpscp -f {hostfile} {idrsapub_file} =:{idrsapub_file};")
+    )
+
+    Execute(
+        params.source_cmd + utilities.gpsshify(format("""
+            cat {idrsapub_file} >> {authkeys_file};
+
+            chown -R {user} {ssh_dir};
+            chmod -R 600 {ssh_dir};
+            chmod 700 {ssh_dir};
+        """), hostfile=hostfile)
+    )
+
 
 def refresh_pg_hba_file():
     import params
@@ -202,7 +248,7 @@ def scan_installation_logs(logFile, minimum_error_level='info'):
     return error_lines
 
 def remove_lines_between_delimiter(lines, delimiter=r".*:-\*+$"):
-    """Given a list of lines, remove all lines in between lines which match the given delimiter pattern, including the asterisks."""
+    """Given a list of lines, remove all lines in between lines which match the given delimiter pattern, including the delimiter lines."""
 
     inside_delimiter = False
     lines_outside_delimiter = []
