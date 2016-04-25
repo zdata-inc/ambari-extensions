@@ -212,6 +212,7 @@ def parse_path_pattern_expression(path_pattern, number_required, data=None, esca
 
 def gpsshify(command, host=None, hostfile=None, args=None):
     """Return a gpssh command which will run the command on the specified remote machine in the cluster.
+    NOTE: User must be specified when running command using Execute!  Even if user is root.
 
     command -- Command or commands which will be run on remote machines in the cluster.
     host -- A remote host to run the command on.
