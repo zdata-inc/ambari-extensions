@@ -22,7 +22,6 @@ def preinstallation_configure(env):
 
     User(
         params.admin_user,
-        password=params.hashed_admin_password,
         groups=[params.admin_group],
         action="create", shell="/bin/bash"
     )
@@ -68,7 +67,10 @@ def master_install(env):
 
     configure_and_distribute_ssh_keys(params.admin_user, params.greenplum_all_hosts_file)
 
-    Execute(format(params.source_cmd + 'gpseginstall -f "{params.greenplum_all_hosts_file}" -u "{params.admin_user}" -g "{params.admin_group}" -p "{params.admin_password}"'))
+    Execute(
+        format(params.source_cmd + 'gpseginstall -c suclv -f "{params.greenplum_all_hosts_file}" -u "{params.admin_user}" -g "{params.admin_group}"'),
+        user="root"
+    )
 
     # Link version installation path to absolute one.
     Execute(params.source_cmd + utilities.gpsshify(

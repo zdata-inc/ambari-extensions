@@ -16,8 +16,6 @@ installation_path = config['configurations']['greenplum-env']['installation_path
 absolute_installation_path = path.join(installation_path, 'greenplum-db')
 admin_user = config['configurations']['greenplum-env']['admin_user']
 admin_group = config['configurations']['greenplum-env']['admin_group']
-admin_password = config['configurations']['greenplum-env']['admin_password']
-hashed_admin_password = utilities.crypt_password(admin_password)
 
 cluster_name = config['configurations']['greenplum-env']['cluster_name']
 database_name = config['configurations']['greenplum-env']['database_name']
