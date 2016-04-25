@@ -14,3 +14,5 @@ for DESTINATION in "${DESTINATIONS[@]}"; do
 
     find "$DESTINATION" -name "*.pyc" -delete;
 done
+
+ambari-server refresh-stack-hash

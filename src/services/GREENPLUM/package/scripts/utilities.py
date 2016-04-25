@@ -6,6 +6,8 @@ import string
 import re
 
 from resource_management import *
+from subprocess import Popen, PIPE
+from resource_management.core.shell import string_cmd_from_args_list
 from textwrap import dedent
 
 def append_bash_profile(user, to_be_appended, run=False, allow_duplicates=False):
@@ -220,6 +222,9 @@ def gpsshify(command, host=None, hostfile=None, args=None):
     if host == None and hostfile == None:
         raise ValueError('Either host or hostfile must be given')
 
+    if isinstance(command, (list, tuple)):
+        command = string_cmd_from_args_list(command)
+
     arguments = []
     if host != None:
         arguments.append('-h "%s"' % host)
@@ -292,6 +297,34 @@ def is_process_running(pid_file, pid_parser=None):
         return False
 
     return True
+
+def get_environment(command):
+    """Return a hashmap of all changes to the environment made by a specific command."""
+
+    command_with_env = format('({command}) &>/dev/null; env')
+
+    old_environment = parse_environment(Popen('env', stdout=PIPE).stdout.read())
+    new_environment = parse_environment(Popen(command_with_env, shell=True, stdout=PIPE).stdout.read())
+
+    return [x
+        for x in new_environment.iteritems()
+        if x[0] not in old_environment.keys() or old_environment[x[0]] != x[1]
+    ]
+
+def parse_environment(environment_text):
+    """Given output of `env` command, return cooresponding hashmap."""
+
+    result = {}
+    lines = environment_text.split(os.linesep)
+
+    for line in lines:
+        if line == '':
+            continue
+
+        key, value = line.split('=', 2)
+        result[key] = value
+
+    return result
 
 def call(*argv, **kwargs):
     def call_fn(fn):
