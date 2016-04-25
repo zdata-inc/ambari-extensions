@@ -150,6 +150,28 @@ git checkout master
 git merge feature/##_pivotal_port
 ```
 
+### Running tests
+Tests are written with unittest2, and they require the ambari source code be available.
+
+1. Set an environment variable so unittests can find the Ambari's source directory:
+
+   ```
+   git clone https://git-wip-us.apache.org/repos/asf/ambari.git ~/source-ambari
+   export AMBARI_SOURCE="$HOME/source-ambari"
+   ```
+
+3. Install necessary python packages
+
+   ```
+   pip install unittest2 mock
+   ```
+
+2. Run tests:
+
+   ```
+   (cd tests; python -m unittest discover)
+   ```
+
 Retrieve Artifacts
 ------------------
 
