@@ -227,9 +227,9 @@ def gpsshify(command, host=None, hostfile=None, args=None):
 
     arguments = []
     if host != None:
-        arguments.append('-h %s' % host)
+        arguments.append('-h "%s"' % host)
     if hostfile != None:
-        arguments.append('-f %s' % hostfile)
+        arguments.append('-f "%s"' % hostfile)
     if args != None:
         arguments.append(args)
 
