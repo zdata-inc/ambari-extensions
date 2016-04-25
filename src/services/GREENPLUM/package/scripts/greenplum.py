@@ -61,16 +61,12 @@ def master_install(env):
     Execute("sed -i 's@^GPHOME=.*@GPHOME={0}@' '{1}';".format(version_installation_path, relative_greenplum_path_file))
 
     source_env = os.environ.copy().update(utilities.get_environment(params.source_cmd))
-    import pprint
-    pprint.pprint(source_env)
 
     Link(params.absolute_installation_path, to=version_installation_path)
 
     create_host_files()
 
     configure_and_distribute_ssh_keys(params.admin_user, params.greenplum_all_hosts_file)
-
-    sys.exit(1)
 
     Execute(format(params.source_cmd + 'gpseginstall -f "{params.greenplum_all_hosts_file}" -u "{params.admin_user}" -g "{params.admin_group}" -p "{params.admin_password}"'))
 
@@ -79,7 +75,7 @@ def master_install(env):
             ('ln', '-s', version_installation_path, params.absolute_installation_path),
             hostfile=params.greenplum_all_hosts_file
         ),
-        only_if=('test', '-L', params.absolute_installation_path)
+        user="root"
     )
 
     try:
@@ -136,24 +132,46 @@ def configure_and_distribute_ssh_keys(user, hostfile):
         user=user
     )
 
-    # Distribute RSA key
+    # Prepare to distribute key
+    # '|| exit 0' because we don't care if directory already exists
     Execute(
         params.source_cmd +
-        utilities.gpsshify(('mkdir', ssh_dir), hostfile=hostfile)
+        utilities.gpsshify('mkdir ' + ssh_dir + ' || exit 0', hostfile=hostfile),
+        user="root"
     )
 
+    # Distribute public key
     Execute(
         format(params.source_cmd + "gpscp -f {hostfile} {idrsapub_file} =:{idrsapub_file};")
     )
 
+    # Trust public key
     Execute(
         params.source_cmd + utilities.gpsshify(format("""
-            cat {idrsapub_file} >> {authkeys_file};
+            cat '{idrsapub_file}' >> {authkeys_file};
 
-            chown -R {user} {ssh_dir};
-            chmod -R 600 {ssh_dir};
-            chmod 700 {ssh_dir};
-        """), hostfile=hostfile)
+            chown -R '{user}' '{ssh_dir}';
+            chmod -R 600 '{ssh_dir}';
+            chmod 700 '{ssh_dir}';
+        """), hostfile=hostfile),
+        user="root"
+    )
+
+    # Distribute private key using public key
+    Execute(
+        format(params.source_cmd + "gpscp -f {hostfile} {idrsa_file} =:{idrsa_file};"),
+        user=user
+    )
+
+    # Trust all hosts for all hosts for user
+    trust_all_hosts_cmds = []
+    for host in params.all_nodes:
+        trust_all_hosts_cmds.append(format('ssh-keyscan {host} >> ~/.ssh/known_hosts;'))
+
+    Execute(
+        params.source_cmd +
+        utilities.gpsshify(" ".join(trust_all_hosts_cmds), hostfile=hostfile),
+        user=user
     )
 
 
