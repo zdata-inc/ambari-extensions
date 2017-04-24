@@ -1,6 +1,6 @@
 #!/bin/bash
 
-defaultRepoUrl="http://public-repo-1.hortonworks.com/ambari/centos6/2.x/updates/2.0.1/ambari.repo"
+defaultRepoUrl="http://public-repo-1.hortonworks.com/ambari/centos6/2.x/updates/2.5.0.3/ambari.repo"
 
 if [ "$EUID" != 0 ]; then
         echo "Please run as root user"
